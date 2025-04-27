@@ -1,0 +1,23 @@
+// _variables.scss - Shared variables for components
+
+// Color Palette
+$primary-color: #6746c3;
+$secondary-color: #4a33a8;
+$accent-color: #00bcd4;
+$light-purple: #f1eeff;
+$dark-text: #333333;
+$light-text: #ffffff;
+$light-gray: #f5f5f5;
+$mid-gray: #e0e0e0;
+$dark-gray: #757575;
+
+// UI Elements
+$border-radius: 10px;
+$shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
+// Layout
+$sidebar-width: 280px;
+$header-height: 64px;
+$message-max-width: 80%;
+$mobile-breakpoint: 768px;

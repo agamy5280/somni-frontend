@@ -1,0 +1,133 @@
+/* chatbot-message.component.scss - Updated */
+
+@import "../../../../assets/styles/variables.scss";
+
+// Variables
+$primary-color: #6746c3;
+$secondary-color: #4a33a8;
+$light-text: #ffffff;
+$dark-text: #333333;
+$border-radius: 10px;
+$shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
+:host {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.message {
+  max-width: 80%;
+  padding: 1rem;
+  border-radius: $border-radius;
+  animation: fadeIn 0.3s ease;
+  margin-bottom: 1rem;
+
+  &.user {
+    align-self: flex-end;
+    margin-left: auto;
+    margin-right: 0;
+    background-color: $primary-color;
+    color: $light-text;
+    border-bottom-right-radius: 0;
+  }
+
+  &.bot {
+    align-self: flex-start;
+    margin-right: auto;
+    margin-left: 0;
+    background-color: $light-text;
+    color: $dark-text;
+    border-bottom-left-radius: 0;
+    box-shadow: $shadow;
+  }
+
+  .message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    .bot-avatar {
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: $primary-color;
+      color: $light-text;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+  }
+
+  .message-content {
+    line-height: 1.5;
+    word-wrap: break-word;
+    white-space: pre-wrap; /* This preserves newlines */
+  }
+}
+
+// Typing indicator styles (unchanged)
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.5rem;
+
+  .typing-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #757575;
+    border-radius: 50%;
+    animation: typingAnimation 1.4s infinite ease-in-out;
+
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+}
+
+// Animations (unchanged)
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes typingAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Media queries for responsive design
+@media (max-width: 768px) {
+  .message {
+    max-width: 90%;
+  }
+}
