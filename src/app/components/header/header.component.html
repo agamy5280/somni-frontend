@@ -1,0 +1,57 @@
+<div class="header">
+  <div class="logo">
+    <button class="header-btn" (click)="onToggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <img src="assets/images/anb.png" alt="anb" />
+    <span class="logo-text">WatsonX Assistant</span>
+  </div>
+  <div class="header-actions">
+    <button class="header-btn" title="Notifications">
+      <i class="fas fa-bell"></i>
+    </button>
+    <button class="header-btn" title="Help">
+      <i class="fas fa-question-circle"></i>
+    </button>
+
+    <!-- User menu button -->
+    <div class="user-menu-container">
+      <button
+        class="header-btn user-btn"
+        title="User settings"
+        (click)="toggleUserMenu()"
+      >
+        <div *ngIf="currentUser" class="user-avatar">
+          {{ getUserInitials() }}
+        </div>
+        <i *ngIf="!currentUser" class="fas fa-user-circle"></i>
+      </button>
+
+      <!-- Dropdown menu -->
+      <div class="user-dropdown" *ngIf="showUserMenu">
+        <div class="user-info" *ngIf="currentUser">
+          <div class="user-name">{{ currentUser.fullName }}</div>
+          <div class="user-email">{{ currentUser.email }}</div>
+        </div>
+        <div class="dropdown-divider"></div>
+        <ul class="menu-items">
+          <li>
+            <a href="#" (click)="$event.preventDefault()">
+              <i class="fas fa-user"></i> Profile
+            </a>
+          </li>
+          <li>
+            <a href="#" (click)="$event.preventDefault()">
+              <i class="fas fa-cog"></i> Settings
+            </a>
+          </li>
+          <li>
+            <a href="#" (click)="$event.preventDefault(); logout()">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

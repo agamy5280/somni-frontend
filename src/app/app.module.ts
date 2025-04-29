@@ -25,10 +25,10 @@ import { ChatbotContainerComponent } from './components/chatbot/chatbot-containe
 import { ChatbotSidebarComponent } from './components/chatbot/chatbot-sidebar/chatbot-sidebar.component';
 import { ChatbotConversationComponent } from './components/chatbot/chatbot-conversation/chatbot-conversation.component';
 import { ChatbotMessageComponent } from './components/chatbot/chatbot-message/chatbot-message.component';
-import { ChatbotHeaderComponent } from './components/chatbot/chatbot-header/chatbot-header.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
@@ -37,10 +37,10 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     ChatbotSidebarComponent,
     ChatbotConversationComponent,
     ChatbotMessageComponent,
-    ChatbotHeaderComponent,
     LoginComponent,
     RegisterComponent,
     PageNotFoundComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
