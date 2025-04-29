@@ -1,0 +1,17 @@
+import { Component, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-page-not-found',
+  standalone: false,
+  templateUrl: './page-not-found.component.html',
+  styleUrl: './page-not-found.component.scss',
+  encapsulation: ViewEncapsulation.None,
+})
+export class PageNotFoundComponent {
+  constructor(private router: Router) {}
+
+  navigateToHome(): void {
+    this.router.navigate(['/chatbot']);
+  }
+}
