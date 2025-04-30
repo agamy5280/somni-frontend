@@ -27,6 +27,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { HeaderComponent } from './components/header/header.component';
 import { AuthGuard } from './gurads/auth.guard';
 import { DeleteConfirmationDialogComponent } from './components/chatbot/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { DeleteConfirmationDialogComponent } from './components/chatbot/delete-c
     PageNotFoundComponent,
     HeaderComponent,
     DeleteConfirmationDialogComponent,
+    ReportGeneratorComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,118 @@
+<!-- report-generator.component.html -->
+<div class="report-container">
+  <div class="header">
+    <h1>Report Generator</h1>
+    <p>Select and generate various reports with customized filters</p>
+  </div>
+
+  <div class="card">
+    <div class="content-wrapper">
+      <div class="column">
+        <div class="section">
+          <h2>1. Select Report Type</h2>
+          <div class="report-selection">
+            <select
+              [(ngModel)]="selectedReport"
+              (change)="onReportChange()"
+              class="report-dropdown"
+            >
+              <option value="" disabled selected>Choose a report</option>
+              <option
+                *ngFor="let report of availableReports"
+                [value]="report.id"
+              >
+                {{ report.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section" *ngIf="selectedReport">
+          <h2>2. Report Description</h2>
+          <div class="description-box" [@fadeIn]>
+            <div class="report-icon">
+              <i [class]="selectedReportDetails?.icon"></i>
+            </div>
+            <div class="report-details">
+              <h3>{{ selectedReportDetails?.name }}</h3>
+              <p>{{ selectedReportDetails?.description }}</p>
+              <div class="tags">
+                <span
+                  class="tag"
+                  *ngFor="let tag of selectedReportDetails?.tags"
+                  >{{ tag }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" *ngIf="selectedReport">
+          <h2>3. Select Date Range</h2>
+          <div class="date-filter" [@fadeIn]>
+            <div class="date-group">
+              <label for="startDate">From</label>
+              <input
+                type="date"
+                id="startDate"
+                [(ngModel)]="startDate"
+                name="startDate"
+              />
+            </div>
+            <div class="date-group">
+              <label for="endDate">To</label>
+              <input
+                type="date"
+                id="endDate"
+                [(ngModel)]="endDate"
+                name="endDate"
+              />
+            </div>
+          </div>
+
+          <div class="action-buttons" [@fadeIn]>
+            <button
+              class="generate-btn"
+              (click)="generateReport()"
+              [disabled]="isGenerating || !isValidDateRange()"
+            >
+              <i class="fas fa-file-export"></i> Generate Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="column" *ngIf="isGenerating || isCompleted">
+        <div class="section" *ngIf="isGenerating">
+          <h2>4. Generating Report</h2>
+          <div class="progress-container" [@fadeIn]>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                [style.width.%]="progressPercentage"
+              ></div>
+            </div>
+            <div class="progress-text">{{ progressPercentage }}% Complete</div>
+            <div class="progress-status">{{ currentStatus }}</div>
+          </div>
+        </div>
+
+        <div class="section" *ngIf="isCompleted">
+          <h2>5. Download Ready</h2>
+          <div class="download-container" [@bounceIn]>
+            <div class="report-ready-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="report-ready-text">
+              <h3>Report Successfully Generated!</h3>
+              <p>Your {{ selectedReportDetails?.name }} is ready to download</p>
+            </div>
+            <button class="download-btn" (click)="downloadReport()">
+              <i class="fas fa-download"></i> Download Excel Report
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

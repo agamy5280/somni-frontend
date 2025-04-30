@@ -11,6 +11,12 @@
       "fullName": "Marwan Ahmed",
       "email": "marwan@asdasd.com",
       "password": "123123"
+    },
+    {
+      "id": "ma3wug850svm8stm1jsr",
+      "fullName": "KA KA",
+      "email": "dsada@lol.com",
+      "password": "123123"
     }
   ],
   "chats": {
@@ -377,6 +383,50 @@
         "id": "ma3uvlf62rqbabdktck",
         "title": "New Conversation",
         "messages": []
+      }
+    ],
+    "ma3wug850svm8stm1jsr": [
+      {
+        "id": "ma3wurbn5jpsdw54glc",
+        "title": "New Conversation",
+        "messages": [
+          {
+            "id": "ma3wuxle5ceg1ildxwy",
+            "text": "dsahdasbdas,djh",
+            "sender": "user",
+            "timestamp": "2025-04-30T12:27:02.930Z"
+          },
+          {
+            "id": "ma3wuyn0aqas1xtnmd",
+            "text": "I see. How does that make you feel?",
+            "sender": "bot",
+            "timestamp": "2025-04-30T12:27:04.284Z"
+          },
+          {
+            "id": "ma3wv4emhbncqn2xlz6",
+            "text": "asdsadaada",
+            "sender": "user",
+            "timestamp": "2025-04-30T12:27:11.758Z"
+          },
+          {
+            "id": "ma3wv5g5y2efft7erab",
+            "text": "Interesting. What else would you like to discuss?",
+            "sender": "bot",
+            "timestamp": "2025-04-30T12:27:13.109Z"
+          },
+          {
+            "id": "ma3wvbp3pypnbgajbd",
+            "text": "asdasdadaadad\nsdadasdasd\n\nsadadadasdadadsada",
+            "sender": "user",
+            "timestamp": "2025-04-30T12:27:21.207Z"
+          },
+          {
+            "id": "ma3wvcqdf6ai5n9teql",
+            "text": "Thanks for sharing that. What else is on your mind?",
+            "sender": "bot",
+            "timestamp": "2025-04-30T12:27:22.549Z"
+          }
+        ]
       }
     ]
   }

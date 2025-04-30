@@ -5,6 +5,7 @@ import { LoginComponent } from './components/user/login/login.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { AuthGuard } from './gurads/auth.guard';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,11 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'reports',
+    component: ReportGeneratorComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: '',
