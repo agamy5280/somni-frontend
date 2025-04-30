@@ -1,0 +1,16 @@
+<div class="app-container">
+  <app-header (toggleSidebar)="toggleSidebar()"></app-header>
+  <div class="main-content">
+    <app-chatbot-sidebar
+      [isOpen]="sidebarOpen"
+      [chatHistory]="chatHistory"
+      [currentChat]="currentChat"
+      (chatSelected)="selectChat($event)"
+      (newChatClicked)="startNewChat()"
+    >
+    </app-chatbot-sidebar>
+
+    <app-chatbot-conversation [currentChat]="currentChat" [messages]="messages">
+    </app-chatbot-conversation>
+  </div>
+</div>

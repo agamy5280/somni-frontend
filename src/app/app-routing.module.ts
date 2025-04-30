@@ -1,0 +1,36 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ChatbotContainerComponent } from './components/chatbot/chatbot-container/chatbot-container.component';
+import { LoginComponent } from './components/user/login/login.component';
+import { RegisterComponent } from './components/user/register/register.component';
+import { AuthGuard } from './gurads/auth.guard';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+
+const routes: Routes = [
+  {
+    path: 'chatbot',
+    component: ChatbotContainerComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+  },
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
+  { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  providers: [AuthGuard],
+})
+export class AppRoutingModule {}

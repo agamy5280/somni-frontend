@@ -1,0 +1,65 @@
+<div class="chat-container" *ngIf="currentChat">
+  <!-- Chat Header -->
+  <div class="chat-header">
+    <div class="chat-title-area">
+      <i class="fas fa-comments"></i>
+      <h2>{{ currentChat.title }}</h2>
+    </div>
+    <div class="chat-actions">
+      <button class="chat-action-btn" title="Search in chat">
+        <i class="fas fa-search"></i>
+      </button>
+      <button class="chat-action-btn" title="Export chat">
+        <i class="fas fa-file-export"></i>
+      </button>
+      <button class="chat-action-btn" title="Settings">
+        <i class="fas fa-cog"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages Container -->
+  <div class="messages-container" #messagesContainer>
+    <app-chatbot-message *ngFor="let message of messages" [message]="message">
+    </app-chatbot-message>
+
+    <div *ngIf="typing" class="message bot">
+      <div class="message-header">
+        <div class="bot-avatar">W</div>
+        <span>WatsonX AI</span>
+      </div>
+      <div class="typing-indicator">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Input Container -->
+  <div class="message-input-container">
+    <textarea
+      class="message-input"
+      [(ngModel)]="messageText"
+      placeholder="Type your message here"
+      (keydown)="handleKeyDown($event)"
+      rows="1"
+      #messageTextarea
+    ></textarea>
+    <div class="input-actions">
+      <button class="input-action-btn" title="Attach file">
+        <i class="fas fa-paperclip"></i>
+      </button>
+      <button class="input-action-btn" title="Voice input">
+        <i class="fas fa-microphone"></i>
+      </button>
+      <button
+        class="input-action-btn send-btn"
+        (click)="sendMessage()"
+        title="Send message"
+      >
+        <i class="fas fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+</div>
