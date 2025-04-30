@@ -5,345 +5,378 @@
       "fullName": "test test",
       "email": "test@test.com",
       "password": "123123"
+    },
+    {
+      "id": "ma3u7j903x7i4da61d7",
+      "fullName": "Marwan Ahmed",
+      "email": "marwan@asdasd.com",
+      "password": "123123"
     }
   ],
   "chats": {
-    "ma3l6dqrxww4v7j2pt": [
+    "item": {
+      "ma3l6dqrxww4v7j2pt": [
+        {
+          "id": "ma3pooqd68x31psizar",
+          "title": "New Conversation 2",
+          "messages": [
+            {
+              "id": "ma3q8pts0j8go2nnt668",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T09:21:48.736Z"
+            },
+            {
+              "id": "ma3qea1pnbn7xvua0kb",
+              "text": "dsadada",
+              "sender": "user",
+              "timestamp": "2025-04-30T09:26:08.221Z"
+            },
+            {
+              "id": "ma3qeb3dq3b1kvoeu1e",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T09:26:09.577Z"
+            },
+            {
+              "id": "ma3qmd2kso6t51kqjxn",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T09:32:25.388Z"
+            },
+            {
+              "id": "ma3tkb9k0h0ehn8rlh6a",
+              "text": "dasda",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:54:48.584Z"
+            },
+            {
+              "id": "ma3tkcfz8nshaennq7a",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:54:50.111Z"
+            },
+            {
+              "id": "ma3tkr0ghxetdo7713",
+              "text": "dsa",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:55:08.992Z"
+            },
+            {
+              "id": "ma3tks1myyxt57sr5xr",
+              "text": "I understand. Can you tell me more?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:55:10.330Z"
+            },
+            {
+              "id": "ma3tky34y16gwgi9dj",
+              "text": "da",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:55:18.160Z"
+            },
+            {
+              "id": "ma3tkz4f2djkcns3hmo",
+              "text": "Interesting. What else would you like to discuss?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:55:19.503Z"
+            },
+            {
+              "id": "ma3tlwrcs0vk8x8t5bk",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:56:03.096Z"
+            },
+            {
+              "id": "ma3tlxstj9grk5z74in",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:56:04.445Z"
+            },
+            {
+              "id": "ma3tm0imgxh44veiv7",
+              "text": "dsadasd",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:56:07.966Z"
+            },
+            {
+              "id": "ma3tm1ju3n8eyi3ytht",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:56:09.306Z"
+            },
+            {
+              "id": "ma3tm5j8elc18i7hi5r",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:56:14.468Z"
+            },
+            {
+              "id": "ma3tm6sul2jovuet1b",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:56:16.110Z"
+            },
+            {
+              "id": "ma3tmb9hcx6q13zs6qm",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:56:21.893Z"
+            },
+            {
+              "id": "ma3tmcazjc7goksjlf",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:56:23.243Z"
+            }
+          ]
+        },
+        {
+          "id": "ma3ryo9z1o1h2r8wn33",
+          "title": "New Conversation 3",
+          "messages": [
+            {
+              "id": "ma3ryq8nubpild46na",
+              "text": "dsadasda",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:10:01.943Z"
+            },
+            {
+              "id": "ma3ryr9uq7usm1zcqr",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:10:03.282Z"
+            },
+            {
+              "id": "ma3t7eit7avjt8fme25",
+              "text": "Hello",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:44:46.277Z"
+            },
+            {
+              "id": "ma3t7fkmksqzx1o2ld9",
+              "text": "Hello! How can I help you today?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:44:47.638Z"
+            },
+            {
+              "id": "ma3t7hsxi61y9x5y1kd",
+              "text": "sdada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:44:50.529Z"
+            },
+            {
+              "id": "ma3t7iu5k9lotbfu8tq",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:44:51.869Z"
+            },
+            {
+              "id": "ma3t82z1wtw45onw3fe",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:45:17.965Z"
+            },
+            {
+              "id": "ma3t840k9dkix418tw",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:45:19.316Z"
+            },
+            {
+              "id": "ma3t8910z70uxso39qh",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:45:25.812Z"
+            },
+            {
+              "id": "ma3t8a284wegpwnw0a4",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:45:27.152Z"
+            },
+            {
+              "id": "ma3t8ddo9qnyrc90il6",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:45:31.452Z"
+            },
+            {
+              "id": "ma3t8eeuw8kie1m9i6",
+              "text": "Interesting. What else would you like to discuss?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:45:32.790Z"
+            },
+            {
+              "id": "ma3t9hxm96xhoorkuq",
+              "text": "dada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:46:24.010Z"
+            },
+            {
+              "id": "ma3t9iz4kt1bdethrqd",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:46:25.360Z"
+            },
+            {
+              "id": "ma3t9k6u9d134tr9z0f",
+              "text": "dasda",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:46:26.934Z"
+            },
+            {
+              "id": "ma3t9l8jzmsapuil38",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:46:28.291Z"
+            },
+            {
+              "id": "ma3taby0oolt20nbvc",
+              "text": "dasda",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:47:02.904Z"
+            },
+            {
+              "id": "ma3taczv6oqpe92dza5",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:47:04.267Z"
+            },
+            {
+              "id": "ma3tbbfkqf0j7nfjw6e",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:47:48.896Z"
+            },
+            {
+              "id": "ma3tbch09amz0qy5smj",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:47:50.244Z"
+            },
+            {
+              "id": "ma3tc3e9oliq933h0qi",
+              "text": "dasda",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:48:25.137Z"
+            },
+            {
+              "id": "ma3tc4g8e3x1vl8xils",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:48:26.504Z"
+            },
+            {
+              "id": "ma3tcf07p80n41y9vn",
+              "text": "dasda",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:48:40.183Z"
+            },
+            {
+              "id": "ma3tcg1yimbw4j0l67s",
+              "text": "Interesting. What else would you like to discuss?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:48:41.542Z"
+            },
+            {
+              "id": "ma3tcwegtrsvw63lebf",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:49:02.728Z"
+            },
+            {
+              "id": "ma3tcxg4gjalru14ot",
+              "text": "I see. How does that make you feel?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:49:04.084Z"
+            },
+            {
+              "id": "ma3tdaga7jv96rwn6lj",
+              "text": "dada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:49:20.938Z"
+            },
+            {
+              "id": "ma3tdbi1tugbgj049bf",
+              "text": "Interesting. What else would you like to discuss?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:49:22.297Z"
+            },
+            {
+              "id": "ma3tdf485my3dkeahui",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:49:26.984Z"
+            },
+            {
+              "id": "ma3tdg61rohy1hjxrv",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:49:28.345Z"
+            },
+            {
+              "id": "ma3tj37o8vj8pl8zbc",
+              "text": "dasda",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:53:51.492Z"
+            },
+            {
+              "id": "ma3tj493ip3u0a4p3w8",
+              "text": "I understand. Can you tell me more?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:53:52.839Z"
+            },
+            {
+              "id": "ma3tj5tjj74jvx97nwk",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:53:54.871Z"
+            },
+            {
+              "id": "ma3tj7k01hky79m61o9",
+              "text": "Thanks for sharing that. What else is on your mind?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:53:57.120Z"
+            },
+            {
+              "id": "ma3tk3wuit0c330wj8",
+              "text": "dsada",
+              "sender": "user",
+              "timestamp": "2025-04-30T10:54:39.054Z"
+            },
+            {
+              "id": "ma3tk4ya2xqgoc4058q",
+              "text": "I understand. Can you tell me more?",
+              "sender": "bot",
+              "timestamp": "2025-04-30T10:54:40.402Z"
+            }
+          ]
+        }
+      ]
+    },
+    "ma3u7j903x7i4da61d7": [
       {
-        "id": "ma3pooqd68x31psizar",
-        "title": "New Conversation 2",
+        "id": "ma3u9cjdv6glp6m8zm8",
+        "title": "New Conversation",
         "messages": [
           {
-            "id": "ma3q8pts0j8go2nnt668",
-            "text": "dsada",
+            "id": "ma3u9ldidyo71o58nyd",
+            "text": "adsadasdaddadsdadaad",
             "sender": "user",
-            "timestamp": "2025-04-30T09:21:48.736Z"
+            "timestamp": "2025-04-30T11:14:28.086Z"
           },
           {
-            "id": "ma3qea1pnbn7xvua0kb",
-            "text": "dsadada",
-            "sender": "user",
-            "timestamp": "2025-04-30T09:26:08.221Z"
-          },
-          {
-            "id": "ma3qeb3dq3b1kvoeu1e",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T09:26:09.577Z"
-          },
-          {
-            "id": "ma3qmd2kso6t51kqjxn",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T09:32:25.388Z"
-          },
-          {
-            "id": "ma3tkb9k0h0ehn8rlh6a",
-            "text": "dasda",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:54:48.584Z"
-          },
-          {
-            "id": "ma3tkcfz8nshaennq7a",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:54:50.111Z"
-          },
-          {
-            "id": "ma3tkr0ghxetdo7713",
-            "text": "dsa",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:55:08.992Z"
-          },
-          {
-            "id": "ma3tks1myyxt57sr5xr",
-            "text": "I understand. Can you tell me more?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:55:10.330Z"
-          },
-          {
-            "id": "ma3tky34y16gwgi9dj",
-            "text": "da",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:55:18.160Z"
-          },
-          {
-            "id": "ma3tkz4f2djkcns3hmo",
+            "id": "ma3u9mf8vzpmom8f8v",
             "text": "Interesting. What else would you like to discuss?",
             "sender": "bot",
-            "timestamp": "2025-04-30T10:55:19.503Z"
-          },
-          {
-            "id": "ma3tlwrcs0vk8x8t5bk",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:56:03.096Z"
-          },
-          {
-            "id": "ma3tlxstj9grk5z74in",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:56:04.445Z"
-          },
-          {
-            "id": "ma3tm0imgxh44veiv7",
-            "text": "dsadasd",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:56:07.966Z"
-          },
-          {
-            "id": "ma3tm1ju3n8eyi3ytht",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:56:09.306Z"
-          },
-          {
-            "id": "ma3tm5j8elc18i7hi5r",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:56:14.468Z"
-          },
-          {
-            "id": "ma3tm6sul2jovuet1b",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:56:16.110Z"
-          },
-          {
-            "id": "ma3tmb9hcx6q13zs6qm",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:56:21.893Z"
-          },
-          {
-            "id": "ma3tmcazjc7goksjlf",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:56:23.243Z"
+            "timestamp": "2025-04-30T11:14:29.444Z"
           }
         ]
       },
       {
-        "id": "ma3ryo9z1o1h2r8wn33",
-        "title": "New Conversation 3",
-        "messages": [
-          {
-            "id": "ma3ryq8nubpild46na",
-            "text": "dsadasda",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:10:01.943Z"
-          },
-          {
-            "id": "ma3ryr9uq7usm1zcqr",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:10:03.282Z"
-          },
-          {
-            "id": "ma3t7eit7avjt8fme25",
-            "text": "Hello",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:44:46.277Z"
-          },
-          {
-            "id": "ma3t7fkmksqzx1o2ld9",
-            "text": "Hello! How can I help you today?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:44:47.638Z"
-          },
-          {
-            "id": "ma3t7hsxi61y9x5y1kd",
-            "text": "sdada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:44:50.529Z"
-          },
-          {
-            "id": "ma3t7iu5k9lotbfu8tq",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:44:51.869Z"
-          },
-          {
-            "id": "ma3t82z1wtw45onw3fe",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:45:17.965Z"
-          },
-          {
-            "id": "ma3t840k9dkix418tw",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:45:19.316Z"
-          },
-          {
-            "id": "ma3t8910z70uxso39qh",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:45:25.812Z"
-          },
-          {
-            "id": "ma3t8a284wegpwnw0a4",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:45:27.152Z"
-          },
-          {
-            "id": "ma3t8ddo9qnyrc90il6",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:45:31.452Z"
-          },
-          {
-            "id": "ma3t8eeuw8kie1m9i6",
-            "text": "Interesting. What else would you like to discuss?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:45:32.790Z"
-          },
-          {
-            "id": "ma3t9hxm96xhoorkuq",
-            "text": "dada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:46:24.010Z"
-          },
-          {
-            "id": "ma3t9iz4kt1bdethrqd",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:46:25.360Z"
-          },
-          {
-            "id": "ma3t9k6u9d134tr9z0f",
-            "text": "dasda",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:46:26.934Z"
-          },
-          {
-            "id": "ma3t9l8jzmsapuil38",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:46:28.291Z"
-          },
-          {
-            "id": "ma3taby0oolt20nbvc",
-            "text": "dasda",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:47:02.904Z"
-          },
-          {
-            "id": "ma3taczv6oqpe92dza5",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:47:04.267Z"
-          },
-          {
-            "id": "ma3tbbfkqf0j7nfjw6e",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:47:48.896Z"
-          },
-          {
-            "id": "ma3tbch09amz0qy5smj",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:47:50.244Z"
-          },
-          {
-            "id": "ma3tc3e9oliq933h0qi",
-            "text": "dasda",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:48:25.137Z"
-          },
-          {
-            "id": "ma3tc4g8e3x1vl8xils",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:48:26.504Z"
-          },
-          {
-            "id": "ma3tcf07p80n41y9vn",
-            "text": "dasda",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:48:40.183Z"
-          },
-          {
-            "id": "ma3tcg1yimbw4j0l67s",
-            "text": "Interesting. What else would you like to discuss?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:48:41.542Z"
-          },
-          {
-            "id": "ma3tcwegtrsvw63lebf",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:49:02.728Z"
-          },
-          {
-            "id": "ma3tcxg4gjalru14ot",
-            "text": "I see. How does that make you feel?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:49:04.084Z"
-          },
-          {
-            "id": "ma3tdaga7jv96rwn6lj",
-            "text": "dada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:49:20.938Z"
-          },
-          {
-            "id": "ma3tdbi1tugbgj049bf",
-            "text": "Interesting. What else would you like to discuss?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:49:22.297Z"
-          },
-          {
-            "id": "ma3tdf485my3dkeahui",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:49:26.984Z"
-          },
-          {
-            "id": "ma3tdg61rohy1hjxrv",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:49:28.345Z"
-          },
-          {
-            "id": "ma3tj37o8vj8pl8zbc",
-            "text": "dasda",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:53:51.492Z"
-          },
-          {
-            "id": "ma3tj493ip3u0a4p3w8",
-            "text": "I understand. Can you tell me more?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:53:52.839Z"
-          },
-          {
-            "id": "ma3tj5tjj74jvx97nwk",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:53:54.871Z"
-          },
-          {
-            "id": "ma3tj7k01hky79m61o9",
-            "text": "Thanks for sharing that. What else is on your mind?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:53:57.120Z"
-          },
-          {
-            "id": "ma3tk3wuit0c330wj8",
-            "text": "dsada",
-            "sender": "user",
-            "timestamp": "2025-04-30T10:54:39.054Z"
-          },
-          {
-            "id": "ma3tk4ya2xqgoc4058q",
-            "text": "I understand. Can you tell me more?",
-            "sender": "bot",
-            "timestamp": "2025-04-30T10:54:40.402Z"
-          }
-        ]
+        "id": "ma3uvlf62rqbabdktck",
+        "title": "New Conversation",
+        "messages": []
       }
     ]
   }
