@@ -1,0 +1,18 @@
+<div class="modal-backdrop" *ngIf="isOpen" [@fadeInOut] (click)="onCancel()">
+  <div class="modal-container" [@scaleIn] (click)="onDialogClick($event)">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-trash-alt"></i>
+      </div>
+      <h3 class="modal-title">{{ title }}</h3>
+      <p class="modal-message">
+        Are you sure you want to delete this conversation? This action cannot be
+        undone.
+      </p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="onCancel()">Cancel</button>
+        <button class="btn-confirm" (click)="onConfirm()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -175,4 +175,28 @@ export class ChatbotContainerComponent implements OnInit {
       },
     });
   }
+
+  deleteChat(chat: Chat): void {
+    // Check authentication first
+    if (!this.dataService.isLoggedIn()) {
+      return; // Let the AuthGuard handle the redirect
+    }
+
+    // Delete the chat via data service
+    this.dataService.deleteChat(chat.id).subscribe({
+      next: () => {
+        // If the deleted chat was the current one, clear the current chat
+        if (this.currentChat && this.currentChat.id === chat.id) {
+          this.currentChat = null;
+          this.messages = [];
+        }
+
+        // Reload chat list to reflect the deletion
+        this.loadChats();
+      },
+      error: (error) => {
+        console.error('Error deleting chat:', error);
+      },
+    });
+  }
 }

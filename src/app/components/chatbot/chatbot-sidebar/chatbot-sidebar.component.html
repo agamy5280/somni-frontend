@@ -14,11 +14,19 @@
       *ngFor="let chat of chatHistory"
       class="chat-item"
       [ngClass]="{ active: currentChat && currentChat.id === chat.id }"
-      (click)="onChatSelect(chat)"
     >
-      <i class="fas fa-comment chat-icon"></i>
-      <span class="chat-title">{{ chat.title }}</span>
-      <span class="chat-date">{{ formatDate(chat) }}</span>
+      <div class="chat-item-main" (click)="onChatSelect(chat)">
+        <i class="fas fa-comment chat-icon"></i>
+        <span class="chat-title">{{ chat.title }}</span>
+        <span class="chat-date">{{ formatDate(chat) }}</span>
+      </div>
+      <button
+        class="delete-btn"
+        (click)="onDeleteChat(chat, $event)"
+        title="Delete conversation"
+      >
+        <i class="fas fa-trash"></i>
+      </button>
     </div>
   </div>
 
@@ -29,4 +37,12 @@
       <i class="fas fa-cog"></i>
     </button>
   </div>
+
+  <!-- Delete Confirmation Dialog -->
+  <app-delete-confirmation-dialog
+    [isOpen]="showDeleteModal"
+    [title]="'Delete conversation'"
+    (confirmed)="confirmDelete()"
+    (canceled)="closeDeleteModal()"
+  ></app-delete-confirmation-dialog>
 </div>

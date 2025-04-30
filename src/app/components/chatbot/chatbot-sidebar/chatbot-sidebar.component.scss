@@ -154,3 +154,107 @@ $transition: all 0.3s ease;
     }
   }
 }
+// Add this at the end of your chatbot-sidebar.component.scss file
+
+.chat-item {
+  position: relative;
+
+  .chat-item-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: calc(100% - 30px);
+    cursor: pointer;
+  }
+
+  .delete-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #f44336;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    font-size: 14px;
+    padding: 5px;
+
+    &:hover {
+      color: #d32f2f;
+    }
+  }
+
+  &:hover .delete-btn {
+    opacity: 1;
+  }
+}
+
+.chat-item {
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+
+  .chat-item-main {
+    transition: transform 0.3s ease;
+  }
+
+  .delete-actions {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #f44336;
+      padding: 0 10px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        color: #d32f2f;
+      }
+    }
+
+    .confirm-delete-btn {
+      position: absolute;
+      right: -100px;
+      height: 100%;
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 0 15px;
+      cursor: pointer;
+      transition: right 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      &:hover {
+        background: #d32f2f;
+      }
+    }
+  }
+
+  &:hover .delete-btn {
+    opacity: 1;
+  }
+
+  &.delete-mode {
+    background-color: rgba(244, 67, 54, 0.1);
+
+    .chat-item-main {
+      transform: translateX(-80px);
+    }
+
+    .confirm-delete-btn {
+      right: 0;
+    }
+  }
+}

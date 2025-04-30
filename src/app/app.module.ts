@@ -26,6 +26,7 @@ import { RegisterComponent } from './components/user/register/register.component
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { HeaderComponent } from './components/header/header.component';
 import { AuthGuard } from './gurads/auth.guard';
+import { DeleteConfirmationDialogComponent } from './components/chatbot/delete-confirmation-dialog/delete-confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AuthGuard } from './gurads/auth.guard';
     RegisterComponent,
     PageNotFoundComponent,
     HeaderComponent,
+    DeleteConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,

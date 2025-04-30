@@ -14,8 +14,11 @@ export class ChatbotSidebarComponent implements OnInit {
 
   @Output() chatSelected = new EventEmitter<Chat>();
   @Output() newChatClicked = new EventEmitter<void>();
+  @Output() deleteChatClicked = new EventEmitter<Chat>();
 
   currentUser: User | null = null;
+  showDeleteModal = false;
+  chatToDelete: Chat | null = null;
 
   constructor(private dataService: DataService) {}
 
@@ -85,5 +88,26 @@ export class ChatbotSidebarComponent implements OnInit {
     }
 
     return nameParts[0][0].toUpperCase();
+  }
+
+  onDeleteChat(chat: Chat, event: MouseEvent): void {
+    // Prevent the click from bubbling up to the parent (which would select the chat)
+    event.stopPropagation();
+
+    // Show delete confirmation modal
+    this.chatToDelete = chat;
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete(): void {
+    if (this.chatToDelete) {
+      this.deleteChatClicked.emit(this.chatToDelete);
+      this.closeDeleteModal();
+    }
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+    this.chatToDelete = null;
   }
 }
