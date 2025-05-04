@@ -1,0 +1,76 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Transactions Analysis Dashboard</h1>
+    <p>
+      Interactive visualizations of transaction patterns and trends across
+      different channels
+    </p>
+  </div>
+  <div class="dashboard-overview">
+    <h2>Dashboard Overview</h2>
+    <p>
+      This interactive dashboard presents comprehensive analysis of transaction
+      patterns and trends based on the latest data. Navigate through different
+      visualizations using the tabs below.
+    </p>
+    <p>
+      Key insights include transaction patterns by channel, merchant analysis,
+      digital payment trends, and fraud monitoring. All visualization elements
+      are fully interactive.
+    </p>
+    <div class="categories">
+      <button class="category-button active" (click)="filterByCategory('all')">
+        All
+      </button>
+      <button class="category-button" (click)="filterByCategory('overview')">
+        Overview
+      </button>
+      <button class="category-button" (click)="filterByCategory('digital')">
+        Digital Payments
+      </button>
+      <button class="category-button" (click)="filterByCategory('merchant')">
+        Merchant Analysis
+      </button>
+      <button class="category-button" (click)="filterByCategory('cards')">
+        Cards
+      </button>
+      <button class="category-button" (click)="filterByCategory('atm')">
+        ATM
+      </button>
+      <button class="category-button" (click)="filterByCategory('transfers')">
+        Transfers
+      </button>
+      <button class="category-button" (click)="filterByCategory('mule')">
+        Mule Accounts
+      </button>
+      <button class="category-button" (click)="filterByCategory('cash')">
+        Cash Transactions
+      </button>
+    </div>
+    <div class="visualization-links">
+      <!-- Links will be populated by JavaScript -->
+    </div>
+  </div>
+  <div class="search-container">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search visualizations..."
+      (keyup)="searchVisualizations()"
+    />
+    <div class="no-results" id="noResults">
+      No visualizations found matching your search.
+    </div>
+  </div>
+  <div class="tabs"><!-- Tab buttons will be populated by JavaScript --></div>
+  <div class="tab-contents">
+    <!-- Tab contents will be populated by JavaScript -->
+  </div>
+  <div class="dashboard-navigation">
+    <button id="prevTab" (click)="navigateTabs(-1)">
+      <span>❮</span> Previous
+    </button>
+    <button id="nextTab" (click)="navigateTabs(1)">Next <span>❯</span></button>
+  </div>
+  <footer><p>© 2025 Transaction Analysis Dashboard</p></footer>
+</div>

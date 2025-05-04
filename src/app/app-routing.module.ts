@@ -6,6 +6,7 @@ import { RegisterComponent } from './components/user/register/register.component
 import { AuthGuard } from './gurads/auth.guard';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
+import { DashboardsComponent } from './components/dashboards/dashboards.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,11 @@ const routes: Routes = [
   {
     path: 'reports',
     component: ReportGeneratorComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'dashboards',
+    component: DashboardsComponent,
     canActivate: [AuthGuard],
   },
   {

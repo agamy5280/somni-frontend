@@ -1,0 +1,454 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  padding: 20px; /* Keep body padding for overall spacing */
+  background-color: #f5f5f5;
+}
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%; /* Ensure container takes full available width */
+}
+.dashboard-header {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #0066cc, #004080);
+  color: white;
+}
+.dashboard-header h1 {
+  margin-bottom: 10px;
+  font-size: 32px;
+}
+.dashboard-header p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  width: 100%;
+}
+.tab-button {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 5px;
+  transition: all 0.3s;
+  font-size: 16px;
+  border-radius: 8px;
+}
+.tab-button:hover {
+  background: #e9ecef;
+  transform: translateY(-2px);
+}
+.tab-button.active {
+  background: #0066cc;
+  color: white;
+  border-color: #0066cc;
+}
+
+/* Container for all tab contents */
+.tab-contents {
+  width: 100%;
+  padding: 0; /* Ensure no padding here */
+  overflow: hidden; /* Prevent potential overflow issues */
+}
+
+/* Individual tab content panel */
+.tab-content {
+  display: none;
+  /* REMOVED padding: 25px; */
+  padding: 15px 0 25px 0; /* Add vertical padding, remove horizontal */
+  animation: fadeIn 0.5s;
+  text-align: center;
+  width: 100%; /* Ensure full width */
+}
+.tab-content.active {
+  display: block;
+  width: 100%;
+}
+.plot-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #003366;
+  border-bottom: 2px solid #0066cc;
+  padding: 0 20px 10px 20px; /* Add horizontal padding only here */
+  display: inline-block; /* Center the border correctly */
+}
+.plot-description {
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: #666;
+  padding: 0 20px; /* Add horizontal padding only here */
+}
+.legend-fix-note {
+  background-color: #e6f0ff;
+  border-left: 3px solid #0066cc;
+  padding: 10px 15px;
+  margin: 0 20px 15px 20px; /* Add horizontal margin */
+  border-radius: 4px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  text-align: left; /* Align text left */
+}
+.legend-fix-note:before {
+  content: "ℹ️";
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* Iframe for visualization */
+.visualization-frame {
+  width: 100%; /* Takes full width of parent (.tab-content) */
+  height: 700px;
+  border: none;
+  /* Removed border-radius and box-shadow as they might look odd edge-to-edge */
+  display: block;
+  margin: 0; /* No margin needed */
+  padding: 0; /* No padding needed */
+  overflow: hidden; /* Prevent internal scrollbars if possible */
+  position: relative; /* Needed for spinner positioning */
+  transition: opacity 0.5s ease; /* For loading fade-in */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.dashboard-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+  padding: 15px;
+}
+.dashboard-navigation button {
+  padding: 12px 25px;
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dashboard-navigation button:hover {
+  background: #004c99;
+  transform: translateY(-2px);
+}
+.search-container {
+  margin: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+#searchInput {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.dashboard-overview {
+  margin: 20px;
+  padding: 25px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 5px solid #0066cc;
+}
+.dashboard-overview h2 {
+  color: #003366;
+  margin-bottom: 15px;
+  font-size: 24px;
+}
+.dashboard-overview p {
+  margin-bottom: 15px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+.category-button {
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 14px;
+}
+.category-button:hover {
+  background: #004c99;
+  transform: translateY(-2px);
+}
+.category-button.active {
+  background: #339933;
+}
+.visualization-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+.visualization-link {
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 8px;
+  border-left: 3px solid #0066cc;
+  transition: all 0.3s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.visualization-link:hover {
+  background: #f8f9fa;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.visualization-link a {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  display: block;
+  margin-bottom: 8px;
+}
+.visualization-link p {
+  color: #7f8c8d;
+  margin-bottom: 0;
+}
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #7f8c8d;
+  border-top: 1px solid #ddd;
+  margin-top: 40px;
+  background: #f8f9fa;
+}
+.no-results {
+  padding: 15px;
+  background-color: #fef0f0;
+  color: #e74c3c;
+  border-radius: 8px;
+  text-align: center;
+  display: none;
+  margin-top: 10px;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .tab-button {
+    flex-basis: calc(50% - 10px);
+  }
+  .visualization-frame {
+    height: 500px;
+  }
+  .legend-fix-note {
+    font-size: 12px;
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .plot-title,
+  .plot-description {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+@media (max-width: 480px) {
+  .tab-button {
+    flex-basis: 100%;
+  }
+  .visualization-frame {
+    height: 400px;
+  }
+  .legend-fix-note {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .plot-title,
+  .plot-description {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+/* Loading spinner styles */
+.spinner-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.85);
+  z-index: 10;
+  transition: opacity 0.5s ease;
+}
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 102, 204, 0.2);
+  border-radius: 50%;
+  border-top-color: #0066cc;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 15px;
+}
+.loading-text {
+  color: #0066cc;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+.fade-out {
+  opacity: 0;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Page Loader Styles */
+.page-loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+.page-spinner {
+  width: 80px;
+  height: 80px;
+  border: 8px solid rgba(0, 102, 204, 0.2);
+  border-radius: 50%;
+  border-top-color: #0066cc;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 20px;
+}
+.page-loading-text {
+  color: #0066cc;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.progress-counter {
+  font-size: 18px;
+  color: #003366;
+  font-weight: bold;
+}
+
+/* Styles for the category indicator and reset button */
+.current-category-indicator {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 10px 0 15px 0;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 3px solid #0066cc;
+}
+.category-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #003366;
+}
+.category-reset-button {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: none; /* Initially hidden */
+}
+.category-reset-button:hover {
+  background-color: #004c99;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Category highlight animation */
+@keyframes category-highlight-animation {
+  0% {
+    background-color: #f8f9fa;
+  }
+  50% {
+    background-color: #e6f0ff;
+  }
+  100% {
+    background-color: #f8f9fa;
+  }
+}
+.category-highlight {
+  animation: category-highlight-animation 1s ease;
+}
+
+/* Styles to help iframe content utilize full width */
+/* Ensure Plotly divs inside iframe take full space */
+::ng-deep iframe.visualization-frame .plotly-graph-div,
+::ng-deep iframe.visualization-frame .js-plotly-plot,
+::ng-deep iframe.visualization-frame .main-svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Ensure html/body inside iframe have no margin/padding */
+::ng-deep iframe.visualization-frame html,
+::ng-deep iframe.visualization-frame body {
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important; /* Prevent scrollbars inside iframe */
+}
+
+/* Target potential containers within the iframe plot */
+::ng-deep iframe.visualization-frame .chart-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important; /* Remove padding if any */
+  margin: 0 !important; /* Remove margin if any */
+}

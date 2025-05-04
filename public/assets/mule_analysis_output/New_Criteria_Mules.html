@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mule Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        line-height: 1.3;
+        color: #333;
+        /* max-width: 1100px;
+        margin: 0 auto; */
+        padding: 8px 0;
+      }
+      .header {
+        text-align: left;
+        margin-bottom: 10px;
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 3px 0;
+        color: #333;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 8px 0 4px 0;
+        color: #444;
+      }
+      .section {
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 6px;
+        font-size: 11px;
+      }
+      .data-table th {
+        background-color: #0000ff;
+        color: white;
+        padding: 3px 6px;
+        text-align: left;
+        font-weight: bold;
+      }
+      .data-table td {
+        padding: 3px 6px;
+        border-bottom: 1px solid #ddd;
+      }
+      .data-table tr:nth-child(even) {
+        background-color: #f8f8f8;
+      }
+      .data-table .total-row {
+        font-weight: bold;
+        background-color: #e6e6e6;
+        padding: 2px 6px;
+      }
+      .chart-container {
+        margin-top: 10px;
+      }
+      .chart-table-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .table-container {
+        flex-basis: 58%;
+        overflow-x: auto;
+      }
+      .chart-container {
+        flex-basis: 38%;
+      }
+      .footer {
+        margin-top: 12px;
+        text-align: center;
+        font-size: 10px;
+        color: #777;
+      }
+      @media (max-width: 768px) {
+        .chart-table-container {
+          flex-direction: column;
+        }
+        .table-container,
+        .chart-container {
+          flex-basis: 100%;
+        }
+      }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-2.28.0.min.js"></script>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Mule Activity Dashboard</h1>
+    </div>
+
+    <div class="chart-table-container">
+      <div class="table-container section">
+        <h2>Daily Mule Activity</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Susp</th>
+              <th>Mules</th>
+              <th>%</th>
+              <th>Cashout</th>
+              <th>Recovery</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Wed, Nov 13</td>
+              <td>260</td>
+              <td>74</td>
+              <td>28.5%</td>
+              <td>108,625</td>
+              <td>214,162</td>
+            </tr>
+            <tr>
+              <td>Thu, Nov 14</td>
+              <td>66</td>
+              <td>50</td>
+              <td>75.8%</td>
+              <td>1,404</td>
+              <td>19,453</td>
+            </tr>
+            <tr>
+              <td>Fri, Nov 15</td>
+              <td>106</td>
+              <td>33</td>
+              <td>31.1%</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Sat, Nov 16</td>
+              <td>100</td>
+              <td>84</td>
+              <td>84.0%</td>
+              <td>254,176</td>
+              <td>606,516</td>
+            </tr>
+            <tr>
+              <td>Sun, Nov 17</td>
+              <td>192</td>
+              <td>118</td>
+              <td>61.5%</td>
+              <td>229,122</td>
+              <td>1,909,499</td>
+            </tr>
+            <tr>
+              <td>Mon, Nov 18</td>
+              <td>265</td>
+              <td>184</td>
+              <td>69.4%</td>
+              <td>118,199</td>
+              <td>213,970</td>
+            </tr>
+            <tr>
+              <td>Tue, Nov 19</td>
+              <td>185</td>
+              <td>12</td>
+              <td>6.5%</td>
+              <td>872</td>
+              <td>839,833</td>
+            </tr>
+            <tr>
+              <td>Wed, Nov 20</td>
+              <td>105</td>
+              <td>44</td>
+              <td>41.9%</td>
+              <td>83,040</td>
+              <td>361,524</td>
+            </tr>
+            <tr>
+              <td>Thu, Nov 21</td>
+              <td>143</td>
+              <td>57</td>
+              <td>39.9%</td>
+              <td>2,463</td>
+              <td>392,323</td>
+            </tr>
+            <tr>
+              <td>Fri, Nov 22</td>
+              <td>111</td>
+              <td>50</td>
+              <td>45.0%</td>
+              <td>18,917</td>
+              <td>1,289,248</td>
+            </tr>
+            <tr>
+              <td>Sun, Nov 24</td>
+              <td>50</td>
+              <td>50</td>
+              <td>100.0%</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Mon, Nov 25</td>
+              <td>93</td>
+              <td>56</td>
+              <td>60.2%</td>
+              <td>53,702</td>
+              <td>315,446</td>
+            </tr>
+            <tr>
+              <td>Tue, Nov 26</td>
+              <td>16</td>
+              <td>2</td>
+              <td>12.5%</td>
+              <td>120,962</td>
+              <td>547,186</td>
+            </tr>
+            <tr>
+              <td>Wed, Nov 27</td>
+              <td>18</td>
+              <td>9</td>
+              <td>50.0%</td>
+              <td>97,007</td>
+              <td>73,105</td>
+            </tr>
+            <tr>
+              <td>Thu, Nov 28</td>
+              <td>50</td>
+              <td>29</td>
+              <td>58.0%</td>
+              <td>1,026</td>
+              <td>124,317</td>
+            </tr>
+            <tr>
+              <td>Sun, Dec 01</td>
+              <td>52</td>
+              <td>23</td>
+              <td>44.2%</td>
+              <td>186,581</td>
+              <td>305,103</td>
+            </tr>
+            <tr>
+              <td>Mon, Dec 02</td>
+              <td>110</td>
+              <td>29</td>
+              <td>26.4%</td>
+              <td>4,989</td>
+              <td>150,063</td>
+            </tr>
+            <tr>
+              <td>Tue, Dec 03</td>
+              <td>50</td>
+              <td>41</td>
+              <td>82.0%</td>
+              <td>0</td>
+              <td>27,169</td>
+            </tr>
+            <tr>
+              <td>Wed, Dec 04</td>
+              <td>50</td>
+              <td>46</td>
+              <td>92.0%</td>
+              <td>115,556</td>
+              <td>218,534</td>
+            </tr>
+            <tr>
+              <td>Thu, Dec 05</td>
+              <td>50</td>
+              <td>0</td>
+              <td>0.0%</td>
+              <td>76,905</td>
+              <td>117,742</td>
+            </tr>
+            <tr>
+              <td>Sun, Dec 08</td>
+              <td>53</td>
+              <td>0</td>
+              <td>0.0%</td>
+              <td>146,134</td>
+              <td>438,524</td>
+            </tr>
+            <tr class="total-row">
+              <td>Total</td>
+              <td>2125</td>
+              <td>991</td>
+              <td>46.6%</td>
+              <td>1,619,680</td>
+              <td>8,163,718</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="chart-container section">
+        <h2>Account Age Distribution</h2>
+        <div>
+          <script type="text/javascript">
+            window.PlotlyConfig = { MathJaxConfig: "local" };
+          </script>
+          <script
+            charset="utf-8"
+            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
+          ></script>
+          <div
+            id="1c934335-d606-4b85-bf9f-ce682dc67005"
+            class="plotly-graph-div"
+            style="height: 250px; width: 100%"
+          ></div>
+          <script type="text/javascript">
+            window.PLOTLYENV = window.PLOTLYENV || {};
+            if (
+              document.getElementById("1c934335-d606-4b85-bf9f-ce682dc67005")
+            ) {
+              Plotly.newPlot(
+                "1c934335-d606-4b85-bf9f-ce682dc67005",
+                [
+                  {
+                    marker: { color: "#118DFF" },
+                    x: [
+                      "Within a Month",
+                      "More Than 6 Months (Sleeping)",
+                      "1 - 6 Months",
+                      "More than 6 Months (Sleeping)",
+                    ],
+                    y: { dtype: "i2", bdata: "kgGRAboAAgA=" },
+                    type: "bar",
+                  },
+                ],
+                {
+                  template: {
+                    data: {
+                      histogram2dcontour: [
+                        {
+                          type: "histogram2dcontour",
+                          colorbar: { outlinewidth: 0, ticks: "" },
+                          colorscale: [
+                            [0.0, "#0d0887"],
+                            [0.1111111111111111, "#46039f"],
+                            [0.2222222222222222, "#7201a8"],
+                            [0.3333333333333333, "#9c179e"],
+                            [0.4444444444444444, "#bd3786"],
+                            [0.5555555555555556, "#d8576b"],
+                            [0.6666666666666666, "#ed7953"],
+                            [0.7777777777777778, "#fb9f3a"],
+                            [0.8888888888888888, "#fdca26"],
+                            [1.0, "#f0f921"],
+                          ],
+                        },
+                      ],
+                      choropleth: [
+                        {
+                          type: "choropleth",
+                          colorbar: { outlinewidth: 0, ticks: "" },
+                        },
+                      ],
+                      histogram2d: [
+                        {
+                          type: "histogram2d",
+                          colorbar: { outlinewidth: 0, ticks: "" },
+                          colorscale: [
+                            [0.0, "#0d0887"],
+                            [0.1111111111111111, "#46039f"],
+                            [0.2222222222222222, "#7201a8"],
+                            [0.3333333333333333, "#9c179e"],
+                            [0.4444444444444444, "#bd3786"],
+                            [0.5555555555555556, "#d8576b"],
+                            [0.6666666666666666, "#ed7953"],
+                            [0.7777777777777778, "#fb9f3a"],
+                            [0.8888888888888888, "#fdca26"],
+                            [1.0, "#f0f921"],
+                          ],
+                        },
+                      ],
+                      heatmap: [
+                        {
+                          type: "heatmap",
+                          colorbar: { outlinewidth: 0, ticks: "" },
+                          colorscale: [
+                            [0.0, "#0d0887"],
+                            [0.1111111111111111, "#46039f"],
+                            [0.2222222222222222, "#7201a8"],
+                            [0.3333333333333333, "#9c179e"],
+                            [0.4444444444444444, "#bd3786"],
+                            [0.5555555555555556, "#d8576b"],
+                            [0.6666666666666666, "#ed7953"],
+                            [0.7777777777777778, "#fb9f3a"],
+                            [0.8888888888888888, "#fdca26"],
+                            [1.0, "#f0f921"],
+                          ],
+                        },
+                      ],
+                      contourcarpet: [
+                        {
+                          type: "contourcarpet",
+                          colorbar: { outlinewidth: 0, ticks: "" },
+                        },
+                      ],
+                      contour: [
+                        {
+                          type: "contour",
+                          colorbar: { outlinewidth: 0, ticks: "" },
+                          colorscale: [
+                            [0.0, "#0d0887"],
+                            [0.1111111111111111, "#46039f"],
+                            [0.2222222222222222, "#7201a8"],
+                            [0.3333333333333333, "#9c179e"],
+                            [0.4444444444444444, "#bd3786"],
+                            [0.5555555555555556, "#d8576b"],
+                            [0.6666666666666666, "#ed7953"],
+                            [0.7777777777777778, "#fb9f3a"],
+                            [0.8888888888888888, "#fdca26"],
+                            [1.0, "#f0f921"],
+                          ],
+                        },
+                      ],
+                      surface: [
+                        {
+                          type: "surface",
+                          colorbar: { outlinewidth: 0, ticks: "" },
+                          colorscale: [
+                            [0.0, "#0d0887"],
+                            [0.1111111111111111, "#46039f"],
+                            [0.2222222222222222, "#7201a8"],
+                            [0.3333333333333333, "#9c179e"],
+                            [0.4444444444444444, "#bd3786"],
+                            [0.5555555555555556, "#d8576b"],
+                            [0.6666666666666666, "#ed7953"],
+                            [0.7777777777777778, "#fb9f3a"],
+                            [0.8888888888888888, "#fdca26"],
+                            [1.0, "#f0f921"],
+                          ],
+                        },
+                      ],
+                      mesh3d: [
+                        {
+                          type: "mesh3d",
+                          colorbar: { outlinewidth: 0, ticks: "" },
+                        },
+                      ],
+                      scatter: [
+                        {
+                          fillpattern: {
+                            fillmode: "overlay",
+                            size: 10,
+                            solidity: 0.2,
+                          },
+                          type: "scatter",
+                        },
+                      ],
+                      parcoords: [
+                        {
+                          type: "parcoords",
+                          line: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      scatterpolargl: [
+                        {
+                          type: "scatterpolargl",
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      bar: [
+                        {
+                          error_x: { color: "#2a3f5f" },
+                          error_y: { color: "#2a3f5f" },
+                          marker: {
+                            line: { color: "#E5ECF6", width: 0.5 },
+                            pattern: {
+                              fillmode: "overlay",
+                              size: 10,
+                              solidity: 0.2,
+                            },
+                          },
+                          type: "bar",
+                        },
+                      ],
+                      scattergeo: [
+                        {
+                          type: "scattergeo",
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      scatterpolar: [
+                        {
+                          type: "scatterpolar",
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      histogram: [
+                        {
+                          marker: {
+                            pattern: {
+                              fillmode: "overlay",
+                              size: 10,
+                              solidity: 0.2,
+                            },
+                          },
+                          type: "histogram",
+                        },
+                      ],
+                      scattergl: [
+                        {
+                          type: "scattergl",
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      scatter3d: [
+                        {
+                          type: "scatter3d",
+                          line: { colorbar: { outlinewidth: 0, ticks: "" } },
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      scattermap: [
+                        {
+                          type: "scattermap",
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      scattermapbox: [
+                        {
+                          type: "scattermapbox",
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      scatterternary: [
+                        {
+                          type: "scatterternary",
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      scattercarpet: [
+                        {
+                          type: "scattercarpet",
+                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
+                        },
+                      ],
+                      carpet: [
+                        {
+                          aaxis: {
+                            endlinecolor: "#2a3f5f",
+                            gridcolor: "white",
+                            linecolor: "white",
+                            minorgridcolor: "white",
+                            startlinecolor: "#2a3f5f",
+                          },
+                          baxis: {
+                            endlinecolor: "#2a3f5f",
+                            gridcolor: "white",
+                            linecolor: "white",
+                            minorgridcolor: "white",
+                            startlinecolor: "#2a3f5f",
+                          },
+                          type: "carpet",
+                        },
+                      ],
+                      table: [
+                        {
+                          cells: {
+                            fill: { color: "#EBF0F8" },
+                            line: { color: "white" },
+                          },
+                          header: {
+                            fill: { color: "#C8D4E3" },
+                            line: { color: "white" },
+                          },
+                          type: "table",
+                        },
+                      ],
+                      barpolar: [
+                        {
+                          marker: {
+                            line: { color: "#E5ECF6", width: 0.5 },
+                            pattern: {
+                              fillmode: "overlay",
+                              size: 10,
+                              solidity: 0.2,
+                            },
+                          },
+                          type: "barpolar",
+                        },
+                      ],
+                      pie: [{ automargin: true, type: "pie" }],
+                    },
+                    layout: {
+                      autotypenumbers: "strict",
+                      colorway: [
+                        "#636efa",
+                        "#EF553B",
+                        "#00cc96",
+                        "#ab63fa",
+                        "#FFA15A",
+                        "#19d3f3",
+                        "#FF6692",
+                        "#B6E880",
+                        "#FF97FF",
+                        "#FECB52",
+                      ],
+                      font: { color: "#2a3f5f" },
+                      hovermode: "closest",
+                      hoverlabel: { align: "left" },
+                      paper_bgcolor: "white",
+                      plot_bgcolor: "#E5ECF6",
+                      polar: {
+                        bgcolor: "#E5ECF6",
+                        angularaxis: {
+                          gridcolor: "white",
+                          linecolor: "white",
+                          ticks: "",
+                        },
+                        radialaxis: {
+                          gridcolor: "white",
+                          linecolor: "white",
+                          ticks: "",
+                        },
+                      },
+                      ternary: {
+                        bgcolor: "#E5ECF6",
+                        aaxis: {
+                          gridcolor: "white",
+                          linecolor: "white",
+                          ticks: "",
+                        },
+                        baxis: {
+                          gridcolor: "white",
+                          linecolor: "white",
+                          ticks: "",
+                        },
+                        caxis: {
+                          gridcolor: "white",
+                          linecolor: "white",
+                          ticks: "",
+                        },
+                      },
+                      coloraxis: { colorbar: { outlinewidth: 0, ticks: "" } },
+                      colorscale: {
+                        sequential: [
+                          [0.0, "#0d0887"],
+                          [0.1111111111111111, "#46039f"],
+                          [0.2222222222222222, "#7201a8"],
+                          [0.3333333333333333, "#9c179e"],
+                          [0.4444444444444444, "#bd3786"],
+                          [0.5555555555555556, "#d8576b"],
+                          [0.6666666666666666, "#ed7953"],
+                          [0.7777777777777778, "#fb9f3a"],
+                          [0.8888888888888888, "#fdca26"],
+                          [1.0, "#f0f921"],
+                        ],
+                        sequentialminus: [
+                          [0.0, "#0d0887"],
+                          [0.1111111111111111, "#46039f"],
+                          [0.2222222222222222, "#7201a8"],
+                          [0.3333333333333333, "#9c179e"],
+                          [0.4444444444444444, "#bd3786"],
+                          [0.5555555555555556, "#d8576b"],
+                          [0.6666666666666666, "#ed7953"],
+                          [0.7777777777777778, "#fb9f3a"],
+                          [0.8888888888888888, "#fdca26"],
+                          [1.0, "#f0f921"],
+                        ],
+                        diverging: [
+                          [0, "#8e0152"],
+                          [0.1, "#c51b7d"],
+                          [0.2, "#de77ae"],
+                          [0.3, "#f1b6da"],
+                          [0.4, "#fde0ef"],
+                          [0.5, "#f7f7f7"],
+                          [0.6, "#e6f5d0"],
+                          [0.7, "#b8e186"],
+                          [0.8, "#7fbc41"],
+                          [0.9, "#4d9221"],
+                          [1, "#276419"],
+                        ],
+                      },
+                      xaxis: {
+                        gridcolor: "white",
+                        linecolor: "white",
+                        ticks: "",
+                        title: { standoff: 15 },
+                        zerolinecolor: "white",
+                        automargin: true,
+                        zerolinewidth: 2,
+                      },
+                      yaxis: {
+                        gridcolor: "white",
+                        linecolor: "white",
+                        ticks: "",
+                        title: { standoff: 15 },
+                        zerolinecolor: "white",
+                        automargin: true,
+                        zerolinewidth: 2,
+                      },
+                      scene: {
+                        xaxis: {
+                          backgroundcolor: "#E5ECF6",
+                          gridcolor: "white",
+                          linecolor: "white",
+                          showbackground: true,
+                          ticks: "",
+                          zerolinecolor: "white",
+                          gridwidth: 2,
+                        },
+                        yaxis: {
+                          backgroundcolor: "#E5ECF6",
+                          gridcolor: "white",
+                          linecolor: "white",
+                          showbackground: true,
+                          ticks: "",
+                          zerolinecolor: "white",
+                          gridwidth: 2,
+                        },
+                        zaxis: {
+                          backgroundcolor: "#E5ECF6",
+                          gridcolor: "white",
+                          linecolor: "white",
+                          showbackground: true,
+                          ticks: "",
+                          zerolinecolor: "white",
+                          gridwidth: 2,
+                        },
+                      },
+                      shapedefaults: { line: { color: "#2a3f5f" } },
+                      annotationdefaults: {
+                        arrowcolor: "#2a3f5f",
+                        arrowhead: 0,
+                        arrowwidth: 1,
+                      },
+                      geo: {
+                        bgcolor: "white",
+                        landcolor: "#E5ECF6",
+                        subunitcolor: "white",
+                        showland: true,
+                        showlakes: true,
+                        lakecolor: "white",
+                      },
+                      title: { x: 0.05 },
+                      mapbox: { style: "light" },
+                    },
+                  },
+                  margin: { l: 40, r: 40, t: 20, b: 60 },
+                  font: { size: 10 },
+                  title: { text: "" },
+                  xaxis: { title: { text: "Account Age" } },
+                  yaxis: { title: { text: "Count" } },
+                  height: 250,
+                },
+                { responsive: true }
+              );
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Activity by Detection Criteria</h2>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Criteria</th>
+            <th>Susp</th>
+            <th>Mules</th>
+            <th>%</th>
+            <th>Cashout</th>
+            <th>Recovery</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Advance Payments with more than 50% of the inward transfer for
+              newely opened accounts
+            </td>
+            <td>68</td>
+            <td>13</td>
+            <td>19.1%</td>
+            <td>90,398</td>
+            <td>99,049</td>
+          </tr>
+          <tr>
+            <td>Cashout Certain Merchants</td>
+            <td>55</td>
+            <td>1</td>
+            <td>1.8%</td>
+            <td>2,148</td>
+            <td>83,712</td>
+          </tr>
+          <tr>
+            <td>Compromised Devices + Hot Zone Area</td>
+            <td>1157</td>
+            <td>571</td>
+            <td>49.4%</td>
+            <td>394,635</td>
+            <td>1,536,765</td>
+          </tr>
+          <tr>
+            <td>
+              Customer Age + Account Age + Advance Payment + Inward Transfer
+            </td>
+            <td>743</td>
+            <td>386</td>
+            <td>52.0%</td>
+            <td>1,131,604</td>
+            <td>6,330,538</td>
+          </tr>
+          <tr>
+            <td>INACTIVE Then High number of inward transfers</td>
+            <td>97</td>
+            <td>20</td>
+            <td>20.6%</td>
+            <td>895</td>
+            <td>113,653</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
