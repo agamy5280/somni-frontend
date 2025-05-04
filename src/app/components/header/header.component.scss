@@ -1,7 +1,7 @@
 @forward "../../../../public/assets/styles/variables.scss";
 
 // Variables
-$primary-color: #6746c3;
+$primary-color: #001081;
 $secondary-color: #4a33a8;
 $light-text: #ffffff;
 $shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -43,6 +43,11 @@ $border-color: #e0e0e0;
   gap: 15px;
 }
 
+// Sidebar toggle container styles
+.sidebar-toggle-container {
+  position: relative;
+}
+
 .header-btn {
   background: none;
   border: none;
@@ -59,6 +64,49 @@ $border-color: #e0e0e0;
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+// Routes dropdown styles
+.routes-dropdown {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  width: 200px;
+  background-color: $menu-background;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 100;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.routes-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      color: $menu-text;
+      text-decoration: none;
+      transition: $transition;
+      cursor: pointer;
+
+      i {
+        margin-right: 10px;
+        color: $primary-color;
+        width: 20px;
+        text-align: center;
+      }
+
+      &:hover {
+        background-color: $menu-hover;
+      }
+    }
   }
 }
 

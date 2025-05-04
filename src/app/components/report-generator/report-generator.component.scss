@@ -63,7 +63,7 @@
       display: inline-block;
       width: 3px;
       height: 16px;
-      background-color: #3498db;
+      background-color: #001081;
       margin-right: 8px;
       border-radius: 2px;
     }
@@ -86,7 +86,7 @@
   transition: all 0.3s ease;
 
   &:focus {
-    border-color: #3498db;
+    border-color: #001081;
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
     outline: none;
   }
@@ -97,13 +97,13 @@
   background-color: #f8fafc;
   border-radius: 6px;
   padding: 12px;
-  border-left: 4px solid #3498db;
+  border-left: 4px solid #001081;
   margin-bottom: 5px;
 
   .report-icon {
     font-size: 24px;
     margin-right: 12px;
-    color: #3498db;
+    color: #001081;
     display: flex;
     align-items: center;
   }
@@ -135,7 +135,7 @@
   .tag {
     padding: 3px 8px;
     background-color: #e1f0fa;
-    color: #3498db;
+    color: #001081;
     border-radius: 20px;
     font-size: 12px;
     font-weight: 500;
@@ -166,7 +166,7 @@
       transition: all 0.3s ease;
 
       &:focus {
-        border-color: #3498db;
+        border-color: #001081;
         box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
         outline: none;
       }
@@ -181,7 +181,7 @@
 }
 
 .generate-btn {
-  background-color: #3498db;
+  background-color: #001081;
   color: #fff;
   padding: 10px 20px;
   border: none;
@@ -227,7 +227,7 @@
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(to right, #3498db, #2ecc71);
+      background: linear-gradient(to right, #001081, #2ecc71);
       border-radius: 4px;
       transition: width 0.3s ease;
     }
@@ -248,7 +248,7 @@
     color: #34495e;
     font-size: 13px;
     text-align: center;
-    border-left: 3px solid #3498db;
+    border-left: 3px solid #001081;
     animation: pulse 1.5s infinite;
   }
 }

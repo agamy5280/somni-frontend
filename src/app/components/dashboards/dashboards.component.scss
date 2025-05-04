@@ -7,7 +7,7 @@ body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
   color: #333;
-  padding: 20px; /* Keep body padding for overall spacing */
+  /* Keep body padding for overall spacing */
   background-color: #f5f5f5;
 }
 .dashboard-container {
@@ -15,6 +15,7 @@ body {
   margin: 0 auto;
   background-color: #fff;
   border-radius: 10px;
+  padding: 10px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 100%; /* Ensure container takes full available width */
@@ -24,6 +25,7 @@ body {
   padding: 30px 20px;
   background: linear-gradient(135deg, #0066cc, #004080);
   color: white;
+  border-radius: 10px;
 }
 .dashboard-header h1 {
   margin-bottom: 10px;

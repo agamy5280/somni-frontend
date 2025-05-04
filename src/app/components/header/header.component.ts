@@ -1,3 +1,4 @@
+// header.component.ts
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService, User } from '../../services/data.service';
@@ -13,6 +14,14 @@ export class HeaderComponent implements OnInit {
 
   currentUser: User | null = null;
   showUserMenu = false;
+  showRoutes = false; // New property to track routes visibility
+
+  // Define the routes to display when sidebar icon is clicked
+  navigationRoutes = [
+    { path: '/chatbot', label: 'Chatbot', icon: 'fa-comment-dots' },
+    { path: '/dashboards', label: 'Dashboards', icon: 'fa-chart-pie' },
+    { path: '/reports', label: 'Reports', icon: 'fa-file-alt' },
+  ];
 
   constructor(private dataService: DataService, private router: Router) {}
 
@@ -22,7 +31,18 @@ export class HeaderComponent implements OnInit {
   }
 
   onToggleSidebar(): void {
+    // Toggle the routes visibility
+    this.showRoutes = !this.showRoutes;
+
+    // Still emit the toggle event for backward compatibility
     this.toggleSidebar.emit();
+  }
+
+  // Add method to navigate to a specific route
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+    // Hide the routes after navigation (optional)
+    this.showRoutes = false;
   }
 
   toggleUserMenu(): void {

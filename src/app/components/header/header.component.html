@@ -1,19 +1,35 @@
-<div class="header">
-  <div class="logo">
-    <button class="header-btn" (click)="onToggleSidebar()">
-      <i class="fas fa-bars"></i>
-    </button>
-    <img src="/assets/images/anb.png" alt="anb" />
-    <span class="logo-text">WatsonX Assistant</span>
-  </div>
-  <div class="header-actions">
-    <!-- <button class="header-btn" title="Notifications">
+<!-- <button class="header-btn" title="Notifications">
       <i class="fas fa-bell"></i>
     </button>
     <button class="header-btn" title="Help">
       <i class="fas fa-question-circle"></i>
     </button> -->
 
+<!-- User menu button -->
+<div class="header">
+  <div class="logo">
+    <div class="sidebar-toggle-container">
+      <button class="header-btn" (click)="onToggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- This is the dropdown menu for routes that appears when the bars icon is clicked -->
+      <div class="routes-dropdown" *ngIf="showRoutes">
+        <ul class="routes-menu">
+          <li *ngFor="let route of navigationRoutes">
+            <a (click)="navigateTo(route.path)">
+              <i class="fas {{ route.icon }}"></i>
+              <span>{{ route.label }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <span class="logo-text">Somni Assistant</span>
+  </div>
+
+  <div class="header-actions">
     <!-- User menu button -->
     <div class="user-menu-container">
       <button
