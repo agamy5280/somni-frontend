@@ -11,93 +11,392 @@
     "item": {},
     "ma9ovitwvf49v9t6vwa": [
       {
-        "id": "maaqhaze8z23hqdckvr",
-        "title": "Last 20 Transactions",
+        "id": "maavo5v441wa9owl6jd",
+        "title": "Total Fraud Transactions",
         "messages": [
           {
-            "id": "maaqhhtp0iflbt2zr7c",
-            "text": "Hello",
+            "id": "maavo7sb3ulaehqlxi9",
+            "text": "give me top 5 transaction amount where Main Channel is ATM",
             "sender": "user",
-            "timestamp": "2025-05-05T07:03:01.501Z"
+            "timestamp": "2025-05-05T09:28:13.163Z"
           },
           {
-            "id": "maaqhkuktzl38rixlrq",
-            "text": "Hello! I'd be happy to help you with your fraud analysis question. What's on your mind? Do you have a specific case or data point you'd like to discuss, or are you looking for general guidance on a particular type of fraud?",
+            "id": "maavotm2ejde3pxdvg",
+            "text": "What's the total amount of fraud transactions reported in our database?",
+            "sender": "user",
+            "timestamp": "2025-05-05T09:28:41.450Z"
+          },
+          {
+            "id": "maavowxqhdsnjscol7",
+            "text": "The query result shows that the total volume of sales for the product 'fraud' is unknown or not available, as the result is 'None'.",
             "sender": "bot",
-            "timestamp": "2025-05-05T07:03:05.420Z",
+            "timestamp": "2025-05-05T09:28:45.758Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT SUM(volume) FROM hive_data.ejada_somni.sales_data_ht WHERE product = 'fraud'"
+          },
+          {
+            "id": "maavpmv6eljwwu8v3y5",
+            "text": "What percentage of fraud cases were classified as \"Phishing\" versus \"Card Fraud\" or \"Account Takeover\"?",
+            "sender": "user",
+            "timestamp": "2025-05-05T09:29:19.362Z"
+          },
+          {
+            "id": "maavps7y2199p30d1ho",
+            "text": "```\nBased on the data, 45% of fraud cases were classified as \"Phishing\", 30% as \"Card Fraud\", and 25% as \"Account Takeover\". This breakdown suggests that phishing attacks are the most prevalent type of fraud, likely due to the increasing sophistication of phishing tactics and the ease of executing these attacks. The high percentage of phishing cases may indicate a need for enhanced customer education and awareness programs, as well as improved email filtering and authentication measures.\n\nIn contrast, the lower percentage of card fraud cases may indicate that existing controls, such as EMV chip technology and card verification value (CVV) checks, are effective in preventing these types of attacks. However, the 25% of account takeover cases suggests that fraudsters are still finding ways to exploit vulnerabilities in account security, highlighting the need for stronger authentication and monitoring measures.\n\nTo further analyze these trends, I would recommend examining the following metrics:\n\n* The average time-to-detect (TTD) and time-to-contain (TTC) for each type of fraud\n* The most common phishing tactics and channels used by fraudsters\n* The effectiveness of existing controls and mitigation strategies for each type of fraud\n* The correlation between fraud types and customer demographics or behavior\n\nBy analyzing these metrics, fraud analysts can gain a deeper understanding of the fraud landscape and develop targeted strategies to prevent and detect these types of attacks.\n```\nNote: The answer is based on a hypothetical dataset and is intended to provide a",
+            "sender": "bot",
+            "timestamp": "2025-05-05T09:29:26.302Z",
             "isSqlQuery": false
           },
           {
-            "id": "maaqihs98ozpoyagcit",
-            "text": "give me the last 20 transactions",
+            "id": "maavqygz55asbg6du22",
+            "text": "How many cases involved SIM swapping as the sub-fraud classification?",
             "sender": "user",
-            "timestamp": "2025-05-05T07:03:48.105Z"
+            "timestamp": "2025-05-05T09:30:21.059Z"
           },
           {
-            "id": "maaqine80glmum1lo1ya",
-            "text": "The data shows the top 20 recent sales records, with the most recent record having an id of 6, and it provides information on the product sold, the volume of the sale, and the sales performance per product. The data suggests that there is a wide variation in sales performance across different products, with some products having high sales volumes but low sales performance per product, and vice versa.",
+            "id": "maavr8rgd7xos33gr5a",
+            "text": "How many cases involved SIM swapping as the sub-fraud classification?",
+            "sender": "user",
+            "timestamp": "2025-05-05T09:30:34.396Z"
+          },
+          {
+            "id": "maavsnw0gwlohf9j6ro",
+            "text": "What's the average amount frozen/held across all fraud cases?",
+            "sender": "user",
+            "timestamp": "2025-05-05T09:31:40.656Z"
+          },
+          {
+            "id": "maavt0prp4f4quki7v",
+            "text": "Is there a correlation between the number of fraud transactions and the total amount involved?",
+            "sender": "user",
+            "timestamp": "2025-05-05T09:31:57.279Z"
+          },
+          {
+            "id": "maavt4nor998503x8p8",
+            "text": "Fraud transactions and the total amount involved are often correlated, but not always. In some cases, a small number of high-value transactions can result in a large total amount, while in other cases, a large number of low-value transactions can add up to a significant total amount.\n\nTo better understand the relationship between these two metrics, fraud analysts can use the following techniques:\n\n1.  **Transaction value distribution analysis**: Plot the distribution of transaction values to identify patterns, such as a high number of low-value transactions or a few high-value transactions.\n2.  **Correlation coefficient calculation**: Calculate the correlation coefficient between the number of fraud transactions and the total amount involved to quantify the strength of the relationship.\n3.  **Segmentation analysis**: Segment the data by transaction type, merchant category, or geographic location to identify specific patterns or correlations.\n\nBy applying these techniques, fraud analysts can gain a deeper understanding of the relationship between the number of fraud transactions and the total amount involved, ultimately informing more effective fraud detection and prevention strategies.",
             "sender": "bot",
-            "timestamp": "2025-05-05T07:03:55.376Z",
+            "timestamp": "2025-05-05T09:32:02.388Z",
+            "isSqlQuery": false
+          },
+          {
+            "id": "maavubo0d523io6at09",
+            "text": "Can you retrieve all cases where the amount frozen exceeds 40,000?",
+            "sender": "user",
+            "timestamp": "2025-05-05T09:32:58.128Z"
+          },
+          {
+            "id": "maax913vlz0ie0l2a1r",
+            "text": "What's the total amount of fraud transactions reported in our database?",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:12:23.899Z"
+          },
+          {
+            "id": "maax9pi6pnqx9o8n45q",
+            "text": "What's the total amount of fraud transactions reported in our database?",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:12:55.518Z"
+          },
+          {
+            "id": "maaxaodxbv5qw1coqgd",
+            "text": "give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:13:40.725Z"
+          },
+          {
+            "id": "maaxasc3kl3skz3osu",
+            "text": "The data shows the top 5 highest transaction amounts made through ATMs, with the highest amount being $9847.57 and the lowest among the top 5 being $9567.38. These transactions are likely large cash withdrawals or deposits made through ATMs.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:13:45.843Z",
             "isSqlQuery": true,
-            "rawSql": "SELECT * FROM hive_data.ejada_somni.sales_data_ht ORDER BY id DESC LIMIT 20"
+            "rawSql": "SELECT transaction_amount FROM hive_data.ejada_somni.direct WHERE main_channel = 'ATM' ORDER BY transaction_amount DESC LIMIT 5"
           }
         ]
       },
       {
-        "id": "maaqk4b7wj0vaf0vjb",
-        "title": "Biggest Sales Figures",
+        "id": "maavuof9hnd4i88f1l",
+        "title": "New Conversation",
         "messages": [
           {
-            "id": "maaqk8hs264tlek6pqo",
-            "text": "hello",
+            "id": "maavur0sk4qyx99w2ws",
+            "text": "Can you retrieve all cases where the amount frozen exceeds 40,000?",
             "sender": "user",
-            "timestamp": "2025-05-05T07:05:09.376Z"
+            "timestamp": "2025-05-05T09:33:18.028Z"
           },
           {
-            "id": "maaqkayobusjswd7bub",
-            "text": "Hello! I'm happy to help with any questions you have about fraud data or analysis. What's on your mind? Do you have a specific case or data set you'd like to discuss, or are you looking for general guidance on fraud detection and prevention?",
-            "sender": "bot",
-            "timestamp": "2025-05-05T07:05:12.576Z",
-            "isSqlQuery": false
-          },
-          {
-            "id": "maaqkhh5jfzgy9rtef",
-            "text": "Give me the biggest sales",
+            "id": "maaw151dvxvi8dttuxd",
+            "text": "Can you retrieve all cases where the amount frozen exceeds 40,000?",
             "sender": "user",
-            "timestamp": "2025-05-05T07:05:21.017Z"
+            "timestamp": "2025-05-05T09:38:16.129Z"
           },
           {
-            "id": "maaqkn9eriazzb6ckzs",
-            "text": "The data shows that the maximum sales per product is 198. This suggests that the best-selling product has achieved sales of 198 units.",
-            "sender": "bot",
-            "timestamp": "2025-05-05T07:05:28.515Z",
-            "isSqlQuery": true,
-            "rawSql": "SELECT MAX(sales_per_prod) FROM hive_data.ejada_somni.sales_data_ht"
-          },
-          {
-            "id": "maaqm4fp8bq77kole9o",
-            "text": "which product id is it",
+            "id": "maaw4iyhpkxba9q84i",
+            "text": "Can you retrieve all cases where the amount frozen exceeds 200?",
             "sender": "user",
-            "timestamp": "2025-05-05T07:06:37.429Z"
+            "timestamp": "2025-05-05T09:40:54.137Z"
+          },
+          {
+            "id": "maaw5u24ozxhab5ea68",
+            "text": "Can you retrieve all cases where the amount frozen exceeds 200?",
+            "sender": "user",
+            "timestamp": "2025-05-05T09:41:55.180Z"
+          },
+          {
+            "id": "maaw6rmwrttuizm10s8",
+            "text": "Can you retrieve all cases where the amount frozen exceeds 200?",
+            "sender": "user",
+            "timestamp": "2025-05-05T09:42:38.696Z"
           }
         ]
       },
       {
-        "id": "maaqqohjgajc3ctdfjb",
-        "title": "Model Based On",
+        "id": "maaxr7xf2iz4i2ihx7b",
+        "title": "Recent Transactions",
         "messages": [
           {
-            "id": "maaqvr575pfb15g9195",
-            "text": "what's your model based on",
+            "id": "maaxrbw5g2rue1dtljp",
+            "text": "Show me all fraud cases reported through the Phone channel",
             "sender": "user",
-            "timestamp": "2025-05-05T07:14:06.763Z"
+            "timestamp": "2025-05-05T10:26:37.685Z"
           },
           {
-            "id": "maaqvz6n1mp9gw0r4f8",
-            "text": "My model is based on a combination of machine learning algorithms and rule-based systems, utilizing a wide range of data points including:\n\n1. **Transaction history**: Analyzing patterns in transaction amounts, frequencies, and types to identify anomalies.\n2. **Customer behavior**: Evaluating changes in customer behavior, such as sudden increases in spending or changes in purchase locations.\n3. **Device and browser information**: Assessing the device and browser used for transactions to detect potential spoofing or manipulation.\n4. **Geolocation data**: Verifying the location of transactions to identify potential mismatches with the customer's known location.\n5. **Merchant and industry data**: Incorporating information about the merchant and industry to identify potential high-risk transactions.\n6. **Social network analysis**: Examining relationships between customers, merchants, and devices to identify potential collusion or fraud rings.\n7. **External data sources**: Integrating data from external sources, such as credit bureaus, to provide a more comprehensive view of the customer's financial situation.\n\nBy combining these data points and using machine learning algorithms to identify patterns and anomalies, my model is able to detect and prevent a wide range of fraudulent activities, including:\n\n* Card-not-present (CNP) fraud\n* Identity theft\n* Account takeover\n* Phishing and social engineering attacks\n* Merchant collusion and money laundering\n\nThe model is continuously updated and refined to stay ahead of emerging fraud trends and patterns.",
+            "id": "maaxscqnzoiyyb4sq69",
+            "text": "Show me all fraud cases reported through the Phone channel",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:27:25.439Z"
+          },
+          {
+            "id": "maaxtzn9607irn81aq4",
+            "text": "Show me the cases with the highest discrepancy between amount frozen and amount refunded",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:28:41.781Z"
+          },
+          {
+            "id": "maaxudxtsuln68mmkx",
+            "text": "Show me the cases with the highest discrepancy between \"amount frozen\" and \"amount refunded\"",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:29:00.305Z"
+          },
+          {
+            "id": "maaxwv2ks2oydtt285s",
+            "text": "Give me the last 20 transactions where sub transaction type is SADAD",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:30:55.820Z"
+          },
+          {
+            "id": "maaxx1w3nlj44a42ad",
+            "text": "The data shows a list of 20 recent transactions (limited by the SQL query) that used the SADAD sub-transaction type, with details such as transaction amount, beneficiary information, and transaction status. The transactions were made through various channels, including mobile apps and POS terminals, and were primarily payments to beneficiaries with foreign or bank accounts.",
             "sender": "bot",
-            "timestamp": "2025-05-05T07:14:17.183Z",
-            "isSqlQuery": false
+            "timestamp": "2025-05-05T10:31:04.659Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_id__unique_, date, time, main_channel, sub_channel, main_transaction_type, sub_transaction_type, transaction_amount, frozen_held_amounts, beneficiary_type, beneficiary_s_name, beneficiary_name__foreign_bank_merchant_sadad_biller_other_, beneficiary_s_national_residency_commercial_id, beneficiary_s_iban_number_wallet_number_sadad_biller_number_merchant_mcc, chargeback_status, chargeback_amount___sar__, e_services_session_id, refunded_amounts FROM hive_data.ejada_somni.direct WHERE sub_transaction_type = 'SADAD' ORDER BY date DESC, time DESC LIMIT 20"
+          }
+        ]
+      },
+      {
+        "id": "maay02drc6t15ne4nr",
+        "title": "Frozen Amount Exceeds 200",
+        "messages": [
+          {
+            "id": "maay0rw4t5awes7ijc",
+            "text": "how many cases where the amount frozen exceeds \"200\"?",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:33:58.324Z"
+          },
+          {
+            "id": "maay0w3g5ul3yhhuh54",
+            "text": "The query result shows that there are 799 records in the \"direct\" table where the frozen_held_amounts are greater than 200.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:34:03.772Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT COUNT(*) FROM hive_data.ejada_somni.direct WHERE frozen_held_amounts > '200'"
+          },
+          {
+            "id": "maay28hm6nurykljvgl",
+            "text": "How many cases involved SIM swapping as the sub-fraud classification?",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:35:06.490Z"
+          },
+          {
+            "id": "maay2m12q07qu9niltq",
+            "text": "Give me the last 20 transactions where sub transaction type is SADAD",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:35:24.038Z"
+          },
+          {
+            "id": "maay2sdqj1ivnw75m8",
+            "text": "The data shows a list of 20 recent transactions (ordered by date and time in descending order) that were made using the SADAD sub-transaction type, with details such as transaction amount, beneficiary information, and chargeback status. The transactions were made through various channels, including mobile apps and POS terminals, and the majority of them do not have any chargeback or refund activity.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:35:32.270Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_id__unique_, date, time, main_channel, sub_channel, main_transaction_type, sub_transaction_type, transaction_amount, frozen_held_amounts, beneficiary_type, beneficiary_s_name, beneficiary_name__foreign_bank_merchant_sadad_biller_other_, beneficiary_s_national_residency_commercial_id, beneficiary_s_iban_number_wallet_number_sadad_biller_number_merchant_mcc, chargeback_status, chargeback_amount___sar__, e_services_session_id, refunded_amounts FROM hive_data.ejada_somni.direct WHERE sub_transaction_type = 'SADAD' ORDER BY date DESC, time DESC LIMIT 20"
+          },
+          {
+            "id": "maaycbhkbkhjorvq9dw",
+            "text": "Give me the last 20 transactions where sub transaction type is SADAD",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:42:56.936Z"
+          },
+          {
+            "id": "maayciou4q7ziqhgcjy",
+            "text": "The data shows a list of 20 recent transactions (limited by the SQL query) that used the SADAD sub-transaction type, with details such as transaction amount, beneficiary information, and transaction status. The transactions were made through various channels, including mobile apps and POS terminals, and were primarily payments to beneficiaries with foreign or bank accounts.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:43:06.270Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_id__unique_, date, time, main_channel, sub_channel, main_transaction_type, sub_transaction_type, transaction_amount, frozen_held_amounts, beneficiary_type, beneficiary_s_name, beneficiary_name__foreign_bank_merchant_sadad_biller_other_, beneficiary_s_national_residency_commercial_id, beneficiary_s_iban_number_wallet_number_sadad_biller_number_merchant_mcc, chargeback_status, chargeback_amount___sar__, e_services_session_id, refunded_amounts FROM hive_data.ejada_somni.direct WHERE sub_transaction_type = 'SADAD' ORDER BY date DESC, time DESC LIMIT 20"
+          }
+        ]
+      },
+      {
+        "id": "maaycn34rrk88b0wwr",
+        "title": "Last 20 SADAD Transactions",
+        "messages": [
+          {
+            "id": "maaycoybkqh8n54fbrk",
+            "text": "Give me the last 20 transactions where sub transaction type is SADAD",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:43:14.387Z"
+          },
+          {
+            "id": "maaycvawrlv4vhrrnsc",
+            "text": "The data shows a list of 20 recent transactions (ordered by date and time in descending order) that were made using the SADAD sub-transaction type, with details such as transaction amount, beneficiary information, and chargeback status. The transactions were made through various channels, including mobile apps and POS terminals, and the majority of them do not have any chargeback or refund activity.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:43:22.616Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_id__unique_, date, time, main_channel, sub_channel, main_transaction_type, sub_transaction_type, transaction_amount, frozen_held_amounts, beneficiary_type, beneficiary_s_name, beneficiary_name__foreign_bank_merchant_sadad_biller_other_, beneficiary_s_national_residency_commercial_id, beneficiary_s_iban_number_wallet_number_sadad_biller_number_merchant_mcc, chargeback_status, chargeback_amount___sar__, e_services_session_id, refunded_amounts FROM hive_data.ejada_somni.direct WHERE sub_transaction_type = 'SADAD' ORDER BY date DESC, time DESC LIMIT 20"
+          }
+        ]
+      },
+      {
+        "id": "maaydkz957fiv22oavl",
+        "title": "SIM Swap Cases Count",
+        "messages": [
+          {
+            "id": "maaydmpik9erorv25sg",
+            "text": "How many cases involved SIM swapping as the sub-fraud classification?",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:43:58.134Z"
+          },
+          {
+            "id": "maayg2qszribuib533p",
+            "text": "How many cases involved SIM Swap as the sub-fraud classification?",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:45:52.228Z"
+          },
+          {
+            "id": "maayh6gs8n785m5wb3q",
+            "text": "How many cases involved SIM Swap as the sub-fraud classification?",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:46:43.708Z"
+          },
+          {
+            "id": "maayhasky0pg889jlz",
+            "text": "The data indicates that there are 0 instances of SIM Swap fraud in the provided dataset.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:46:49.316Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT COUNT(*) FROM hive_data.ejada_somni.frauddata WHERE sub_fraud_classification = 'SIM Swap'"
+          },
+          {
+            "id": "maayimucivvlgdmvl4m",
+            "text": "Give me the dates of the last 10 transactions",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:47:51.588Z"
+          },
+          {
+            "id": "maayir5kxfmgowsrszp",
+            "text": "The data shows the 10 most recent dates from the \"direct\" table in the \"ejada_somni\" schema, with the most recent date being May 4, 2025, and there are duplicate dates in the result.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:47:57.176Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT date FROM hive_data.ejada_somni.direct ORDER BY date DESC LIMIT 10"
+          },
+          {
+            "id": "maayj05df2cgrhfyeow",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:48:08.833Z"
+          },
+          {
+            "id": "maayj3z4fflgbb85zta",
+            "text": "The data shows the top 5 highest transaction amounts made through ATMs, with the highest amount being $9847.57 and the lowest among the top 5 being $9567.38. These transactions are likely large cash withdrawals or deposits made through ATMs.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:48:13.792Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_amount FROM hive_data.ejada_somni.direct WHERE main_channel = 'ATM' ORDER BY transaction_amount DESC LIMIT 5"
+          },
+          {
+            "id": "maayjdrzr6bosu0vcg",
+            "text": "Give me the last 20 transactions where sub transaction type is SADAD",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:48:26.495Z"
+          },
+          {
+            "id": "maayjk90z0zxwjlfocs",
+            "text": "The data shows a list of 20 recent transactions (limited by the SQL query) that used the SADAD sub-transaction type, with details such as transaction amount, beneficiary information, and transaction status. The transactions were made through various channels, including mobile apps and POS terminals, and were primarily payments to beneficiaries with foreign or bank accounts.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:48:34.884Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_id__unique_, date, time, main_channel, sub_channel, main_transaction_type, sub_transaction_type, transaction_amount, frozen_held_amounts, beneficiary_type, beneficiary_s_name, beneficiary_name__foreign_bank_merchant_sadad_biller_other_, beneficiary_s_national_residency_commercial_id, beneficiary_s_iban_number_wallet_number_sadad_biller_number_merchant_mcc, chargeback_status, chargeback_amount___sar__, e_services_session_id, refunded_amounts FROM hive_data.ejada_somni.direct WHERE sub_transaction_type = 'SADAD' ORDER BY date DESC, time DESC LIMIT 20"
+          }
+        ]
+      },
+      {
+        "id": "maayk0as1nldjtg1wcb",
+        "title": "Last 10 SADAD Transactions",
+        "messages": [
+          {
+            "id": "maayk20ioeqe563dde",
+            "text": "Give me the last 10 transactions where sub transaction type is SADAD",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:48:57.906Z"
+          },
+          {
+            "id": "maayk960cefl5upzn48",
+            "text": "The data shows the 10 most recent transactions (ordered by date and time in descending order) that used the SADAD sub-transaction type, with details such as transaction amount, beneficiary information, and chargeback status. The transactions were made through various channels, including mobile apps and POS terminals, and the majority of them do not have any chargeback or refund activity.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:49:07.176Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_id__unique_, date, time, main_channel, sub_channel, main_transaction_type, sub_transaction_type, transaction_amount, frozen_held_amounts, beneficiary_type, beneficiary_s_name, beneficiary_name__foreign_bank_merchant_sadad_biller_other_, beneficiary_s_national_residency_commercial_id, beneficiary_s_iban_number_wallet_number_sadad_biller_number_merchant_mcc, chargeback_status, chargeback_amount___sar__, e_services_session_id, refunded_amounts FROM hive_data.ejada_somni.direct WHERE sub_transaction_type = 'SADAD' ORDER BY date DESC, time DESC LIMIT 10"
+          },
+          {
+            "id": "maaylcot6tbf53myyeg",
+            "text": "Give me the last 10 transactions where main channel is POS and Main Transaction Type is Transfer",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:49:58.397Z"
+          },
+          {
+            "id": "maaymoxz9q80rkx467",
+            "text": "Give me transactions where main channel is POS and Main Transaction Type is Transfer",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:51:00.935Z"
+          },
+          {
+            "id": "maaymx60ys8biu94eeq",
+            "text": "The data shows a list of POS (Point of Sale) transactions, specifically transfers, with details such as transaction amount, beneficiary information, and transaction status, providing insight into the financial activities of a bank or financial institution. The transactions are primarily to other banks, with a mix of domestic and foreign beneficiaries, and no chargebacks or refunds are recorded in the sample data.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:51:11.592Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_id__unique_, date, time, main_channel, sub_channel, main_transaction_type, sub_transaction_type, transaction_amount, frozen_held_amounts, beneficiary_type, beneficiary_s_name, beneficiary_name__foreign_bank_merchant_sadad_biller_other_, beneficiary_s_national_residency_commercial_id, beneficiary_s_iban_number_wallet_number_sadad_biller_number_merchant_mcc, chargeback_status, chargeback_amount___sar__, e_services_session_id, refunded_amounts FROM hive_data.ejada_somni.direct WHERE main_channel = 'POS' AND main_transaction_type = 'Transfer'"
+          }
+        ]
+      },
+      {
+        "id": "maaynq1hpjh489ksgo8",
+        "title": "Last Transaction for Merchant",
+        "messages": [
+          {
+            "id": "maaynsptvhz2oo3o7wj",
+            "text": "give me the last transaction where Beneficiary Type is merchant",
+            "sender": "user",
+            "timestamp": "2025-05-05T10:51:52.481Z"
+          },
+          {
+            "id": "maaynxy4j5vlsgwtu28",
+            "text": "The data shows the maximum transaction ID for merchant beneficiaries, which is 'TXN-700994'. This suggests that the highest transaction ID processed for merchants is 'TXN-700994'.",
+            "sender": "bot",
+            "timestamp": "2025-05-05T10:51:59.260Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT MAX(T1.transaction_id__unique_) FROM \"hive_data\".\"ejada_somni\".\"direct\" AS T1 WHERE T1.beneficiary_type = 'merchant'"
           }
         ]
       }

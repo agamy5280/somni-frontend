@@ -184,12 +184,15 @@ $sql-border: #e4e6eb;
       background-color: $code-bg;
       overflow-x: auto;
       max-height: 300px;
+      white-space: pre;
 
       code {
         color: #0077aa;
         font-family: "Courier New", Courier, monospace;
         font-size: 0.9em;
         line-height: 1.5;
+        display: block;
+        width: 100%;
 
         /* SQL syntax highlighting */
         .keyword {

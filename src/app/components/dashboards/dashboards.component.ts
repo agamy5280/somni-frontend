@@ -52,7 +52,7 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
     this.renderer.setProperty(
       loadingText,
       'textContent',
-      'Loading Dashboard...'
+      'Loading Dashboards...'
     );
 
     // Add counter for progress indication
@@ -73,8 +73,8 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
       document.body.firstChild
     );
 
-    // Start progress animation
-    this.simulateProgress(progressCounter);
+    // Start tracking iframe loading directly
+    this.trackIframeLoading();
   }
 
   simulateProgress(progressElement: any): void {
@@ -119,7 +119,7 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
       // Update progress text
       const progressElement = document.getElementById('loaderProgressCounter');
       if (progressElement) {
-        progressElement.textContent = `70% - Loading visualizations (0/${
+        progressElement.textContent = `Loading visualizations (0/${
           (window as any).totalIframes
         })`;
       }
@@ -136,19 +136,16 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
 
       // Set a timeout to prevent infinite waiting
       setTimeout(() => this.completeLoading(), 30000); // 30 seconds max wait
-    }, 1000);
+    }, 500); // Reduced from 1000ms to 500ms to start tracking sooner
   }
 
   incrementLoadedIframes(): void {
     (window as any).loadedIframes++;
 
-    // Calculate total progress (70% base + up to 30% for iframes)
-    const iframeProgress =
-      (window as any).totalIframes > 0
-        ? ((window as any).loadedIframes / (window as any).totalIframes) * 30
-        : 30;
-
-    const totalProgress = Math.min(70 + Math.floor(iframeProgress), 100);
+    // Calculate progress based on actual iframe loading
+    const totalProgress = Math.floor(
+      ((window as any).loadedIframes / (window as any).totalIframes) * 100
+    );
 
     // Update progress text
     const progressElement = document.getElementById('loaderProgressCounter');
@@ -178,20 +175,13 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
         progressCounter.textContent = '100% - Complete';
       }
 
-      // Clear any remaining interval
-      if ((window as any).progressInterval) {
-        clearInterval((window as any).progressInterval);
-      }
+      // Add fade-out class immediately
+      loaderContainer.classList.add('fade-out');
 
-      // Add fade-out class
+      // Remove after animation completes
       setTimeout(() => {
-        loaderContainer.classList.add('fade-out');
-
-        // Remove after animation completes
-        setTimeout(() => {
-          loaderContainer.remove();
-        }, 500);
-      }, 500); // Show 100% for a moment before fading
+        loaderContainer.remove();
+      }, 500);
     }
   }
 

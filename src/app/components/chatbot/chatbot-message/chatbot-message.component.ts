@@ -63,7 +63,30 @@ export class ChatbotMessageComponent {
 
   // Extract SQL code from message metadata
   extractSqlCode(): string {
-    return this.message.rawSql || '';
+    if (!this.message.rawSql) {
+      return '';
+    }
+
+    // Format SQL with line breaks for better readability
+    return this.formatSqlQuery(this.message.rawSql);
+  }
+
+  private formatSqlQuery(sql: string): string {
+    if (!sql) return '';
+
+    // Replace common SQL keywords with keywords + newline
+    const formattedSql = sql
+      // Add newlines after these keywords
+      .replace(
+        /\b(SELECT|FROM|WHERE|GROUP BY|ORDER BY|HAVING|JOIN|LEFT JOIN|RIGHT JOIN|INNER JOIN|OUTER JOIN|ON|AND|OR|UNION|LIMIT)\b/gi,
+        (match) => `\n${match}`
+      )
+      // Clean up double newlines
+      .replace(/\n\s*\n/g, '\n')
+      // Trim leading/trailing whitespace
+      .trim();
+
+    return formattedSql;
   }
 
   // Copy SQL to clipboard
