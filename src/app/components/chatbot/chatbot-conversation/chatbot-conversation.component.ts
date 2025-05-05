@@ -1,12 +1,16 @@
 import {
   Component,
   Input,
+  Output,
+  EventEmitter,
   OnChanges,
   ViewChild,
   ElementRef,
   AfterViewChecked,
 } from '@angular/core';
 import { Chat, DataService } from '../../../services/data.service';
+import { WatsonxService } from '../../../services/watsonx.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chatbot-conversation',
@@ -22,15 +26,30 @@ export class ChatbotConversationComponent
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
   @ViewChild('messageTextarea') private messageTextarea!: ElementRef;
 
+  // Add output event to notify when chat title is updated
+  @Output() chatTitleUpdated = new EventEmitter<Chat>();
+
   messageText: string = '';
   typing: boolean = false;
   shouldScrollToBottom: boolean = false;
 
-  constructor(private dataService: DataService) {}
+  // Track title generation state
+  private hasCustomTitle: boolean = false;
+  private titleUpdateInProgress = false;
+
+  constructor(
+    private dataService: DataService,
+    private watsonxService: WatsonxService
+  ) {}
 
   ngOnChanges(): void {
     // Flag that we should scroll to bottom
     this.shouldScrollToBottom = true;
+
+    // Reset the title tracking when a new chat is selected
+    if (this.currentChat) {
+      this.hasCustomTitle = !this.isTitleGeneric(this.currentChat.title);
+    }
   }
 
   ngAfterViewChecked() {
@@ -39,6 +58,19 @@ export class ChatbotConversationComponent
       this.scrollToBottom();
       this.shouldScrollToBottom = false;
     }
+  }
+
+  // Keep track of whether a meaningful title has been generated
+  private isTitleGeneric(title: string): boolean {
+    // Check if the title is one of the generic/default ones
+    const genericTitles = [
+      'New Conversation',
+      'Recent Transactions',
+      'Sales Data',
+      'Fraud Analysis',
+      'Data Query Results',
+    ];
+    return genericTitles.includes(title);
   }
 
   sendMessage(): void {
@@ -68,82 +100,163 @@ export class ChatbotConversationComponent
     // Send message to service
     this.dataService.sendMessage(this.currentChat.id, userMessage).subscribe({
       next: (message) => {
-        // Get bot response
-        this.dataService.getBotResponse(userMessage).subscribe({
-          next: (botResponseText) => {
-            // Send bot message to the backend
-            this.dataService
-              .sendBotMessage(this.currentChat!.id, botResponseText)
-              .subscribe({
-                next: (botMessage) => {
-                  // Hide typing indicator
-                  this.typing = false;
+        // Determine if this is a new chat or if we still need a better title
+        const needsTitle: boolean =
+          this.messages.length <= 1 ||
+          (!!this.currentChat &&
+            this.isTitleGeneric(this.currentChat.title) &&
+            !this.hasCustomTitle);
 
-                  // Add bot message to UI
-                  this.messages.push({
-                    id: botMessage.id,
-                    type: 'bot',
-                    content: botMessage.text,
-                  });
-
-                  // Scroll to bottom
-                  this.shouldScrollToBottom = true;
-                },
-                error: (error) => {
-                  console.error('Error sending bot message:', error);
-                  this.typing = false;
-
-                  // Don't redirect - let the AuthGuard handle auth issues
-                  // Just show an error message
-                  if (
-                    this.messages.findIndex((m) => m.type === 'error') === -1
-                  ) {
-                    this.messages.push({
-                      id: 'error-' + Date.now(),
-                      type: 'error',
-                      content: 'Failed to get a response. Please try again.',
-                    });
-                    this.shouldScrollToBottom = true;
-                  }
-                },
-              });
-          },
-          error: (error) => {
-            console.error('Error getting bot response:', error);
+        // Send query to WatsonX service
+        this.watsonxService.sendQuery(userMessage, needsTitle).subscribe({
+          next: (response) => {
+            // Hide typing indicator
             this.typing = false;
 
-            // Don't redirect - let the AuthGuard handle auth issues
-            // Just show an error message
-            if (this.messages.findIndex((m) => m.type === 'error') === -1) {
-              this.messages.push({
-                id: 'error-' + Date.now(),
-                type: 'error',
-                content: 'Failed to get a response. Please try again.',
+            // Format the bot response
+            let botContent = response.summary;
+
+            // Process the title update separately, ensuring it completes before proceeding
+            if (
+              needsTitle &&
+              response.title &&
+              this.currentChat &&
+              !this.titleUpdateInProgress
+            ) {
+              this.titleUpdateInProgress = true;
+
+              // Check if the new title is also generic
+              const isGenericTitle = this.isTitleGeneric(response.title);
+
+              // Only consider we have a good title if it's not generic
+              if (!isGenericTitle) {
+                this.hasCustomTitle = true;
+              }
+
+              this.updateChatTitle(this.currentChat.id, response.title, () => {
+                // After title is updated, then send the bot message
+                this.sendBotMessageWithMeta(
+                  this.currentChat!.id,
+                  botContent,
+                  response.is_sql_query,
+                  response.sql
+                );
               });
-              this.shouldScrollToBottom = true;
+            } else {
+              // If no title update needed, just send the bot message directly
+              this.sendBotMessageWithMeta(
+                this.currentChat!.id,
+                botContent,
+                response.is_sql_query,
+                response.sql
+              );
             }
+          },
+          error: (error) => {
+            this.handleMessageError(error, 'Failed to process your query');
           },
         });
       },
       error: (error) => {
-        console.error('Error sending message:', error);
-        this.typing = false;
-
         // Remove the temporary message
         this.messages = this.messages.filter((m) => m.id !== tempMessageId);
-
-        // Don't redirect - let the AuthGuard handle auth issues
-        // Just show an error message
-        if (this.messages.findIndex((m) => m.type === 'error') === -1) {
-          this.messages.push({
-            id: 'error-' + Date.now(),
-            type: 'error',
-            content: 'Failed to send message. Please try again.',
-          });
-          this.shouldScrollToBottom = true;
-        }
+        this.handleMessageError(error, 'Failed to send message');
       },
     });
+  }
+
+  // New method to handle title updates with a completion callback
+  private updateChatTitle(
+    chatId: string,
+    newTitle: string,
+    onComplete: () => void
+  ): void {
+    this.dataService
+      .updateChatTitle(chatId, newTitle)
+      .pipe(
+        finalize(() => {
+          this.titleUpdateInProgress = false;
+        })
+      )
+      .subscribe({
+        next: (updatedChat) => {
+          // Emit an event so parent components know the chat title was updated
+          this.chatTitleUpdated.emit(updatedChat);
+
+          // Update the current chat with the new title
+          if (this.currentChat) {
+            this.currentChat.title = updatedChat.title;
+          }
+
+          // Explicitly refresh the chats list to ensure the title change is persisted
+          this.dataService.getChats().subscribe({
+            next: () => {
+              // Execute the completion callback
+              onComplete();
+            },
+            error: (err) => {
+              console.error('Error refreshing chats after title update:', err);
+              // Still execute the callback even if refresh fails
+              onComplete();
+            },
+          });
+        },
+        error: (error) => {
+          console.error('Failed to update chat title:', error);
+          // Execute the callback even in case of error
+          onComplete();
+        },
+      });
+  }
+
+  // New method to send bot messages with metadata
+  private sendBotMessageWithMeta(
+    chatId: string,
+    content: string,
+    isSqlQuery?: boolean,
+    sqlCode?: string
+  ): void {
+    this.dataService
+      .sendBotMessage(chatId, content, isSqlQuery, sqlCode)
+      .subscribe({
+        next: (botMessage) => {
+          // Add bot message to UI with metadata if it's an SQL query
+          const messageData: any = {
+            id: botMessage.id,
+            type: 'bot',
+            content: botMessage.text,
+          };
+
+          // Add SQL metadata if available
+          if (isSqlQuery && sqlCode) {
+            messageData.isSqlQuery = true;
+            messageData.rawSql = sqlCode;
+          }
+
+          this.messages.push(messageData);
+
+          // Scroll to bottom
+          this.shouldScrollToBottom = true;
+        },
+        error: (error) => {
+          this.handleMessageError(error, 'Failed to get a response');
+        },
+      });
+  }
+
+  private handleMessageError(error: any, message: string): void {
+    console.error('Error in message handling:', error);
+    this.typing = false;
+
+    // Show error message
+    if (this.messages.findIndex((m) => m.type === 'error') === -1) {
+      this.messages.push({
+        id: 'error-' + Date.now(),
+        type: 'error',
+        content: `${message}. Please try again.`,
+      });
+      this.shouldScrollToBottom = true;
+    }
   }
 
   private scrollToBottom(): void {

@@ -15,6 +15,8 @@ export interface Message {
   text: string;
   sender: 'user' | 'bot';
   timestamp: Date;
+  isSqlQuery?: boolean; // Added for SQL queries
+  rawSql?: string; // Added to store raw SQL
 }
 
 export interface Chat {
@@ -54,8 +56,6 @@ export class DataService {
   // Authentication methods
 
   login(email: string, password: string): Observable<User> {
-    console.log('Login attempt:', email);
-
     // Get users from JSON Server
     return this.http.get<User[]>(`${this.API_URL}/users`).pipe(
       map((users) => {
@@ -248,6 +248,7 @@ export class DataService {
     );
   }
 
+  // Enhanced updateChatTitle method with improved persistence
   updateChatTitle(chatId: string, newTitle: string): Observable<Chat> {
     if (!this.currentUser) {
       return throwError(() => new Error('Not authenticated'));
@@ -256,34 +257,78 @@ export class DataService {
     // Get current chats
     return this.http.get<any>(`${this.API_URL}/chats`).pipe(
       map((allChats) => {
-        const userChats = allChats[this.currentUser!.id] || [];
+        // Make sure we have the current user chats
+        if (!allChats[this.currentUser!.id]) {
+          console.warn('User chats not found in database, creating new entry');
+          allChats[this.currentUser!.id] = [];
+        }
+
+        const userChats = allChats[this.currentUser!.id];
         const chatIndex = userChats.findIndex((c: any) => c.id === chatId);
 
         if (chatIndex === -1) {
-          throw new Error('Chat not found');
+          throw new Error(
+            `Chat with ID ${chatId} not found for user ${this.currentUser!.id}`
+          );
         }
-
-        // Update title
-        userChats[chatIndex].title = newTitle;
+        userChats[chatIndex].title = newTitle || 'Untitled Chat'; // Prevent empty titles
         allChats[this.currentUser!.id] = userChats;
 
         return { allChats, updatedChat: userChats[chatIndex] };
       }),
       switchMap(({ allChats, updatedChat }) => {
-        // Save updated chats
+        // Make sure to save the complete chats object to the server with explicit PUT
         return this.http.put(`${this.API_URL}/chats`, allChats).pipe(
-          map(() => ({
-            ...updatedChat,
-            messages: updatedChat.messages.map((msg: any) => ({
-              ...msg,
-              timestamp: new Date(msg.timestamp),
-            })),
-          }))
+          tap(() => {}),
+          map(() => {
+            // Make a clean copy with proper Date objects for timestamps
+            return {
+              ...updatedChat,
+              messages: updatedChat.messages.map((msg: any) => ({
+                ...msg,
+                timestamp: new Date(msg.timestamp),
+              })),
+            };
+          })
+        );
+      }),
+      // Add retry logic for database saving
+      switchMap((updatedChat) => {
+        // Verify the update was saved by re-fetching
+        return this.http.get<any>(`${this.API_URL}/chats`).pipe(
+          map((refreshedChats) => {
+            const userChats = refreshedChats[this.currentUser!.id] || [];
+            const savedChat = userChats.find((c: any) => c.id === chatId);
+
+            if (!savedChat) {
+              console.error('Chat not found after update!');
+              return updatedChat;
+            }
+
+            if (savedChat.title !== newTitle) {
+              console.warn(
+                `Title mismatch after save! DB has "${savedChat.title}" but expected "${newTitle}"`
+              );
+              // Could trigger another save here if needed
+            } else {
+            }
+
+            return updatedChat;
+          }),
+          catchError((error) => {
+            console.warn(
+              'Verification check failed but update may have succeeded:',
+              error
+            );
+            return of(updatedChat);
+          })
         );
       }),
       catchError((error) => {
         console.error('Error updating chat title:', error);
-        return throwError(() => new Error('Failed to update chat title'));
+        return throwError(
+          () => new Error(`Failed to update chat title: ${error.message}`)
+        );
       }),
       delay(300) // Simulate network delay
     );
@@ -370,7 +415,13 @@ export class DataService {
     return of(response).pipe(delay(1000)); // Simulate thinking time
   }
 
-  sendBotMessage(chatId: string, text: string): Observable<Message> {
+  // Updated to accept SQL metadata
+  sendBotMessage(
+    chatId: string,
+    text: string,
+    isSqlQuery?: boolean,
+    rawSql?: string
+  ): Observable<Message> {
     if (!this.currentUser) {
       return throwError(() => new Error('Not authenticated'));
     }
@@ -380,6 +431,8 @@ export class DataService {
       text,
       sender: 'bot',
       timestamp: new Date(),
+      isSqlQuery, // Store SQL flag
+      rawSql, // Store raw SQL
     };
 
     return this.addMessageToChat(chatId, message);

@@ -14,6 +14,9 @@ export class ChatbotContainerComponent implements OnInit {
   messages: any[] = [];
   chatHistory: Chat[] = [];
 
+  // Track if any chats have been loaded
+  private chatsLoaded = false;
+
   quickActions = [
     {
       icon: 'fa-magnifying-glass',
@@ -53,6 +56,7 @@ export class ChatbotContainerComponent implements OnInit {
     this.dataService.getChats().subscribe({
       next: (chats) => {
         this.chatHistory = chats;
+        this.chatsLoaded = true;
 
         // If we have chats but no selected chat, select the first one
         if (chats.length > 0 && !this.currentChat) {
@@ -74,6 +78,84 @@ export class ChatbotContainerComponent implements OnInit {
     });
   }
 
+  // New method to handle chat title updates
+  onChatTitleUpdated(updatedChat: Chat): void {
+    // Update the current chat title in the UI
+    if (this.currentChat && this.currentChat.id === updatedChat.id) {
+      this.currentChat.title = updatedChat.title;
+
+      // Special handling for welcome messages if the chat was previously empty
+      if (
+        this.messages.length === 0 &&
+        !this.isGenericTitle(updatedChat.title)
+      ) {
+        // Now that we have a meaningful title, we can add welcome messages
+        this.messages = [
+          {
+            id: 'system-' + Date.now(),
+            type: 'system',
+            content: `This conversation is about ${updatedChat.title}.`,
+          },
+          {
+            id: 'bot-' + Date.now(),
+            type: 'bot',
+            content: `How can I help with your ${updatedChat.title.toLowerCase()} today?`,
+          },
+        ];
+      }
+    }
+
+    // Update the chat in the chat history list
+    const chatIndex = this.chatHistory.findIndex(
+      (chat) => chat.id === updatedChat.id
+    );
+    if (chatIndex !== -1) {
+      this.chatHistory[chatIndex].title = updatedChat.title;
+
+      // Force a chats refresh to ensure persistence in database
+      if (!this.isGenericTitle(updatedChat.title)) {
+        this.refreshChats();
+      }
+    }
+  }
+
+  // Check if a title is generic
+  private isGenericTitle(title: string): boolean {
+    const genericTitles = [
+      'New Conversation',
+      'Recent Transactions',
+      'Sales Data',
+      'Fraud Analysis',
+      'Data Query Results',
+    ];
+    return genericTitles.includes(title);
+  }
+
+  // Explicitly refresh the chats list from the database
+  refreshChats(): void {
+    this.dataService.getChats().subscribe({
+      next: (refreshedChats) => {
+        // Update only if we have chats
+        if (refreshedChats.length > 0) {
+          this.chatHistory = refreshedChats;
+
+          // If the current chat exists in the refreshed list, update it
+          if (this.currentChat) {
+            const updatedCurrentChat = refreshedChats.find(
+              (c) => c.id === this.currentChat!.id
+            );
+            if (updatedCurrentChat) {
+              this.currentChat = updatedCurrentChat;
+            }
+          }
+        }
+      },
+      error: (error) => {
+        console.error('Error refreshing chats:', error);
+      },
+    });
+  }
+
   toggleSidebar(): void {
     this.sidebarOpen = !this.sidebarOpen;
   }
@@ -83,25 +165,36 @@ export class ChatbotContainerComponent implements OnInit {
 
     // Convert chat messages to the format expected by the conversation component
     if (chat.messages && chat.messages.length > 0) {
-      this.messages = chat.messages.map((msg) => ({
-        id: msg.id,
-        type: msg.sender === 'user' ? 'user' : 'bot',
-        content: msg.text,
-      }));
+      this.messages = chat.messages.map((msg) => {
+        return {
+          id: msg.id,
+          type: msg.sender === 'user' ? 'user' : 'bot',
+          content: msg.text,
+          // Include SQL metadata if available
+          isSqlQuery: msg.isSqlQuery,
+          rawSql: msg.rawSql,
+        };
+      });
     } else {
-      // If no messages, show a welcome message
-      this.messages = [
-        {
-          id: 'system-' + Date.now(),
-          type: 'system',
-          content: `This conversation is about ${chat.title}.`,
-        },
-        {
-          id: 'bot-' + Date.now(),
-          type: 'bot',
-          content: `How can I help with your ${chat.title.toLowerCase()} today?`,
-        },
-      ];
+      // If this is a new chat with the default title, don't add welcome messages yet
+      // They'll be added after the user sends their first message and a better title is generated
+      if (this.isGenericTitle(chat.title)) {
+        this.messages = [];
+      } else {
+        // For chats with custom titles, show the welcome message
+        this.messages = [
+          {
+            id: 'system-' + Date.now(),
+            type: 'system',
+            content: `This conversation is about ${chat.title}.`,
+          },
+          {
+            id: 'bot-' + Date.now(),
+            type: 'bot',
+            content: `How can I help with your ${chat.title.toLowerCase()} today?`,
+          },
+        ];
+      }
     }
   }
 
@@ -116,7 +209,13 @@ export class ChatbotContainerComponent implements OnInit {
       next: (newChat) => {
         this.currentChat = newChat;
         this.messages = [];
-        // Reload chat list to include the new chat
+
+        // Add to chat history immediately
+        if (!this.chatHistory.some((c) => c.id === newChat.id)) {
+          this.chatHistory = [newChat, ...this.chatHistory];
+        }
+
+        // Also reload chat list to include the new chat and ensure it's saved properly
         this.loadChats();
       },
       error: (error) => {
@@ -136,7 +235,6 @@ export class ChatbotContainerComponent implements OnInit {
     if (!this.dataService.isLoggedIn()) {
       return; // Let the AuthGuard handle the redirect
     }
-
     // Create a new chat with the action title
     this.dataService.createChat(action.title).subscribe({
       next: (newChat) => {
@@ -157,6 +255,11 @@ export class ChatbotContainerComponent implements OnInit {
                 content: message.text,
               },
             ];
+
+            // Add to chat history immediately
+            if (!this.chatHistory.some((c) => c.id === newChat.id)) {
+              this.chatHistory = [newChat, ...this.chatHistory];
+            }
 
             // Reload chat list
             this.loadChats();
@@ -190,6 +293,9 @@ export class ChatbotContainerComponent implements OnInit {
           this.currentChat = null;
           this.messages = [];
         }
+
+        // Remove from local chat history immediately
+        this.chatHistory = this.chatHistory.filter((c) => c.id !== chat.id);
 
         // Reload chat list to reflect the deletion
         this.loadChats();

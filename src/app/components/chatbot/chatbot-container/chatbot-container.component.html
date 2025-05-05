@@ -11,7 +11,11 @@
     >
     </app-chatbot-sidebar>
 
-    <app-chatbot-conversation [currentChat]="currentChat" [messages]="messages">
+    <app-chatbot-conversation
+      [currentChat]="currentChat"
+      [messages]="messages"
+      (chatTitleUpdated)="onChatTitleUpdated($event)"
+    >
     </app-chatbot-conversation>
   </div>
 </div>

@@ -6,5 +6,28 @@
   <div class="message-header" *ngIf="message.type === 'user'">
     <span>{{ getCurrentUserName() }}</span>
   </div>
-  <div class="message-content">{{ message.content }}</div>
+
+  <!-- Regular message content -->
+  <div
+    class="message-content"
+    [innerHTML]="formatMessageContent(message.content)"
+  ></div>
+
+  <!-- SQL code block (shown only for SQL query messages) -->
+  <div class="sql-container" *ngIf="message.isSqlQuery">
+    <div class="sql-header">
+      <span>Generated SQL</span>
+      <button
+        class="copy-btn"
+        (click)="copySqlToClipboard()"
+        [attr.aria-label]="'Copy SQL code'"
+      >
+        <i class="fas" [ngClass]="copiedSql ? 'fa-check' : 'fa-copy'"></i>
+        <span class="copy-text">{{ copiedSql ? "Copied!" : "Copy code" }}</span>
+      </button>
+    </div>
+    <pre
+      class="sql-code-block"
+    ><code class="language-sql">{{ extractSqlCode() }}</code></pre>
+  </div>
 </div>

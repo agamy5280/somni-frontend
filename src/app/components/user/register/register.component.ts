@@ -129,7 +129,6 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe({
         next: (user) => {
-          console.log('Registration successful:', user);
           this.router.navigate(['/chatbot']);
         },
         error: (error) => {
