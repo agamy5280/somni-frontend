@@ -97,65 +97,78 @@ export class ChatbotConversationComponent
     // Show typing indicator
     this.typing = true;
 
+    // Determine if this is a new chat
+    const isNewChat =
+      this.messages.length <= 1 ||
+      (!!this.currentChat &&
+        this.isTitleGeneric(this.currentChat.title) &&
+        !this.hasCustomTitle);
+
     // Send message to service
     this.dataService.sendMessage(this.currentChat.id, userMessage).subscribe({
       next: (message) => {
-        // Determine if this is a new chat or if we still need a better title
-        const needsTitle: boolean =
-          this.messages.length <= 1 ||
-          (!!this.currentChat &&
-            this.isTitleGeneric(this.currentChat.title) &&
-            !this.hasCustomTitle);
+        // Prepare chat history only if this is not a new chat
+        let tokenizedHistory = [];
+        if (!isNewChat && this.messages.length > 1) {
+          // Only tokenize history for existing conversations
+          tokenizedHistory = this.watsonxService.tokenizeHistory(this.messages);
+        }
 
-        // Send query to WatsonX service
-        this.watsonxService.sendQuery(userMessage, needsTitle).subscribe({
-          next: (response) => {
-            // Hide typing indicator
-            this.typing = false;
+        // Send query to WatsonX service (history only included for existing chats)
+        this.watsonxService
+          .sendQuery(userMessage, isNewChat, tokenizedHistory)
+          .subscribe({
+            next: (response) => {
+              // Hide typing indicator
+              this.typing = false;
 
-            // Format the bot response
-            let botContent = response.summary;
+              // Format the bot response
+              let botContent = response.summary;
 
-            // Process the title update separately, ensuring it completes before proceeding
-            if (
-              needsTitle &&
-              response.title &&
-              this.currentChat &&
-              !this.titleUpdateInProgress
-            ) {
-              this.titleUpdateInProgress = true;
+              // Process the title update separately for new chats
+              if (
+                isNewChat &&
+                response.title &&
+                this.currentChat &&
+                !this.titleUpdateInProgress
+              ) {
+                this.titleUpdateInProgress = true;
 
-              // Check if the new title is also generic
-              const isGenericTitle = this.isTitleGeneric(response.title);
+                // Check if the new title is also generic
+                const isGenericTitle = this.isTitleGeneric(response.title);
 
-              // Only consider we have a good title if it's not generic
-              if (!isGenericTitle) {
-                this.hasCustomTitle = true;
-              }
+                // Only consider we have a good title if it's not generic
+                if (!isGenericTitle) {
+                  this.hasCustomTitle = true;
+                }
 
-              this.updateChatTitle(this.currentChat.id, response.title, () => {
-                // After title is updated, then send the bot message
+                this.updateChatTitle(
+                  this.currentChat.id,
+                  response.title,
+                  () => {
+                    // After title is updated, then send the bot message
+                    this.sendBotMessageWithMeta(
+                      this.currentChat!.id,
+                      botContent,
+                      response.is_sql_query,
+                      response.sql
+                    );
+                  }
+                );
+              } else {
+                // If no title update needed, just send the bot message directly
                 this.sendBotMessageWithMeta(
                   this.currentChat!.id,
                   botContent,
                   response.is_sql_query,
                   response.sql
                 );
-              });
-            } else {
-              // If no title update needed, just send the bot message directly
-              this.sendBotMessageWithMeta(
-                this.currentChat!.id,
-                botContent,
-                response.is_sql_query,
-                response.sql
-              );
-            }
-          },
-          error: (error) => {
-            this.handleMessageError(error, 'Failed to process your query');
-          },
-        });
+              }
+            },
+            error: (error) => {
+              this.handleMessageError(error, 'Failed to process your query');
+            },
+          });
       },
       error: (error) => {
         // Remove the temporary message

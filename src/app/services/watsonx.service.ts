@@ -1,3 +1,4 @@
+// watsonx.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -9,6 +10,7 @@ export interface QueryResponse {
   summary: string;
   title?: string;
   is_sql_query?: boolean;
+  chat_summary?: string;
 }
 
 @Injectable({
@@ -23,22 +25,82 @@ export class WatsonxService {
    * Send a natural language query to the Flask backend
    * @param query The natural language query
    * @param isNewChat Whether this is a new chat (for title generation)
+   * @param chatHistory The tokenized chat history (only sent for existing chats)
    */
   sendQuery(
     query: string,
-    isNewChat: boolean = false
+    isNewChat: boolean = false,
+    chatHistory: any[] = []
   ): Observable<QueryResponse> {
-    return this.http
-      .post<QueryResponse>(`${this.API_URL}/query`, {
-        query: query,
-        isNewChat: isNewChat,
+    // Only include chatHistory if this is NOT a new chat
+    const payload: any = {
+      query: query,
+      isNewChat: isNewChat,
+    };
+
+    // Only add chat history for existing conversations
+    if (!isNewChat && chatHistory.length > 0) {
+      payload.chatHistory = chatHistory;
+    }
+
+    return this.http.post<QueryResponse>(`${this.API_URL}/query`, payload).pipe(
+      tap((response) => {}),
+      catchError((error) => {
+        console.error('Error in WatsonX query:', error);
+        throw error;
       })
-      .pipe(
-        tap((response) => {}),
-        catchError((error) => {
-          console.error('Error in WatsonX query:', error);
-          throw error;
-        })
-      );
+    );
+  }
+
+  /**
+   * Tokenize chat history to approximately last 200 tokens
+   * @param messages Full chat history
+   * @returns Tokenized chat history with just text and sender info
+   */
+  tokenizeHistory(messages: any[]): any[] {
+    if (!messages || messages.length === 0) {
+      return [];
+    }
+
+    // A simple tokenization approach:
+    // 1. Reverse messages to start from most recent
+    // 2. Calculate tokens (roughly words count)
+    // 3. Include messages until we reach token limit
+    const TOKEN_LIMIT = 200;
+    let tokenCount = 0;
+    const tokenizedHistory = [];
+
+    // Clone and reverse messages to start from the most recent
+    const reversedMessages = [...messages].reverse();
+
+    for (const message of reversedMessages) {
+      // Skip any message without text content
+      if (!message.content) {
+        continue;
+      }
+
+      // Simplify message to just text and sender
+      const simplifiedMessage = {
+        text: message.content,
+        sender: message.type === 'user' ? 'user' : 'bot',
+      };
+
+      // Rough token count (words + some overhead)
+      const messageTokens = simplifiedMessage.text.split(/\s+/).length;
+
+      // If adding this message would exceed our limit and we already have some messages
+      if (
+        tokenCount + messageTokens > TOKEN_LIMIT &&
+        tokenizedHistory.length > 0
+      ) {
+        break;
+      }
+
+      // Add message to our tokenized history
+      tokenizedHistory.unshift(simplifiedMessage); // Add to beginning to restore order
+      tokenCount += messageTokens;
+    }
+
+    return tokenizedHistory;
   }
 }
