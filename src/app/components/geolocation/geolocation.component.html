@@ -1,0 +1,184 @@
+<div class="geolocation-container">
+  <!-- Header Section -->
+  <div class="geolocation-header">
+    <h1>Geographic Location Detector</h1>
+    <p>
+      Upload a CSV file with GPS coordinates to detect city and country
+      information
+    </p>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-content">
+      <mat-spinner [diameter]="50"></mat-spinner>
+      <h3 *ngIf="uploadProgress < 100">
+        Uploading File: {{ uploadProgress }}%
+      </h3>
+      <h3 *ngIf="uploadProgress === 100 && processingProgress < 100">
+        Processing Data: {{ processingProgress }}%
+      </h3>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-container">
+    <!-- Upload Section (shown when no file is processed) -->
+    <div class="upload-section" *ngIf="!processingComplete">
+      <div class="card">
+        <h2>Upload Your Data</h2>
+        <p>
+          Drag and drop a CSV file with GPS coordinates to begin the analysis
+        </p>
+
+        <ngx-dropzone
+          (change)="onFileSelected($event)"
+          [accept]="'.csv,.xlsx,.xls'"
+          [disabled]="isLoading"
+          [multiple]="false"
+          [ngStyle]="{ 'margin-top': '10px' }"
+        >
+          <ngx-dropzone-label>
+            <div class="dropzone-content">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <h3>Drop your CSV or Excel file here</h3>
+              <p>Your file should contain GPS latitude and longitude columns</p>
+            </div>
+          </ngx-dropzone-label>
+        </ngx-dropzone>
+      </div>
+
+      <div class="card info-card" *ngIf="dataLoaded">
+        <h2>Ready to Process</h2>
+        <p>The geographical database is loaded and ready:</p>
+        <ul>
+          <li>Countries: {{ countriesData?.features?.length || 0 }}</li>
+          <li>Cities: {{ citiesData.length || 0 }}</li>
+        </ul>
+        <p>Drop your file above to begin processing</p>
+      </div>
+    </div>
+
+    <!-- Results Section (shown after processing) -->
+    <div class="results-section" *ngIf="processingComplete">
+      <!-- Summary Statistics -->
+      <div class="card stats-card">
+        <h2>Processing Summary</h2>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value">{{ stats.totalRecords }}</div>
+            <div class="stat-label">Total Records</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ stats.detectedLocations }}</div>
+            <div class="stat-label">Locations Detected</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">
+              {{
+                ((stats.detectedLocations / stats.totalRecords) * 100).toFixed(
+                  1
+                )
+              }}%
+            </div>
+            <div class="stat-label">Success Rate</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">{{ stats.processingTime.toFixed(2) }}s</div>
+            <div class="stat-label">Processing Time</div>
+          </div>
+        </div>
+
+        <!-- Export Button -->
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="exportToCsv()">
+            <i class="fas fa-cloud-download-alt"></i>
+            Download Enhanced Data
+          </button>
+
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="processingComplete = false"
+          >
+            <i class="fas fa-sync"></i>
+            Process Another File
+          </button>
+        </div>
+      </div>
+
+      <!-- Visualization Row -->
+      <div class="visualization-row">
+        <!-- Map Container -->
+        <div class="card map-card">
+          <h2>Location Map</h2>
+          <div #mapContainer class="map-container"></div>
+          <p class="map-note">Shows up to 1000 detected locations</p>
+        </div>
+
+        <!-- Charts Container -->
+        <div class="card charts-card">
+          <h2>Detection Statistics</h2>
+
+          <div class="chart-container pie-chart-container">
+            <h3>Location Detection Status</h3>
+            <canvas #pieChart></canvas>
+          </div>
+
+          <div class="chart-container bar-chart-container">
+            <h3>Top Countries</h3>
+            <canvas #barChart></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample Data Table -->
+      <div class="card data-card">
+        <h2>Sample Results (First 10 Rows)</h2>
+        <div class="table-container">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of displayData.slice(0, 10)">
+                <td
+                  [ngClass]="
+                    'status-' +
+                    row['Location Status']?.toLowerCase()?.replace(' ', '-')
+                  "
+                >
+                  {{ row["Location Status"] }}
+                </td>
+                <td>{{ row["Detected City"] || "N/A" }}</td>
+                <td>{{ row["Detected Country"] || "N/A" }}</td>
+                <td>
+                  {{
+                    row[columnMap["login gps latitude"]] !== null &&
+                    row[columnMap["login gps latitude"]] !== undefined
+                      ? row[columnMap["login gps latitude"]].toFixed(4)
+                      : "N/A"
+                  }}
+                </td>
+                <td>
+                  {{
+                    row[columnMap["login gps longitude"]] !== null &&
+                    row[columnMap["login gps longitude"]] !== undefined
+                      ? row[columnMap["login gps longitude"]].toFixed(4)
+                      : "N/A"
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

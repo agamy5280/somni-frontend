@@ -7,6 +7,7 @@ import { AuthGuard } from './gurads/auth.guard';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
+import { GeolocationComponent } from './components/geolocation/geolocation.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,11 @@ const routes: Routes = [
   {
     path: 'dashboards',
     component: DashboardsComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'geolocation',
+    component: GeolocationComponent,
     canActivate: [AuthGuard],
   },
   {

@@ -39,12 +39,18 @@
                 "glob": "favicon.ico",
                 "input": "src",
                 "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/data",
+                "output": "/assets/data"
               }
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "public/assets/styles/_variables.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           },
@@ -102,12 +108,18 @@
                 "glob": "favicon.ico",
                 "input": "src",
                 "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/data",
+                "output": "/assets/data"
               }
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "public/assets/styles/_variables.scss",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": []
           }

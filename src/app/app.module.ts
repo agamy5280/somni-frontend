@@ -16,7 +16,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { NgxDropzoneModule } from 'ngx-dropzone';
 import { ChatbotContainerComponent } from './components/chatbot/chatbot-container/chatbot-container.component';
 import { ChatbotSidebarComponent } from './components/chatbot/chatbot-sidebar/chatbot-sidebar.component';
 import { ChatbotConversationComponent } from './components/chatbot/chatbot-conversation/chatbot-conversation.component';
@@ -29,6 +29,7 @@ import { AuthGuard } from './gurads/auth.guard';
 import { DeleteConfirmationDialogComponent } from './components/chatbot/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
+import { GeolocationComponent } from './components/geolocation/geolocation.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { DashboardsComponent } from './components/dashboards/dashboards.componen
     DeleteConfirmationDialogComponent,
     ReportGeneratorComponent,
     DashboardsComponent,
+    GeolocationComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +63,7 @@ import { DashboardsComponent } from './components/dashboards/dashboards.componen
     MatCardModule,
     MatDividerModule,
     BrowserAnimationsModule,
+    NgxDropzoneModule,
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
