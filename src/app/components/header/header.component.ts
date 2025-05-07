@@ -1,4 +1,3 @@
-// header.component.ts
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService, User } from '../../services/data.service';
@@ -21,6 +20,11 @@ export class HeaderComponent implements OnInit {
     { path: '/chatbot', label: 'Chatbot', icon: 'fa-comment-dots' },
     { path: '/dashboards', label: 'Dashboards', icon: 'fa-chart-pie' },
     { path: '/reports', label: 'Reports', icon: 'fa-file-alt' },
+    {
+      path: '/geolocation',
+      label: 'Location Detector',
+      icon: 'fa-map-marker-alt',
+    },
   ];
 
   constructor(private dataService: DataService, private router: Router) {}
