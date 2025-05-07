@@ -44,6 +44,11 @@
                 "glob": "**/*",
                 "input": "src/assets/data",
                 "output": "/assets/data"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/leaflet",
+                "output": "/assets/leaflet"
               }
             ],
             "styles": [
@@ -113,6 +118,11 @@
                 "glob": "**/*",
                 "input": "src/assets/data",
                 "output": "/assets/data"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets/leaflet",
+                "output": "/assets/leaflet"
               }
             ],
             "styles": [
