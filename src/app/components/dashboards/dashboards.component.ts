@@ -27,12 +27,24 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     // Create and insert page loader
     this.createPageLoader();
+
+    // Ensure we start at the top of the page
+    this.scrollToTop();
   }
 
   ngAfterViewInit(): void {
     // Initialize the dashboard
     this.initDashboard();
     this.addCategoryResetButton();
+    setTimeout(() => this.scrollToTop(), 100); // Small delay to ensure it happens after other initializations
+  }
+
+  scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto', // Use 'auto' for immediate scrolling instead of 'smooth'
+    });
   }
 
   // PAGE LOADER METHODS
@@ -73,35 +85,54 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
       document.body.firstChild
     );
 
-    // Start tracking iframe loading directly
-    this.trackIframeLoading();
+    // Check if we have cached content
+    const hasCachedContent = this.checkCacheStatus();
+
+    // Simulate faster progress if we have cached content
+    this.simulateProgress(progressCounter, hasCachedContent);
   }
 
-  simulateProgress(progressElement: any): void {
+  simulateProgress(progressElement: any, useCache: boolean = false): void {
     let progress = 0;
-    const interval = setInterval(() => {
-      // Slower progress simulation to account for iframe loading
-      const increment = (100 - progress) / 15;
-      progress += Math.min(increment, 2);
+    const interval = setInterval(
+      () => {
+        // Faster progress for cached content
+        const increment = useCache
+          ? (100 - progress) / 4
+          : (100 - progress) / 15;
+        progress += Math.min(increment, useCache ? 8 : 2);
 
-      if (progress >= 70) {
-        // Stop at 70% and wait for actual content load
-        clearInterval(interval);
-        this.renderer.setProperty(progressElement, 'textContent', '70%');
-      } else {
-        this.renderer.setProperty(
-          progressElement,
-          'textContent',
-          `${Math.floor(progress)}%`
-        );
-      }
-    }, 300);
+        if (progress >= (useCache ? 95 : 70)) {
+          // Stop at 95% for cached, 70% for non-cached
+          clearInterval(interval);
+          this.renderer.setProperty(
+            progressElement,
+            'textContent',
+            useCache ? '95%' : '70%'
+          );
+
+          // Complete loading faster if using cache
+          if (useCache) {
+            setTimeout(() => this.completeLoading(), 500);
+          }
+        } else {
+          this.renderer.setProperty(
+            progressElement,
+            'textContent',
+            `${Math.floor(progress)}%`
+          );
+        }
+      },
+      useCache ? 100 : 300
+    ); // Faster intervals for cached content
 
     // Store interval ID
     (window as any).progressInterval = interval;
 
-    // Track iframe loading
-    this.trackIframeLoading();
+    // Only track iframe loading if not using cache
+    if (!useCache) {
+      this.trackIframeLoading();
+    }
   }
 
   trackIframeLoading(): void {
@@ -126,17 +157,19 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
 
       // Track each iframe's load event
       iframes.forEach((iframe: any) => {
-        // Check if already loaded
-        if (iframe.complete || iframe.readyState === 'complete') {
+        // Check if data-loaded attribute is set - if so, consider it loaded
+        if (iframe.getAttribute('data-loaded') === 'true') {
+          this.incrementLoadedIframes();
+        } else if (iframe.complete || iframe.readyState === 'complete') {
           this.incrementLoadedIframes();
         } else {
           iframe.addEventListener('load', () => this.incrementLoadedIframes());
         }
       });
 
-      // Set a timeout to prevent infinite waiting
-      setTimeout(() => this.completeLoading(), 30000); // 30 seconds max wait
-    }, 500); // Reduced from 1000ms to 500ms to start tracking sooner
+      // Set a timeout to prevent infinite waiting - reduced from 30 to 15 seconds
+      setTimeout(() => this.completeLoading(), 15000);
+    }, 500);
   }
 
   incrementLoadedIframes(): void {
@@ -370,16 +403,16 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
         legendFixNote.innerHTML =
           '<strong>Interactive Elements:</strong> You can click and drag legends to reposition them if they overlap. Right-click on legends for additional options.';
 
-        // Create iframe element with safe URL
+        // Create iframe element
         const iframe = this.renderer.createElement('iframe');
-        // Create safe URL
-        const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-          viz.filename
-        );
-        this.renderer.setAttribute(iframe, 'src', viz.filename);
+
+        // Don't set src directly anymore - we'll use our loadVisualization method
+        // this.renderer.setAttribute(iframe, 'src', viz.filename);
+
         this.renderer.addClass(iframe, 'visualization-frame');
         this.renderer.setAttribute(iframe, 'id', `frame${index}`);
         this.renderer.setAttribute(iframe, 'data-viz-id', index.toString());
+        this.renderer.setAttribute(iframe, 'data-filename', viz.filename);
 
         // Append all elements to tab content
         this.renderer.appendChild(tabContent, plotTitle);
@@ -390,16 +423,11 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
         // Append tab content to container
         this.renderer.appendChild(tabContentsContainer, tabContent);
 
-        // Show loading spinner immediately
-        this.showLoadingSpinner(iframe);
-
-        // Add event listeners for loading and loaded states
-        this.renderer.listen(iframe, 'load', () => {
-          // Hide spinner when iframe loads
-          this.hideLoadingSpinner(iframe);
-          // Apply legend fix after iframe is loaded
-          this.applyLegendFix(iframe);
-        });
+        // Load only the first (active) tab immediately
+        if (index === 0) {
+          this.loadVisualization(iframe, viz.filename);
+          this.renderer.setAttribute(iframe, 'data-loaded', 'true');
+        }
       });
     }
 
@@ -754,7 +782,7 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
             }
           }
         }
-
+  
         // Run legend fixes on load
         function runLegendFixes() {
           makeLegendsDraggable();
@@ -762,6 +790,9 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
         
         // Run after a slight delay to ensure plots are loaded
         setTimeout(runLegendFixes, 1000);
+        
+        // Expose runLegendFixes to be callable from outside
+        window.runLegendFixes = runLegendFixes;
       `;
 
       iframeDocument.body.appendChild(scriptElement);
@@ -771,6 +802,18 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
 
       // Add right-click context menu for legends
       this.addLegendContextMenu(iframe);
+
+      // Ensure legend fixes run after a delay (especially for cached content)
+      setTimeout(() => {
+        try {
+          // Explicitly run legend fixes
+          if ((iframeWindow as any).runLegendFixes) {
+            (iframeWindow as any).runLegendFixes();
+          }
+        } catch (error) {
+          console.warn('Error running legend fixes:', error);
+        }
+      }, 500);
     } catch (error) {
       console.warn('Could not apply legend fixes to iframe:', error);
     }
@@ -1058,22 +1101,15 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
       });
     }
 
-    // Force iframe reload to ensure proper rendering
+    // Load iframe content if not already loaded
     const activeFrame = this.el.nativeElement.querySelector(`#${tabId} iframe`);
     if (activeFrame) {
-      // Only reload if tab is being viewed for the first time
       if (!activeFrame.getAttribute('data-loaded')) {
-        // Show loading spinner
-        this.showLoadingSpinner(activeFrame);
-
-        // Store current src
-        const currentSrc = activeFrame.src;
-        // Clear and reset src to force reload
-        activeFrame.src = '';
-        setTimeout(() => {
-          activeFrame.src = currentSrc;
+        const filename = activeFrame.getAttribute('data-filename');
+        if (filename) {
+          this.loadVisualization(activeFrame, filename);
           this.renderer.setAttribute(activeFrame, 'data-loaded', 'true');
-        }, 50);
+        }
       }
     }
   }
@@ -1483,14 +1519,88 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
   }
 
   // Setup event listeners for iframe loads
-  setupIframeEventListeners(): void {
-    const frames = this.el.nativeElement.querySelectorAll(
-      '.visualization-frame'
-    );
-    frames.forEach((frame: HTMLIFrameElement) => {
-      this.renderer.listen(frame, 'load', () => {
-        this.applyLegendFix(frame);
+  setupIframeEventListeners(): void {}
+  // Check if visualization is cached
+  private checkCachedVisualization(filename: string): string | null {
+    try {
+      const cacheKey = 'viz_cache_' + filename.replace(/[^a-zA-Z0-9]/g, '_');
+      return localStorage.getItem(cacheKey);
+    } catch (error) {
+      console.warn('Error checking cache:', error);
+      return null;
+    }
+  }
+
+  // Save visualization to localStorage
+  private saveVisualizationToCache(filename: string, content: string): void {
+    try {
+      const cacheKey = 'viz_cache_' + filename.replace(/[^a-zA-Z0-9]/g, '_');
+      localStorage.setItem(cacheKey, content);
+      localStorage.setItem('viz_cache_timestamp', Date.now().toString());
+    } catch (error) {
+      console.warn('Error saving to cache:', error);
+    }
+  }
+
+  // Check if we have cached visualizations
+  private checkCacheStatus(): boolean {
+    try {
+      const timestamp = localStorage.getItem('viz_cache_timestamp');
+      return !!timestamp;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  // Load visualization content (either from cache or from URL)
+  private loadVisualization(iframe: HTMLIFrameElement, filename: string): void {
+    // Show loading spinner
+    this.showLoadingSpinner(iframe);
+
+    // Check if we have this visualization cached
+    const cachedContent = this.checkCachedVisualization(filename);
+
+    if (cachedContent) {
+      // Use cached content with a small artificial delay to maintain UI appearance
+      setTimeout(() => {
+        // Write cached content to iframe
+        const iframeDoc = iframe.contentWindow?.document;
+        if (!iframeDoc) return;
+
+        iframeDoc.open();
+        iframeDoc.write(cachedContent);
+        iframeDoc.close();
+
+        // Apply legend fixes after a short delay
+        setTimeout(() => {
+          this.hideLoadingSpinner(iframe);
+          this.applyLegendFix(iframe);
+        }, 300);
+      }, 200); // Small delay to maintain UI consistency
+    } else {
+      // Load from URL and cache it
+      this.renderer.setAttribute(iframe, 'src', filename);
+
+      // When iframe loads from URL
+      this.renderer.listen(iframe, 'load', () => {
+        try {
+          const iframeDoc = iframe.contentWindow?.document;
+          if (!iframeDoc) return;
+
+          // Get the full HTML content
+          const htmlContent = iframeDoc.documentElement.outerHTML;
+
+          // Save to cache for next time
+          this.saveVisualizationToCache(filename, htmlContent);
+
+          // Hide spinner and apply fixes
+          this.hideLoadingSpinner(iframe);
+          this.applyLegendFix(iframe);
+        } catch (error) {
+          console.warn('Error caching iframe content:', error);
+          this.hideLoadingSpinner(iframe);
+        }
       });
-    });
+    }
   }
 }

@@ -94,6 +94,19 @@
             "sender": "bot",
             "timestamp": "2025-05-06T12:55:57.448Z",
             "isSqlQuery": false
+          },
+          {
+            "id": "maf6a6v1107tos25u2nd",
+            "text": "Hello",
+            "sender": "user",
+            "timestamp": "2025-05-08T09:36:19.261Z"
+          },
+          {
+            "id": "maf6ad0x02vfqhwn3f9w",
+            "text": "Hello! I'm glad we're back to discussing transaction analysis. To further investigate potential fraud, I recommend examining the transaction timestamps and locations for the high-value POS transactions we identified earlier. This can help determine if there are any suspicious patterns or correlations. Additionally, it might be useful to analyze the cardholder information and transaction history to identify any potential red flags. Would you like to explore any of these avenues further?",
+            "sender": "bot",
+            "timestamp": "2025-05-08T09:36:27.249Z",
+            "isSqlQuery": false
           }
         ]
       },
