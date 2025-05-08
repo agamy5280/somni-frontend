@@ -200,20 +200,45 @@ export class ReportGeneratorComponent implements OnInit {
 
   // Download the report (simulated)
   downloadReport(): void {
-    // In a real implementation, this would trigger a file download
-    // For this demo, we'll just show an alert
-
+    // Get the report name and date range for the filename
     const reportName = this.selectedReportDetails?.name || 'Report';
     const fromDate = new Date(this.startDate).toLocaleDateString();
     const toDate = new Date(this.endDate).toLocaleDateString();
 
-    // Create a fake download link (in a real app, you would use a proper file download)
-    const link = document.createElement('a');
-    link.href =
-      'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,UEsDBBQAAAAIAJKqiEsAAAAABwAAAAQAAQBbQ29udGVudF9UeXBlc10ueG1sxZHLTsMwEEX3fEXkHTlGBYQiNQsQEogFgsgHOGMnltk8ZE8f5d9DkjZdFBZZeOv7uOcOTpJsJm3RF/FEPjAwySKdVzRkgec82JrjvNwcYqC2Qg3oSTBwEEGm5fpud+StILlwNgRRRE0GFFK4Z05RgUHllf8BRXKd3yfZxJn5UlXNTm8l40+ssYM65k3kgE+2sclU8YUcZpixj1r/WTGegRYoqTNEExNqX5aMXOZLiPnYAY/xnDSK/iXjC3TQV5m7dXOYX6xDU3kdPr43CyXO/ntvlAkb/3HXeAZ3vX0AAAD//wMAUEsDBBQAAAAIAJKqiEuFbDzrjQAAAFEBAAALAAEAX3JlbHMvLnJlbHOtksFqwzAMhu99it';
-    link.download = `${reportName} (${fromDate} to ${toDate}).xlsx`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Path to the actual file in assets folder
+    const filePath = 'assets/data/report.xlsx';
+
+    // Create a file download by fetching the file from assets
+    fetch(filePath)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        // Create a blob URL for the file
+        const blobUrl = window.URL.createObjectURL(blob);
+
+        // Create a temporary link element to trigger the download
+        const link = document.createElement('a');
+        link.href = blobUrl;
+
+        // Set the desired filename for the download
+        link.download = `${reportName} (${fromDate} to ${toDate}).xlsx`;
+
+        // Append to body, click and remove
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(blobUrl);
+      })
+      .catch((error) => {
+        console.error('Error downloading the report:', error);
+        // You could add user feedback here for error cases
+        alert('Error downloading the report. Please try again.');
+      });
   }
 }
