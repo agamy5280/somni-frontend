@@ -73,6 +73,43 @@ $sql-border: #e4e6eb;
       font-size: 0.9rem;
       font-weight: 600;
     }
+
+    // Add styles for the copy button in message header
+    .copy-btn {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #4a5568;
+      transition: $transition;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      i {
+        font-size: 0.9rem;
+      }
+
+      .copy-text {
+        display: none;
+
+        @media (min-width: 768px) {
+          display: inline;
+        }
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 16, 129, 0.3);
+      }
+    }
   }
 
   .message-content {

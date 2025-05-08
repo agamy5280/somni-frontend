@@ -14,7 +14,9 @@ export class ChatbotMessageComponent {
 
   // Track copy state
   copiedSql = false;
+  copiedMessage = false;
   copiedTimeout: any;
+  messageTimeout: any;
 
   constructor(
     private dataService: DataService,
@@ -104,6 +106,24 @@ export class ChatbotMessageComponent {
       // Reset copied state after 3 seconds
       this.copiedTimeout = setTimeout(() => {
         this.copiedSql = false;
+      }, 3000);
+    }
+  }
+
+  // Copy entire message content to clipboard
+  copyMessageContent(): void {
+    if (this.message && this.message.content) {
+      this.clipboardService.copyFromContent(this.message.content);
+      this.copiedMessage = true;
+
+      // Clear any existing timeout
+      if (this.messageTimeout) {
+        clearTimeout(this.messageTimeout);
+      }
+
+      // Reset copied state after 3 seconds
+      this.messageTimeout = setTimeout(() => {
+        this.copiedMessage = false;
       }, 3000);
     }
   }

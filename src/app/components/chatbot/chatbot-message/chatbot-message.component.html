@@ -2,6 +2,16 @@
   <div class="message-header" *ngIf="message.type === 'bot'">
     <div class="bot-avatar">W</div>
     <span>WatsonX AI</span>
+    <!-- Add copy button for bot messages -->
+    <button
+      *ngIf="message.type === 'bot'"
+      class="copy-btn"
+      (click)="copyMessageContent()"
+      [attr.aria-label]="'Copy response'"
+    >
+      <i class="fas" [ngClass]="copiedMessage ? 'fa-check' : 'fa-copy'"></i>
+      <span class="copy-text">{{ copiedMessage ? "Copied!" : "Copy" }}</span>
+    </button>
   </div>
   <div class="message-header" *ngIf="message.type === 'user'">
     <span>{{ getCurrentUserName() }}</span>
