@@ -81,16 +81,18 @@ export class ChatbotConversationComponent
       return; // Let the AuthGuard handle the redirect
     }
 
+    // Store user message for reference
+    const userMessage = this.messageText.trim();
+
     // Add user message to UI immediately for better UX
     const tempMessageId = 'temp-' + Date.now();
     this.messages.push({
       id: tempMessageId,
       type: 'user',
-      content: this.messageText,
+      content: userMessage,
     });
 
     // Clear input and scroll
-    const userMessage = this.messageText.trim();
     this.messageText = '';
     this.shouldScrollToBottom = true;
 
@@ -151,7 +153,9 @@ export class ChatbotConversationComponent
                       this.currentChat!.id,
                       botContent,
                       response.is_sql_query,
-                      response.sql
+                      response.sql,
+                      response.result,
+                      userMessage // Pass the user query
                     );
                   }
                 );
@@ -161,7 +165,9 @@ export class ChatbotConversationComponent
                   this.currentChat!.id,
                   botContent,
                   response.is_sql_query,
-                  response.sql
+                  response.sql,
+                  response.result,
+                  userMessage // Pass the user query
                 );
               }
             },
@@ -223,14 +229,17 @@ export class ChatbotConversationComponent
   }
 
   // New method to send bot messages with metadata
+  // New method to send bot messages with metadata
   private sendBotMessageWithMeta(
     chatId: string,
     content: string,
     isSqlQuery?: boolean,
-    sqlCode?: string
+    sqlCode?: string,
+    results?: any[],
+    userQuery?: string
   ): void {
     this.dataService
-      .sendBotMessage(chatId, content, isSqlQuery, sqlCode)
+      .sendBotMessage(chatId, content, isSqlQuery, sqlCode, results, userQuery)
       .subscribe({
         next: (botMessage) => {
           // Add bot message to UI with metadata if it's an SQL query
@@ -238,12 +247,19 @@ export class ChatbotConversationComponent
             id: botMessage.id,
             type: 'bot',
             content: botMessage.text,
+            chatTitle: this.currentChat ? this.currentChat.title : 'Chat',
+            userQuery: userQuery, // Store user query for reference
           };
 
           // Add SQL metadata if available
           if (isSqlQuery && sqlCode) {
             messageData.isSqlQuery = true;
             messageData.rawSql = sqlCode;
+          }
+
+          // Add results data if available
+          if (results) {
+            messageData.results = results;
           }
 
           this.messages.push(messageData);

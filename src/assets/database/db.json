@@ -107,6 +107,78 @@
             "sender": "bot",
             "timestamp": "2025-05-08T09:36:27.249Z",
             "isSqlQuery": false
+          },
+          {
+            "id": "maja0pqlle0j087r4pi",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-11T06:32:00.333Z"
+          },
+          {
+            "id": "majas97rbocsp1lyasi",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-11T06:53:25.287Z"
+          },
+          {
+            "id": "majftoeuab8a2ylr4xa",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-11T09:14:29.718Z"
+          },
+          {
+            "id": "majfu3d7uo0z39smsgl",
+            "text": "The top 5 ATM transactions by amount are all above $49,000, with the largest transaction being $49,700.91. These high-value transactions suggest that some customers are using ATMs for large withdrawals or transfers.",
+            "sender": "bot",
+            "timestamp": "2025-05-11T09:14:49.099Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_amount \nFROM hive_data.ejada_somni.direct \nWHERE main_channel = 'ATM' \nORDER BY transaction_amount DESC \nLIMIT 5"
+          },
+          {
+            "id": "majgaj2rllg0qednhbl",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-11T09:27:35.955Z"
+          },
+          {
+            "id": "majgavroza1g69e0ec",
+            "text": "The top 5 ATM transactions by amount are all above $49,000, with the largest transaction being $49,700.91. These high-value transactions suggest that some customers are using ATMs for large withdrawals or transfers.",
+            "sender": "bot",
+            "timestamp": "2025-05-11T09:27:52.404Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_amount \nFROM hive_data.ejada_somni.direct \nWHERE main_channel = 'ATM' \nORDER BY transaction_amount DESC \nLIMIT 5"
+          },
+          {
+            "id": "majgviffji9f74013c",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-11T09:43:54.891Z"
+          },
+          {
+            "id": "majgvt5nqz0otaubglf",
+            "text": "The top 5 ATM transactions by amount are all above $49,000, with the largest transaction being $49,700.91. These high-value transactions suggest that some customers are using ATMs for large withdrawals or transfers.",
+            "sender": "bot",
+            "timestamp": "2025-05-11T09:44:08.795Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_amount \nFROM hive_data.ejada_somni.direct \nWHERE main_channel = 'ATM' \nORDER BY transaction_amount DESC \nLIMIT 5",
+            "results": [
+              {
+                "transaction_amount": 49700.91
+              },
+              {
+                "transaction_amount": 49688.11
+              },
+              {
+                "transaction_amount": 49514.52
+              },
+              {
+                "transaction_amount": 49303.03
+              },
+              {
+                "transaction_amount": 49143.88
+              }
+            ],
+            "userQuery": "Give me top 5 transaction amount where Main Channel is ATM"
           }
         ]
       },

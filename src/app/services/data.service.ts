@@ -17,6 +17,8 @@ export interface Message {
   timestamp: Date;
   isSqlQuery?: boolean; // Added for SQL queries
   rawSql?: string; // Added to store raw SQL
+  results?: any[]; // Added to store JSON results
+  userQuery?: string; // Added to reference the original user query
 }
 
 export interface Chat {
@@ -415,12 +417,15 @@ export class DataService {
     return of(response).pipe(delay(1000)); // Simulate thinking time
   }
 
-  // Updated to accept SQL metadata
+  // Updated to accept SQL metadata and results
+  // Updated to accept SQL metadata, results, and userQuery
   sendBotMessage(
     chatId: string,
     text: string,
     isSqlQuery?: boolean,
-    rawSql?: string
+    rawSql?: string,
+    results?: any[],
+    userQuery?: string
   ): Observable<Message> {
     if (!this.currentUser) {
       return throwError(() => new Error('Not authenticated'));
@@ -433,6 +438,8 @@ export class DataService {
       timestamp: new Date(),
       isSqlQuery, // Store SQL flag
       rawSql, // Store raw SQL
+      results, // Store results
+      userQuery, // Store reference to user query
     };
 
     return this.addMessageToChat(chatId, message);
