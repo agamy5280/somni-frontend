@@ -17,7 +17,8 @@ export interface QueryResponse {
   providedIn: 'root',
 })
 export class WatsonxService {
-  private readonly API_URL = 'http://localhost:5000'; // Flask server URL
+  private readonly API_URL =
+    'http://somni-backend-somni.apps.68060d600b3f018ca424c0c6.eu1.techzone.ibm.com'; // Flask server URL
 
   constructor(private http: HttpClient) {}
 

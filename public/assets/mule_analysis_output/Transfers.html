@@ -1,1160 +1,178 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Fraud Dashboard | Month-on-Month & Trend Analysis (Transfers)</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        font-size: 13px;
-        line-height: 1.3;
-        color: #333;
-        /* max-width: 1100px;
-        margin: 0 auto; */
-        padding: 8px 0;
-      }
-      .header {
-        text-align: left;
-        margin-bottom: 10px;
-        padding: 5px;
-        border-bottom: 1px solid #ddd;
-      }
-      h1 {
-        font-size: 16px;
-        margin: 3px 0;
-        color: #333;
-      }
-      .logo {
-        text-align: right;
-        float: right;
-      }
-      .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 6px;
-        font-size: 11px;
-        margin-bottom: 20px;
-        font-weight: bold;
-      }
-      .data-table th {
-        background-color: #0000ff;
-        color: white;
-        padding: 3px 6px;
-        text-align: left;
-        font-weight: bold;
-      }
-      .data-table td {
-        padding: 3px 6px;
-        border-bottom: 1px solid #ddd;
-      }
-      .data-table tr:nth-child(even) {
-        background-color: #f8f8f8;
-      }
-      .charts-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 10px;
-        margin-top: 20px;
-        font-size: 11px;
-        font-weight: bold;
-        font-family: Arial, sans-serif;
-      }
-      .bar-chart {
-        flex-basis: 48%;
-        font-size: 11px;
-        font-weight: bold;
-        font-family: Arial, sans-serif;
-      }
-      .line-chart {
-        flex-basis: 48%;
-        font-size: 11px;
-        font-weight: bold;
-        font-family: Arial, sans-serif;
-      }
-      .footer {
-        margin-top: 12px;
-        text-align: center;
-        font-size: 10px;
-        color: #777;
-      }
-      @media (max-width: 768px) {
-        .charts-container {
-          flex-direction: column;
-        }
-        .bar-chart,
-        .line-chart {
-          flex-basis: 100%;
-          font-size: 11px;
-          font-weight: bold;
-          font-family: Arial, sans-serif;
-        }
-      }
-    </style>
-    <script src="https://cdn.plot.ly/plotly-2.28.0.min.js"></script>
-  </head>
-  <body>
-    <div class="header">
-      <h1>Fraud Dashboard | Month-on-Month & Trend Analysis (Transfers)</h1>
-      <div class="logo">
-        <!-- Logo placeholder -->
-      </div>
-    </div>
 
-    <div class="table-container">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Month</th>
-            <th># Incidents</th>
-            <th># Transactions</th>
-            <th>Fraud Amount (SAR)</th>
-            <th>Recovery</th>
-            <th>Recovery %</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>January</td>
-            <td style="color: black">1,739</td>
-            <td style="color: black">2,347</td>
-            <td style="color: black">4,521,938</td>
-            <td>723,510</td>
-            <td style="color: green">16 %</td>
-          </tr>
-          <tr>
-            <td>February</td>
-            <td style="color: red">1,774 ▲ 2%</td>
-            <td style="color: red">2,393 ▲ 2%</td>
-            <td style="color: green">3,923,456 ▼ 13%</td>
-            <td>428,827</td>
-            <td style="color: green">10 %</td>
-          </tr>
-          <tr>
-            <td>March</td>
-            <td style="color: green">1,763 ▼ 1%</td>
-            <td style="color: red">2,564 ▲ 7%</td>
-            <td style="color: red">4,410,434 ▲ 12%</td>
-            <td>473,181</td>
-            <td style="color: green">10 %</td>
-          </tr>
-          <tr>
-            <td>April</td>
-            <td style="color: green">797 ▼ 55%</td>
-            <td style="color: green">1,021 ▼ 60%</td>
-            <td style="color: green">1,387,713 ▼ 69%</td>
-            <td>111,136</td>
-            <td style="color: green">8 %</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="charts-container">
-      <div class="bar-chart">
-        <div>
-          <script type="text/javascript">
-            window.PlotlyConfig = { MathJaxConfig: "local" };
-          </script>
-          <script
-            charset="utf-8"
-            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
-          ></script>
-          <div
-            id="5051ea45-414f-4e24-a5a4-fb1b77f93573"
-            class="plotly-graph-div"
-            style="height: 300px; width: 100%"
-          ></div>
-          <script type="text/javascript">
-            window.PLOTLYENV = window.PLOTLYENV || {};
-            if (
-              document.getElementById("5051ea45-414f-4e24-a5a4-fb1b77f93573")
-            ) {
-              Plotly.newPlot(
-                "5051ea45-414f-4e24-a5a4-fb1b77f93573",
-                [
-                  {
-                    marker: { color: "#118DFF" },
-                    name: "Transaction Count",
-                    x: [
-                      "07-Apr 13-Apr 25",
-                      "14-Apr 20-Apr 25",
-                      "31-Mar 06-Apr 25",
-                    ],
-                    y: { dtype: "i2", bdata: "ngH\u002fADgB" },
-                    type: "bar",
-                    xaxis: "x",
-                    yaxis: "y",
-                  },
-                  {
-                    line: { color: "#0000FF", width: 2 },
-                    mode: "lines+markers",
-                    name: "Transaction Amount",
-                    x: [
-                      "07-Apr 13-Apr 25",
-                      "14-Apr 20-Apr 25",
-                      "31-Mar 06-Apr 25",
-                    ],
-                    y: {
-                      dtype: "f8",
-                      bdata: "FK5HYcn0JEEAAAAA69kSQQAAAAAXoxVB",
-                    },
-                    type: "scatter",
-                    xaxis: "x",
-                    yaxis: "y2",
-                  },
-                ],
-                {
-                  template: {
-                    data: {
-                      barpolar: [
-                        {
-                          marker: {
-                            line: { color: "white", width: 0.5 },
-                            pattern: {
-                              fillmode: "overlay",
-                              size: 10,
-                              solidity: 0.2,
-                            },
-                          },
-                          type: "barpolar",
-                        },
-                      ],
-                      bar: [
-                        {
-                          error_x: { color: "#2a3f5f" },
-                          error_y: { color: "#2a3f5f" },
-                          marker: {
-                            line: { color: "white", width: 0.5 },
-                            pattern: {
-                              fillmode: "overlay",
-                              size: 10,
-                              solidity: 0.2,
-                            },
-                          },
-                          type: "bar",
-                        },
-                      ],
-                      carpet: [
-                        {
-                          aaxis: {
-                            endlinecolor: "#2a3f5f",
-                            gridcolor: "#C8D4E3",
-                            linecolor: "#C8D4E3",
-                            minorgridcolor: "#C8D4E3",
-                            startlinecolor: "#2a3f5f",
-                          },
-                          baxis: {
-                            endlinecolor: "#2a3f5f",
-                            gridcolor: "#C8D4E3",
-                            linecolor: "#C8D4E3",
-                            minorgridcolor: "#C8D4E3",
-                            startlinecolor: "#2a3f5f",
-                          },
-                          type: "carpet",
-                        },
-                      ],
-                      choropleth: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          type: "choropleth",
-                        },
-                      ],
-                      contourcarpet: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          type: "contourcarpet",
-                        },
-                      ],
-                      contour: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "contour",
-                        },
-                      ],
-                      heatmap: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "heatmap",
-                        },
-                      ],
-                      histogram2dcontour: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "histogram2dcontour",
-                        },
-                      ],
-                      histogram2d: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "histogram2d",
-                        },
-                      ],
-                      histogram: [
-                        {
-                          marker: {
-                            pattern: {
-                              fillmode: "overlay",
-                              size: 10,
-                              solidity: 0.2,
-                            },
-                          },
-                          type: "histogram",
-                        },
-                      ],
-                      mesh3d: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          type: "mesh3d",
-                        },
-                      ],
-                      parcoords: [
-                        {
-                          line: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "parcoords",
-                        },
-                      ],
-                      pie: [{ automargin: true, type: "pie" }],
-                      scatter3d: [
-                        {
-                          line: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scatter3d",
-                        },
-                      ],
-                      scattercarpet: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattercarpet",
-                        },
-                      ],
-                      scattergeo: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattergeo",
-                        },
-                      ],
-                      scattergl: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattergl",
-                        },
-                      ],
-                      scattermapbox: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattermapbox",
-                        },
-                      ],
-                      scattermap: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattermap",
-                        },
-                      ],
-                      scatterpolargl: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scatterpolargl",
-                        },
-                      ],
-                      scatterpolar: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scatterpolar",
-                        },
-                      ],
-                      scatter: [
-                        {
-                          fillpattern: {
-                            fillmode: "overlay",
-                            size: 10,
-                            solidity: 0.2,
-                          },
-                          type: "scatter",
-                        },
-                      ],
-                      scatterternary: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scatterternary",
-                        },
-                      ],
-                      surface: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "surface",
-                        },
-                      ],
-                      table: [
-                        {
-                          cells: {
-                            fill: { color: "#EBF0F8" },
-                            line: { color: "white" },
-                          },
-                          header: {
-                            fill: { color: "#C8D4E3" },
-                            line: { color: "white" },
-                          },
-                          type: "table",
-                        },
-                      ],
-                    },
-                    layout: {
-                      annotationdefaults: {
-                        arrowcolor: "#2a3f5f",
-                        arrowhead: 0,
-                        arrowwidth: 1,
-                      },
-                      autotypenumbers: "strict",
-                      coloraxis: { colorbar: { outlinewidth: 0, ticks: "" } },
-                      colorscale: {
-                        diverging: [
-                          [0, "#8e0152"],
-                          [0.1, "#c51b7d"],
-                          [0.2, "#de77ae"],
-                          [0.3, "#f1b6da"],
-                          [0.4, "#fde0ef"],
-                          [0.5, "#f7f7f7"],
-                          [0.6, "#e6f5d0"],
-                          [0.7, "#b8e186"],
-                          [0.8, "#7fbc41"],
-                          [0.9, "#4d9221"],
-                          [1, "#276419"],
-                        ],
-                        sequential: [
-                          [0.0, "#0d0887"],
-                          [0.1111111111111111, "#46039f"],
-                          [0.2222222222222222, "#7201a8"],
-                          [0.3333333333333333, "#9c179e"],
-                          [0.4444444444444444, "#bd3786"],
-                          [0.5555555555555556, "#d8576b"],
-                          [0.6666666666666666, "#ed7953"],
-                          [0.7777777777777778, "#fb9f3a"],
-                          [0.8888888888888888, "#fdca26"],
-                          [1.0, "#f0f921"],
-                        ],
-                        sequentialminus: [
-                          [0.0, "#0d0887"],
-                          [0.1111111111111111, "#46039f"],
-                          [0.2222222222222222, "#7201a8"],
-                          [0.3333333333333333, "#9c179e"],
-                          [0.4444444444444444, "#bd3786"],
-                          [0.5555555555555556, "#d8576b"],
-                          [0.6666666666666666, "#ed7953"],
-                          [0.7777777777777778, "#fb9f3a"],
-                          [0.8888888888888888, "#fdca26"],
-                          [1.0, "#f0f921"],
-                        ],
-                      },
-                      colorway: [
-                        "#636efa",
-                        "#EF553B",
-                        "#00cc96",
-                        "#ab63fa",
-                        "#FFA15A",
-                        "#19d3f3",
-                        "#FF6692",
-                        "#B6E880",
-                        "#FF97FF",
-                        "#FECB52",
-                      ],
-                      font: { color: "#2a3f5f" },
-                      geo: {
-                        bgcolor: "white",
-                        lakecolor: "white",
-                        landcolor: "white",
-                        showlakes: true,
-                        showland: true,
-                        subunitcolor: "#C8D4E3",
-                      },
-                      hoverlabel: { align: "left" },
-                      hovermode: "closest",
-                      mapbox: { style: "light" },
-                      paper_bgcolor: "white",
-                      plot_bgcolor: "white",
-                      polar: {
-                        angularaxis: {
-                          gridcolor: "#EBF0F8",
-                          linecolor: "#EBF0F8",
-                          ticks: "",
-                        },
-                        bgcolor: "white",
-                        radialaxis: {
-                          gridcolor: "#EBF0F8",
-                          linecolor: "#EBF0F8",
-                          ticks: "",
-                        },
-                      },
-                      scene: {
-                        xaxis: {
-                          backgroundcolor: "white",
-                          gridcolor: "#DFE8F3",
-                          gridwidth: 2,
-                          linecolor: "#EBF0F8",
-                          showbackground: true,
-                          ticks: "",
-                          zerolinecolor: "#EBF0F8",
-                        },
-                        yaxis: {
-                          backgroundcolor: "white",
-                          gridcolor: "#DFE8F3",
-                          gridwidth: 2,
-                          linecolor: "#EBF0F8",
-                          showbackground: true,
-                          ticks: "",
-                          zerolinecolor: "#EBF0F8",
-                        },
-                        zaxis: {
-                          backgroundcolor: "white",
-                          gridcolor: "#DFE8F3",
-                          gridwidth: 2,
-                          linecolor: "#EBF0F8",
-                          showbackground: true,
-                          ticks: "",
-                          zerolinecolor: "#EBF0F8",
-                        },
-                      },
-                      shapedefaults: { line: { color: "#2a3f5f" } },
-                      ternary: {
-                        aaxis: {
-                          gridcolor: "#DFE8F3",
-                          linecolor: "#A2B1C6",
-                          ticks: "",
-                        },
-                        baxis: {
-                          gridcolor: "#DFE8F3",
-                          linecolor: "#A2B1C6",
-                          ticks: "",
-                        },
-                        bgcolor: "white",
-                        caxis: {
-                          gridcolor: "#DFE8F3",
-                          linecolor: "#A2B1C6",
-                          ticks: "",
-                        },
-                      },
-                      title: { x: 0.05 },
-                      xaxis: {
-                        automargin: true,
-                        gridcolor: "#EBF0F8",
-                        linecolor: "#EBF0F8",
-                        ticks: "",
-                        title: { standoff: 15 },
-                        zerolinecolor: "#EBF0F8",
-                        zerolinewidth: 2,
-                      },
-                      yaxis: {
-                        automargin: true,
-                        gridcolor: "#EBF0F8",
-                        linecolor: "#EBF0F8",
-                        ticks: "",
-                        title: { standoff: 15 },
-                        zerolinecolor: "#EBF0F8",
-                        zerolinewidth: 2,
-                      },
-                    },
-                  },
-                  xaxis: { anchor: "y", domain: [0.0, 0.94] },
-                  yaxis: {
-                    anchor: "x",
-                    domain: [0.0, 1.0],
-                    title: {
-                      font: { size: 11, weight: "bold" },
-                      text: "Transaction Count",
-                    },
-                  },
-                  yaxis2: {
-                    anchor: "x",
-                    overlaying: "y",
-                    side: "right",
-                    title: {
-                      font: { size: 11, weight: "bold" },
-                      text: "Transaction Amount",
-                    },
-                  },
-                  title: {
-                    font: { size: 11, weight: "bold" },
-                    text: "Cashout Transactions",
-                  },
-                  margin: { l: 40, r: 40, t: 40, b: 40 },
-                  legend: {
-                    font: { size: 11, weight: "bold" },
-                    orientation: "h",
-                    yanchor: "bottom",
-                    y: 1.02,
-                    xanchor: "right",
-                    x: 1,
-                  },
-                  font: {
-                    family: "Arial, sans-serif",
-                    size: 11,
-                    weight: "bold",
-                  },
-                  height: 300,
-                },
-                { responsive: true }
-              );
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Fraud Dashboard | Month-on-Month & Trend Analysis (Transfers)</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 13px;
+                line-height: 1.3;
+                color: #333;
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 8px;
             }
-          </script>
-        </div>
-      </div>
-
-      <div class="line-chart">
-        <div>
-          <script type="text/javascript">
-            window.PlotlyConfig = { MathJaxConfig: "local" };
-          </script>
-          <script
-            charset="utf-8"
-            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
-          ></script>
-          <div
-            id="d274d76d-880e-4dca-8631-743230f882c7"
-            class="plotly-graph-div"
-            style="height: 300px; width: 100%"
-          ></div>
-          <script type="text/javascript">
-            window.PLOTLYENV = window.PLOTLYENV || {};
-            if (
-              document.getElementById("d274d76d-880e-4dca-8631-743230f882c7")
-            ) {
-              Plotly.newPlot(
-                "d274d76d-880e-4dca-8631-743230f882c7",
-                [
-                  {
-                    line: { color: "#0000FF", width: 2 },
-                    mode: "lines+markers",
-                    name: "Transaction Amount",
-                    x: [
-                      "Apr 02",
-                      "Apr 03",
-                      "Apr 04",
-                      "Apr 05",
-                      "Apr 06",
-                      "Apr 07",
-                      "Apr 08",
-                      "Apr 09",
-                      "Apr 10",
-                      "Apr 11",
-                      "Apr 12",
-                      "Apr 13",
-                      "Apr 14",
-                      "Apr 15",
-                      "Apr 16",
-                      "Apr 17",
-                      "Apr 18",
-                      "Apr 19",
-                      "Apr 20",
-                    ],
-                    y: {
-                      dtype: "f8",
-                      bdata:
-                        "AAAAALit7UAAAAAA0I\u002fxQAAAAAAg4u9AAAAAAIDR8kAAAAAAIGPzQAAAAABooQhBAAAAADBl8EAAAAAACAzxQAAAAAC8WQZBSOF6FHbL7UAAAAAAwKLuQAAAAABgD+RAAAAAAGBZ8kAAAAAAgFzjQAAAAABAzuVAAAAAAAB95UAAAAAAwGPgQAAAAADA9+NAAAAAALAy3kA=",
-                    },
-                    type: "scatter",
-                  },
-                ],
-                {
-                  template: {
-                    data: {
-                      barpolar: [
-                        {
-                          marker: {
-                            line: { color: "white", width: 0.5 },
-                            pattern: {
-                              fillmode: "overlay",
-                              size: 10,
-                              solidity: 0.2,
-                            },
-                          },
-                          type: "barpolar",
-                        },
-                      ],
-                      bar: [
-                        {
-                          error_x: { color: "#2a3f5f" },
-                          error_y: { color: "#2a3f5f" },
-                          marker: {
-                            line: { color: "white", width: 0.5 },
-                            pattern: {
-                              fillmode: "overlay",
-                              size: 10,
-                              solidity: 0.2,
-                            },
-                          },
-                          type: "bar",
-                        },
-                      ],
-                      carpet: [
-                        {
-                          aaxis: {
-                            endlinecolor: "#2a3f5f",
-                            gridcolor: "#C8D4E3",
-                            linecolor: "#C8D4E3",
-                            minorgridcolor: "#C8D4E3",
-                            startlinecolor: "#2a3f5f",
-                          },
-                          baxis: {
-                            endlinecolor: "#2a3f5f",
-                            gridcolor: "#C8D4E3",
-                            linecolor: "#C8D4E3",
-                            minorgridcolor: "#C8D4E3",
-                            startlinecolor: "#2a3f5f",
-                          },
-                          type: "carpet",
-                        },
-                      ],
-                      choropleth: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          type: "choropleth",
-                        },
-                      ],
-                      contourcarpet: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          type: "contourcarpet",
-                        },
-                      ],
-                      contour: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "contour",
-                        },
-                      ],
-                      heatmap: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "heatmap",
-                        },
-                      ],
-                      histogram2dcontour: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "histogram2dcontour",
-                        },
-                      ],
-                      histogram2d: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "histogram2d",
-                        },
-                      ],
-                      histogram: [
-                        {
-                          marker: {
-                            pattern: {
-                              fillmode: "overlay",
-                              size: 10,
-                              solidity: 0.2,
-                            },
-                          },
-                          type: "histogram",
-                        },
-                      ],
-                      mesh3d: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          type: "mesh3d",
-                        },
-                      ],
-                      parcoords: [
-                        {
-                          line: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "parcoords",
-                        },
-                      ],
-                      pie: [{ automargin: true, type: "pie" }],
-                      scatter3d: [
-                        {
-                          line: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scatter3d",
-                        },
-                      ],
-                      scattercarpet: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattercarpet",
-                        },
-                      ],
-                      scattergeo: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattergeo",
-                        },
-                      ],
-                      scattergl: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattergl",
-                        },
-                      ],
-                      scattermapbox: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattermapbox",
-                        },
-                      ],
-                      scattermap: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scattermap",
-                        },
-                      ],
-                      scatterpolargl: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scatterpolargl",
-                        },
-                      ],
-                      scatterpolar: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scatterpolar",
-                        },
-                      ],
-                      scatter: [
-                        {
-                          fillpattern: {
-                            fillmode: "overlay",
-                            size: 10,
-                            solidity: 0.2,
-                          },
-                          type: "scatter",
-                        },
-                      ],
-                      scatterternary: [
-                        {
-                          marker: { colorbar: { outlinewidth: 0, ticks: "" } },
-                          type: "scatterternary",
-                        },
-                      ],
-                      surface: [
-                        {
-                          colorbar: { outlinewidth: 0, ticks: "" },
-                          colorscale: [
-                            [0.0, "#0d0887"],
-                            [0.1111111111111111, "#46039f"],
-                            [0.2222222222222222, "#7201a8"],
-                            [0.3333333333333333, "#9c179e"],
-                            [0.4444444444444444, "#bd3786"],
-                            [0.5555555555555556, "#d8576b"],
-                            [0.6666666666666666, "#ed7953"],
-                            [0.7777777777777778, "#fb9f3a"],
-                            [0.8888888888888888, "#fdca26"],
-                            [1.0, "#f0f921"],
-                          ],
-                          type: "surface",
-                        },
-                      ],
-                      table: [
-                        {
-                          cells: {
-                            fill: { color: "#EBF0F8" },
-                            line: { color: "white" },
-                          },
-                          header: {
-                            fill: { color: "#C8D4E3" },
-                            line: { color: "white" },
-                          },
-                          type: "table",
-                        },
-                      ],
-                    },
-                    layout: {
-                      annotationdefaults: {
-                        arrowcolor: "#2a3f5f",
-                        arrowhead: 0,
-                        arrowwidth: 1,
-                      },
-                      autotypenumbers: "strict",
-                      coloraxis: { colorbar: { outlinewidth: 0, ticks: "" } },
-                      colorscale: {
-                        diverging: [
-                          [0, "#8e0152"],
-                          [0.1, "#c51b7d"],
-                          [0.2, "#de77ae"],
-                          [0.3, "#f1b6da"],
-                          [0.4, "#fde0ef"],
-                          [0.5, "#f7f7f7"],
-                          [0.6, "#e6f5d0"],
-                          [0.7, "#b8e186"],
-                          [0.8, "#7fbc41"],
-                          [0.9, "#4d9221"],
-                          [1, "#276419"],
-                        ],
-                        sequential: [
-                          [0.0, "#0d0887"],
-                          [0.1111111111111111, "#46039f"],
-                          [0.2222222222222222, "#7201a8"],
-                          [0.3333333333333333, "#9c179e"],
-                          [0.4444444444444444, "#bd3786"],
-                          [0.5555555555555556, "#d8576b"],
-                          [0.6666666666666666, "#ed7953"],
-                          [0.7777777777777778, "#fb9f3a"],
-                          [0.8888888888888888, "#fdca26"],
-                          [1.0, "#f0f921"],
-                        ],
-                        sequentialminus: [
-                          [0.0, "#0d0887"],
-                          [0.1111111111111111, "#46039f"],
-                          [0.2222222222222222, "#7201a8"],
-                          [0.3333333333333333, "#9c179e"],
-                          [0.4444444444444444, "#bd3786"],
-                          [0.5555555555555556, "#d8576b"],
-                          [0.6666666666666666, "#ed7953"],
-                          [0.7777777777777778, "#fb9f3a"],
-                          [0.8888888888888888, "#fdca26"],
-                          [1.0, "#f0f921"],
-                        ],
-                      },
-                      colorway: [
-                        "#636efa",
-                        "#EF553B",
-                        "#00cc96",
-                        "#ab63fa",
-                        "#FFA15A",
-                        "#19d3f3",
-                        "#FF6692",
-                        "#B6E880",
-                        "#FF97FF",
-                        "#FECB52",
-                      ],
-                      font: { color: "#2a3f5f" },
-                      geo: {
-                        bgcolor: "white",
-                        lakecolor: "white",
-                        landcolor: "white",
-                        showlakes: true,
-                        showland: true,
-                        subunitcolor: "#C8D4E3",
-                      },
-                      hoverlabel: { align: "left" },
-                      hovermode: "closest",
-                      mapbox: { style: "light" },
-                      paper_bgcolor: "white",
-                      plot_bgcolor: "white",
-                      polar: {
-                        angularaxis: {
-                          gridcolor: "#EBF0F8",
-                          linecolor: "#EBF0F8",
-                          ticks: "",
-                        },
-                        bgcolor: "white",
-                        radialaxis: {
-                          gridcolor: "#EBF0F8",
-                          linecolor: "#EBF0F8",
-                          ticks: "",
-                        },
-                      },
-                      scene: {
-                        xaxis: {
-                          backgroundcolor: "white",
-                          gridcolor: "#DFE8F3",
-                          gridwidth: 2,
-                          linecolor: "#EBF0F8",
-                          showbackground: true,
-                          ticks: "",
-                          zerolinecolor: "#EBF0F8",
-                        },
-                        yaxis: {
-                          backgroundcolor: "white",
-                          gridcolor: "#DFE8F3",
-                          gridwidth: 2,
-                          linecolor: "#EBF0F8",
-                          showbackground: true,
-                          ticks: "",
-                          zerolinecolor: "#EBF0F8",
-                        },
-                        zaxis: {
-                          backgroundcolor: "white",
-                          gridcolor: "#DFE8F3",
-                          gridwidth: 2,
-                          linecolor: "#EBF0F8",
-                          showbackground: true,
-                          ticks: "",
-                          zerolinecolor: "#EBF0F8",
-                        },
-                      },
-                      shapedefaults: { line: { color: "#2a3f5f" } },
-                      ternary: {
-                        aaxis: {
-                          gridcolor: "#DFE8F3",
-                          linecolor: "#A2B1C6",
-                          ticks: "",
-                        },
-                        baxis: {
-                          gridcolor: "#DFE8F3",
-                          linecolor: "#A2B1C6",
-                          ticks: "",
-                        },
-                        bgcolor: "white",
-                        caxis: {
-                          gridcolor: "#DFE8F3",
-                          linecolor: "#A2B1C6",
-                          ticks: "",
-                        },
-                      },
-                      title: { x: 0.05 },
-                      xaxis: {
-                        automargin: true,
-                        gridcolor: "#EBF0F8",
-                        linecolor: "#EBF0F8",
-                        ticks: "",
-                        title: { standoff: 15 },
-                        zerolinecolor: "#EBF0F8",
-                        zerolinewidth: 2,
-                      },
-                      yaxis: {
-                        automargin: true,
-                        gridcolor: "#EBF0F8",
-                        linecolor: "#EBF0F8",
-                        ticks: "",
-                        title: { standoff: 15 },
-                        zerolinecolor: "#EBF0F8",
-                        zerolinewidth: 2,
-                      },
-                    },
-                  },
-                  title: {
-                    font: { size: 11, weight: "bold" },
-                    text: "Sum of Transaction Amount by Date",
-                  },
-                  xaxis: {
-                    title: {
-                      font: { size: 11, weight: "bold" },
-                      text: "Date (Month, Day)",
-                    },
-                  },
-                  yaxis: {
-                    title: {
-                      font: { size: 11, weight: "bold" },
-                      text: "Sum of Transaction Amount",
-                    },
-                  },
-                  margin: { l: 40, r: 40, t: 40, b: 40 },
-                  font: {
-                    size: 11,
-                    weight: "bold",
-                    family: "Arial, sans-serif",
-                  },
-                  height: 300,
-                },
-                { responsive: true }
-              );
+            .header {
+                text-align: left;
+                margin-bottom: 10px;
+                padding: 5px;
+                border-bottom: 1px solid #ddd;
             }
-          </script>
+            h1 {
+                font-size: 16px;
+                margin: 3px 0;
+                color: #333;
+            }
+            .logo {
+                text-align: right;
+                float: right;
+            }
+            .data-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 6px;
+                font-size: 11px;
+                margin-bottom: 20px;
+                font-weight: bold;
+            }
+            .data-table th {
+                background-color: #0000FF;
+                color: white;
+                padding: 3px 6px;
+                text-align: left;
+                font-weight: bold;
+            }
+            .data-table td {
+                padding: 3px 6px;
+                border-bottom: 1px solid #ddd;
+            }
+            .data-table tr:nth-child(even) {
+                background-color: #f8f8f8;
+            }
+            .charts-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 10px;
+                margin-top: 20px;
+                font-size: 11px;
+                font-weight: bold;
+                font-family: Arial, sans-serif;
+            }
+            .bar-chart {
+                flex-basis: 48%;
+                font-size: 11px;
+                font-weight: bold;
+                font-family: Arial, sans-serif;               
+            }
+            .line-chart {
+                flex-basis: 48%;
+                font-size: 11px;
+                font-weight: bold;
+                font-family: Arial, sans-serif;
+            }
+            .footer {
+                margin-top: 12px;
+                text-align: center;
+                font-size: 10px;
+                color: #777;
+            }
+            @media (max-width: 768px) {
+                .charts-container {
+                    flex-direction: column;
+                }
+                .bar-chart, .line-chart {
+                    flex-basis: 100%;
+                    font-size: 11px;
+                    font-weight: bold;
+                    font-family: Arial, sans-serif;
+                }
+            }
+        </style>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Fraud Dashboard | Month-on-Month & Trend Analysis (Transfers)</h1>
+            <div class="logo">
+                <!-- Logo placeholder -->
+            </div>
         </div>
-      </div>
-    </div>
-  </body>
-</html>
+        
+        <div class="table-container">
+            <table class="data-table">
+<thead>
+<tr>
+<th>Month</th>
+<th># Incidents</th>
+<th># Transactions</th>
+<th>Fraud Amount (SAR)</th>
+<th>Recovery</th>
+<th>Recovery %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January</td>
+<td style="color: black">17</td>
+<td style="color: black">17</td>
+<td style="color: black">328,438</td>
+<td>56,627</td>
+<td style="color: green">17 %</td>
+</tr>
+<tr>
+<td>February</td>
+<td style="color: red">20  ▲ 18%</td>
+<td style="color: red">20  ▲ 18%</td>
+<td style="color: red">593,713  ▲ 81%</td>
+<td>99,362</td>
+<td style="color: green">16 %</td>
+</tr>
+<tr>
+<td>March</td>
+<td style="color: green">13  ▼ 35%</td>
+<td style="color: green">13  ▼ 35%</td>
+<td style="color: green">261,233  ▼ 56%</td>
+<td>62,941</td>
+<td style="color: green">24 %</td>
+</tr>
+<tr>
+<td>April</td>
+<td style="color: red">20  ▲ 54%</td>
+<td style="color: red">20  ▲ 54%</td>
+<td style="color: red">506,167  ▲ 94%</td>
+<td>104,866</td>
+<td style="color: green">20 %</td>
+</tr>
+<tr>
+<td>May</td>
+<td style="color: green">5  ▼ 75%</td>
+<td style="color: green">5  ▼ 75%</td>
+<td style="color: green">74,109  ▼ 85%</td>
+<td>16,852</td>
+<td style="color: green">22 %</td>
+</tr>
+</tbody>
+</table>
+
+        </div>
+        
+        <div class="charts-container">
+            <div class="bar-chart">
+                <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="ba2612d4-8905-4c3e-ad8c-fbb432b07e72" class="plotly-graph-div" style="height:300px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("ba2612d4-8905-4c3e-ad8c-fbb432b07e72")) {                    Plotly.newPlot(                        "ba2612d4-8905-4c3e-ad8c-fbb432b07e72",                        [{"marker":{"color":"#118DFF"},"name":"Transaction Count","x":["05-May 11-May 25","14-Apr 20-Apr 25","21-Apr 27-Apr 25","28-Apr 04-May 25"],"y":{"dtype":"i1","bdata":"BQYGAQ=="},"type":"bar","xaxis":"x","yaxis":"y"},{"line":{"color":"#0000FF","width":2},"mode":"lines+markers","name":"Transaction Amount","x":["05-May 11-May 25","14-Apr 20-Apr 25","21-Apr 27-Apr 25","28-Apr 04-May 25"],"y":{"dtype":"f8","bdata":"UrgehdsX8kAUrkfhKDgBQZDC9Sj2xwVBAAAAAFCD4UA="},"type":"scatter","xaxis":"x","yaxis":"y2"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.94]},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"font":{"size":11,"weight":"bold"},"text":"Transaction Count"}},"yaxis2":{"anchor":"x","overlaying":"y","side":"right","title":{"font":{"size":11,"weight":"bold"},"text":"Transaction Amount"}},"title":{"font":{"size":11,"weight":"bold"},"text":"Cashout Transactions"},"margin":{"l":40,"r":40,"t":40,"b":40},"legend":{"font":{"size":11,"weight":"bold"},"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"font":{"family":"Arial, sans-serif","size":11,"weight":"bold"},"height":300},                        {"responsive": true}                    )                };            </script>        </div>
+            </div>
+            
+            <div class="line-chart">
+                <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>                <div id="fe38aa53-7439-49b6-83b0-fe6c16264b77" class="plotly-graph-div" style="height:300px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("fe38aa53-7439-49b6-83b0-fe6c16264b77")) {                    Plotly.newPlot(                        "fe38aa53-7439-49b6-83b0-fe6c16264b77",                        [{"line":{"color":"#0000FF","width":2},"mode":"lines+markers","name":"Transaction Amount","x":["Apr 14","Apr 15","Apr 17","Apr 18","Apr 20","Apr 23","Apr 24","Apr 26","Apr 29","May 05","May 09","May 11"],"y":{"dtype":"f8","bdata":"rkfhegQP3kBxPQrXYx\u002feQAAAAAAQr9xAFK5H4WrU1EBwPQrXYw\u002fcQDQzMzMPO\u002fhAAAAAABBq0EDYo3A9snTuQAAAAABQg+FA9ihcj6KFwEDXo3A9CuqxQOxRuB4N0e1A"},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"title":{"font":{"size":11,"weight":"bold"},"text":"Sum of Transaction Amount by Date"},"xaxis":{"title":{"font":{"size":11,"weight":"bold"},"text":"Date (Month, Day)"}},"yaxis":{"title":{"font":{"size":11,"weight":"bold"},"text":"Sum of Transaction Amount"}},"margin":{"l":40,"r":40,"t":40,"b":40},"font":{"size":11,"weight":"bold","family":"Arial, sans-serif"},"height":300},                        {"responsive": true}                    )                };            </script>        </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Report generated on 2025-05-13 13:04</p>
+        </div>
+    </body>
+    </html>
+    

@@ -179,6 +179,82 @@
               }
             ],
             "userQuery": "Give me top 5 transaction amount where Main Channel is ATM"
+          },
+          {
+            "id": "majk32hohvp47s1syuq",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-11T11:13:46.332Z"
+          },
+          {
+            "id": "majk3m0u749qzjbni1y",
+            "text": "The data indicates that the top 5 ATM transactions in the direct channel have amounts ranging from 49,143.88 SAR to 49,700.91 SAR. These unusually high transaction amounts may warrant further investigation by a fraud analyst, as they could potentially be indicative of fraudulent activity. The similarity in transaction amounts suggests that these transactions may be related or part of a larger scheme.",
+            "sender": "bot",
+            "timestamp": "2025-05-11T11:14:11.646Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_amount\nFROM hive_data.ejada_somni.direct\nWHERE main_channel = 'ATM'\nORDER BY transaction_amount DESC\nLIMIT 5",
+            "results": [
+              {
+                "transaction_amount": 49700.91
+              },
+              {
+                "transaction_amount": 49688.11
+              },
+              {
+                "transaction_amount": 49514.52
+              },
+              {
+                "transaction_amount": 49303.03
+              },
+              {
+                "transaction_amount": 49143.88
+              }
+            ],
+            "userQuery": "Give me top 5 transaction amount where Main Channel is ATM"
+          },
+          {
+            "id": "majlugy9598oqxco71y",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-11T12:03:04.401Z"
+          },
+          {
+            "id": "majlv52r5cj5jk62f42",
+            "text": "The data indicates that the top 5 ATM transactions in the direct channel have amounts ranging from 49,143.88 SAR to 49,700.91 SAR. These unusually high transaction amounts may warrant further investigation by a fraud analyst, as they could potentially be indicative of fraudulent activity. The similarity in transaction amounts suggests that these transactions may be related or part of a larger scheme.",
+            "sender": "bot",
+            "timestamp": "2025-05-11T12:03:35.667Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT transaction_amount\nFROM hive_data.ejada_somni.direct\nWHERE main_channel = 'ATM'\nORDER BY transaction_amount DESC\nLIMIT 5",
+            "results": [
+              {
+                "transaction_amount": 49700.91
+              },
+              {
+                "transaction_amount": 49688.11
+              },
+              {
+                "transaction_amount": 49514.52
+              },
+              {
+                "transaction_amount": 49303.03
+              },
+              {
+                "transaction_amount": 49143.88
+              }
+            ],
+            "userQuery": "Give me top 5 transaction amount where Main Channel is ATM"
+          },
+          {
+            "id": "mamai0zf7wxrkb2jb9y",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-13T09:08:46.587Z"
+          },
+          {
+            "id": "mamaktwpccq9bsptwmn",
+            "text": "Give me top 5 transaction amount where Main Channel is ATM",
+            "sender": "user",
+            "timestamp": "2025-05-13T09:10:57.385Z"
           }
         ]
       },
@@ -226,6 +302,46 @@
             "sender": "bot",
             "timestamp": "2025-05-06T13:15:54.453Z",
             "isSqlQuery": false
+          },
+          {
+            "id": "majh6yipwcgrp4komy8",
+            "text": "how many cases where the amount frozen exceeds 200?",
+            "sender": "user",
+            "timestamp": "2025-05-11T09:52:48.961Z"
+          },
+          {
+            "id": "majh78h8jbkyijs3lu",
+            "text": "The data indicates that there are 953 records in the \"direct\" table where the \"frozen_amount\" is greater than 200. This suggests that a significant number of transactions have a frozen amount exceeding the specified threshold.",
+            "sender": "bot",
+            "timestamp": "2025-05-11T09:53:01.868Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT COUNT(*) FROM hive_data.ejada_somni.direct WHERE frozen_amount > 200",
+            "results": [
+              {
+                "_col0": 953
+              }
+            ],
+            "userQuery": "how many cases where the amount frozen exceeds 200?"
+          },
+          {
+            "id": "majh7p75prpw8qbk4sn",
+            "text": "and what is the related total amount",
+            "sender": "user",
+            "timestamp": "2025-05-11T09:53:23.537Z"
+          },
+          {
+            "id": "majh7wid11vq0lsto9y",
+            "text": "The total frozen amount in the \"direct\" table of the \"ejada_somni\" database is approximately $2,501,815.17, where the frozen amount is greater than $200.",
+            "sender": "bot",
+            "timestamp": "2025-05-11T09:53:33.013Z",
+            "isSqlQuery": true,
+            "rawSql": "SELECT SUM(frozen_amount) FROM hive_data.ejada_somni.direct WHERE frozen_amount > 200",
+            "results": [
+              {
+                "_col0": 2501815.1700000004
+              }
+            ],
+            "userQuery": "and what is the related total amount"
           }
         ]
       },

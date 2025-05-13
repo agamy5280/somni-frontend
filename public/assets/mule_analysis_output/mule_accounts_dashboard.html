@@ -1,735 +1,759 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Mule Accounts Dashboard</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        font-size: 13px;
-        line-height: 1.3;
-        color: #333;
-        /* max-width: 1200px;
-        margin: 0 auto; */
-        padding: 8px 0;
-      }
-      .header {
-        text-align: left;
-        margin-bottom: 10px;
-        padding: 5px;
-        border-bottom: 1px solid #ddd;
-      }
-      h1 {
-        font-size: 18px;
-        margin: 3px 0;
-        color: #333;
-      }
-      h2 {
-        font-size: 15px;
-        margin: 8px 0 4px 0;
-        color: #444;
-      }
-      h3 {
-        font-size: 13px;
-        margin: 6px 0 3px 0;
-        color: #555;
-        font-weight: bold;
-      }
-      .section {
-        margin-top: 12px;
-        margin-bottom: 12px;
-      }
-      .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 6px;
-        font-size: 11px;
-      }
-      .data-table th {
-        background-color: #0000ff;
-        color: white;
-        padding: 3px 6px;
-        text-align: left;
-        font-weight: bold;
-      }
-      .data-table td {
-        padding: 3px 6px;
-        border-bottom: 1px solid #ddd;
-      }
-      .data-table tr:nth-child(even) {
-        background-color: #f8f8f8;
-      }
-      .data-table .total-row {
-        font-weight: bold;
-        background-color: #e6e6e6;
-        padding: 2px 6px;
-      }
-      .tables-row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: 10px;
-        margin-bottom: 15px;
-      }
-      .month-block {
-        flex-basis: calc(25% - 10px);
-        min-width: 200px;
-        margin-bottom: 5px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        padding: 5px;
-        box-sizing: border-box;
-      }
-      .footer {
-        margin-top: 12px;
-        text-align: center;
-        font-size: 10px;
-        color: #777;
-      }
-      @media (max-width: 992px) {
-        .month-block {
-          flex-basis: calc(50% - 10px);
-        }
-      }
-      @media (max-width: 576px) {
-        .month-block {
-          flex-basis: 100%;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="header">
-      <h1>Mule Accounts Dashboard</h1>
-    </div>
 
-    <div class="section">
-      <h2>Bank Mule Accounts</h2>
-      <div class="tables-row">
-        <div class="month-block">
-          <h3>25-Feb</h3>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Bank</th>
-                <th>Cases</th>
-                <th>Amount</th>
-                <th>%</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>RJH</td>
-                <td>578</td>
-                <td>1,246,857.98</td>
-                <td>39.16%</td>
-              </tr>
-              <tr>
-                <td>Foreign Bank</td>
-                <td>11</td>
-                <td>379,537.80</td>
-                <td>11.92%</td>
-              </tr>
-              <tr>
-                <td>SAIB</td>
-                <td>69</td>
-                <td>270,634.00</td>
-                <td>8.50%</td>
-              </tr>
-              <tr>
-                <td>BAB</td>
-                <td>127</td>
-                <td>234,200.00</td>
-                <td>7.36%</td>
-              </tr>
-              <tr>
-                <td>SNB</td>
-                <td>99</td>
-                <td>195,786.75</td>
-                <td>6.15%</td>
-              </tr>
-              <tr>
-                <td>SAB</td>
-                <td>143</td>
-                <td>170,086.00</td>
-                <td>5.34%</td>
-              </tr>
-              <tr>
-                <td>INMA</td>
-                <td>57</td>
-                <td>166,570.50</td>
-                <td>5.23%</td>
-              </tr>
-              <tr>
-                <td>Vision Bank</td>
-                <td>81</td>
-                <td>107,981.00</td>
-                <td>3.39%</td>
-              </tr>
-              <tr>
-                <td>ANB</td>
-                <td>46</td>
-                <td>87,411.39</td>
-                <td>2.75%</td>
-              </tr>
-              <tr>
-                <td>BSF</td>
-                <td>11</td>
-                <td>80,248.00</td>
-                <td>2.52%</td>
-              </tr>
-              <tr>
-                <td>D360</td>
-                <td>81</td>
-                <td>71,337.58</td>
-                <td>2.24%</td>
-              </tr>
-              <tr>
-                <td>GIB</td>
-                <td>5</td>
-                <td>42,700.00</td>
-                <td>1.34%</td>
-              </tr>
-              <tr>
-                <td>BAJ</td>
-                <td>18</td>
-                <td>42,177.58</td>
-                <td>1.32%</td>
-              </tr>
-              <tr>
-                <td>Foreign bank</td>
-                <td>1</td>
-                <td>40,320.32</td>
-                <td>1.27%</td>
-              </tr>
-              <tr>
-                <td>RB</td>
-                <td>31</td>
-                <td>38,916.00</td>
-                <td>1.22%</td>
-              </tr>
-              <tr>
-                <td>Emirates NBD</td>
-                <td>7</td>
-                <td>5,700.00</td>
-                <td>0.18%</td>
-              </tr>
-              <tr>
-                <td>NEO</td>
-                <td>2</td>
-                <td>2,720.00</td>
-                <td>0.09%</td>
-              </tr>
-              <tr>
-                <td>Vision bank</td>
-                <td>2</td>
-                <td>560.00</td>
-                <td>0.02%</td>
-              </tr>
-              <tr class="total-row">
-                <td>Total</td>
-                <td>1369</td>
-                <td>3,183,744.90</td>
-                <td>100.00%</td>
-              </tr>
-            </tbody>
-          </table>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Mule Accounts Dashboard</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                font-size: 13px;
+                line-height: 1.3;
+                color: #333;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 8px;
+            }
+            .header {
+                text-align: left;
+                margin-bottom: 10px;
+                padding: 5px;
+                border-bottom: 1px solid #ddd;
+            }
+            h1 {
+                font-size: 18px;
+                margin: 3px 0;
+                color: #333;
+            }
+            h2 {
+                font-size: 15px;
+                margin: 8px 0 4px 0;
+                color: #444;
+            }
+            h3 {
+                font-size: 13px;
+                margin: 6px 0 3px 0;
+                color: #555;
+                font-weight: bold;
+            }
+            .section {
+                margin-top: 12px;
+                margin-bottom: 12px;
+            }
+            .data-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 6px;
+                font-size: 11px;
+            }
+            .data-table th {
+                background-color: #0000FF;
+                color: white;
+                padding: 3px 6px;
+                text-align: left;
+                font-weight: bold;
+            }
+            .data-table td {
+                padding: 3px 6px;
+                border-bottom: 1px solid #ddd;
+            }
+            .data-table tr:nth-child(even) {
+                background-color: #f8f8f8;
+            }
+            .data-table .total-row {
+                font-weight: bold;
+                background-color: #e6e6e6;
+                padding: 2px 6px;
+            }
+            .tables-row {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            .month-block {
+                flex-basis: calc(25% - 10px);
+                min-width: 200px;
+                margin-bottom: 5px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                padding: 5px;
+                box-sizing: border-box;
+            }
+            .footer {
+                margin-top: 12px;
+                text-align: center;
+                font-size: 10px;
+                color: #777;
+            }
+            @media (max-width: 992px) {
+                .month-block {
+                    flex-basis: calc(50% - 10px);
+                }
+            }
+            @media (max-width: 576px) {
+                .month-block {
+                    flex-basis: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Mule Accounts Dashboard</h1>
         </div>
-        <div class="month-block">
-          <h3>25-Mar</h3>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Bank</th>
-                <th>Cases</th>
-                <th>Amount</th>
-                <th>%</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>RJH</td>
-                <td>544</td>
-                <td>1,730,348.04</td>
-                <td>53.91%</td>
-              </tr>
-              <tr>
-                <td>SAB</td>
-                <td>221</td>
-                <td>344,975.34</td>
-                <td>10.75%</td>
-              </tr>
-              <tr>
-                <td>RB</td>
-                <td>61</td>
-                <td>204,219.00</td>
-                <td>6.36%</td>
-              </tr>
-              <tr>
-                <td>SNB</td>
-                <td>86</td>
-                <td>202,606.00</td>
-                <td>6.31%</td>
-              </tr>
-              <tr>
-                <td>Foreign Bank</td>
-                <td>11</td>
-                <td>167,370.00</td>
-                <td>5.21%</td>
-              </tr>
-              <tr>
-                <td>INMA</td>
-                <td>54</td>
-                <td>118,551.00</td>
-                <td>3.69%</td>
-              </tr>
-              <tr>
-                <td>BAJ</td>
-                <td>19</td>
-                <td>114,623.58</td>
-                <td>3.57%</td>
-              </tr>
-              <tr>
-                <td>ANB</td>
-                <td>46</td>
-                <td>87,086.00</td>
-                <td>2.71%</td>
-              </tr>
-              <tr>
-                <td>SAIB</td>
-                <td>55</td>
-                <td>80,248.00</td>
-                <td>2.50%</td>
-              </tr>
-              <tr>
-                <td>BAB</td>
-                <td>49</td>
-                <td>77,312.00</td>
-                <td>2.41%</td>
-              </tr>
-              <tr>
-                <td>D360</td>
-                <td>55</td>
-                <td>61,502.00</td>
-                <td>1.92%</td>
-              </tr>
-              <tr>
-                <td>BSF</td>
-                <td>8</td>
-                <td>15,154.00</td>
-                <td>0.47%</td>
-              </tr>
-              <tr>
-                <td>GIB</td>
-                <td>4</td>
-                <td>3,200.00</td>
-                <td>0.10%</td>
-              </tr>
-              <tr>
-                <td>STC Bank</td>
-                <td>1</td>
-                <td>2,000.00</td>
-                <td>0.06%</td>
-              </tr>
-              <tr>
-                <td>Emirates NBD</td>
-                <td>1</td>
-                <td>720.00</td>
-                <td>0.02%</td>
-              </tr>
-              <tr>
-                <td>Vision Bank</td>
-                <td>1</td>
-                <td>50.00</td>
-                <td>0.00%</td>
-              </tr>
-              <tr class="total-row">
-                <td>Total</td>
-                <td>1216</td>
-                <td>3,209,964.96</td>
-                <td>100.00%</td>
-              </tr>
-            </tbody>
-          </table>
+        
+        <div class="section">
+            <h2>Bank Mule Accounts</h2>
+            <div class="tables-row">
+                <div class='month-block'>
+<h3>25-Feb</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Bank</th>
+<th>Cases</th>
+<th>Amount</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Brenda Fernandez</td>
+<td>1</td>
+<td>42,933.51</td>
+<td>13.58%</td>
+</tr>
+<tr>
+<td>Adriana Anderson</td>
+<td>1</td>
+<td>39,604.38</td>
+<td>12.53%</td>
+</tr>
+<tr>
+<td>Kathy King</td>
+<td>1</td>
+<td>39,554.40</td>
+<td>12.51%</td>
+</tr>
+<tr>
+<td>Colin Graham</td>
+<td>1</td>
+<td>34,009.10</td>
+<td>10.76%</td>
+</tr>
+<tr>
+<td>Holly Martin</td>
+<td>1</td>
+<td>31,736.14</td>
+<td>10.04%</td>
+</tr>
+<tr>
+<td>Kevin Avila</td>
+<td>1</td>
+<td>31,256.06</td>
+<td>9.89%</td>
+</tr>
+<tr>
+<td>Courtney Smith</td>
+<td>1</td>
+<td>29,999.53</td>
+<td>9.49%</td>
+</tr>
+<tr>
+<td>Gary Howell</td>
+<td>1</td>
+<td>23,050.74</td>
+<td>7.29%</td>
+</tr>
+<tr>
+<td>Rebecca Williams</td>
+<td>1</td>
+<td>20,625.85</td>
+<td>6.52%</td>
+</tr>
+<tr>
+<td>Brian Sanford</td>
+<td>1</td>
+<td>15,949.16</td>
+<td>5.04%</td>
+</tr>
+<tr>
+<td>Denise Gonzalez</td>
+<td>1</td>
+<td>7,430.85</td>
+<td>2.35%</td>
+</tr>
+<tr class="total-row">
+<td>Total</td>
+<td>11</td>
+<td>316,149.72</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</div>
+                <div class='month-block'>
+<h3>25-Mar</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Bank</th>
+<th>Cases</th>
+<th>Amount</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Austin Nguyen</td>
+<td>1</td>
+<td>49,148.89</td>
+<td>11.32%</td>
+</tr>
+<tr>
+<td>Brianna Howard</td>
+<td>1</td>
+<td>47,062.34</td>
+<td>10.84%</td>
+</tr>
+<tr>
+<td>Timothy Miller</td>
+<td>1</td>
+<td>40,009.07</td>
+<td>9.21%</td>
+</tr>
+<tr>
+<td>Brandon Evans</td>
+<td>1</td>
+<td>37,253.38</td>
+<td>8.58%</td>
+</tr>
+<tr>
+<td>Richard Velazquez</td>
+<td>1</td>
+<td>37,034.30</td>
+<td>8.53%</td>
+</tr>
+<tr>
+<td>Brian Rogers</td>
+<td>1</td>
+<td>36,932.87</td>
+<td>8.50%</td>
+</tr>
+<tr>
+<td>Andrew Vasquez</td>
+<td>1</td>
+<td>36,488.22</td>
+<td>8.40%</td>
+</tr>
+<tr>
+<td>Andrea Parker</td>
+<td>1</td>
+<td>32,332.18</td>
+<td>7.44%</td>
+</tr>
+<tr>
+<td>Joseph Williams</td>
+<td>1</td>
+<td>27,404.38</td>
+<td>6.31%</td>
+</tr>
+<tr>
+<td>Austin Frank</td>
+<td>1</td>
+<td>22,294.26</td>
+<td>5.13%</td>
+</tr>
+<tr>
+<td>Sandra Garcia</td>
+<td>1</td>
+<td>21,004.11</td>
+<td>4.84%</td>
+</tr>
+<tr>
+<td>Katherine Rivera</td>
+<td>1</td>
+<td>18,025.74</td>
+<td>4.15%</td>
+</tr>
+<tr>
+<td>Jaclyn Edwards</td>
+<td>1</td>
+<td>13,114.83</td>
+<td>3.02%</td>
+</tr>
+<tr>
+<td>Katelyn Armstrong</td>
+<td>1</td>
+<td>5,947.66</td>
+<td>1.37%</td>
+</tr>
+<tr>
+<td>Linda Johnson</td>
+<td>1</td>
+<td>5,534.46</td>
+<td>1.27%</td>
+</tr>
+<tr>
+<td>Gary Johnson</td>
+<td>1</td>
+<td>2,461.43</td>
+<td>0.57%</td>
+</tr>
+<tr>
+<td>Curtis Montgomery</td>
+<td>1</td>
+<td>1,551.78</td>
+<td>0.36%</td>
+</tr>
+<tr>
+<td>Fernando Fisher</td>
+<td>1</td>
+<td>752.34</td>
+<td>0.17%</td>
+</tr>
+<tr class="total-row">
+<td>Total</td>
+<td>18</td>
+<td>434,352.24</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</div>
+                <div class='month-block'>
+<h3>25-Apr</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Bank</th>
+<th>Cases</th>
+<th>Amount</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Timothy Nicholson</td>
+<td>1</td>
+<td>49,268.14</td>
+<td>11.44%</td>
+</tr>
+<tr>
+<td>Tyler Riley</td>
+<td>1</td>
+<td>47,768.93</td>
+<td>11.09%</td>
+</tr>
+<tr>
+<td>Gina Brown</td>
+<td>1</td>
+<td>45,837.82</td>
+<td>10.65%</td>
+</tr>
+<tr>
+<td>John Gilbert</td>
+<td>1</td>
+<td>39,138.90</td>
+<td>9.09%</td>
+</tr>
+<tr>
+<td>Thomas Sloan</td>
+<td>1</td>
+<td>30,266.63</td>
+<td>7.03%</td>
+</tr>
+<tr>
+<td>Stephanie Martin</td>
+<td>1</td>
+<td>28,592.60</td>
+<td>6.64%</td>
+</tr>
+<tr>
+<td>Bethany Fernandez</td>
+<td>1</td>
+<td>28,234.11</td>
+<td>6.56%</td>
+</tr>
+<tr>
+<td>Lori King</td>
+<td>1</td>
+<td>27,259.24</td>
+<td>6.33%</td>
+</tr>
+<tr>
+<td>Alicia Goodman</td>
+<td>1</td>
+<td>25,699.17</td>
+<td>5.97%</td>
+</tr>
+<tr>
+<td>Barbara Smith DDS</td>
+<td>1</td>
+<td>21,268.33</td>
+<td>4.94%</td>
+</tr>
+<tr>
+<td>Donna Brown</td>
+<td>1</td>
+<td>20,029.88</td>
+<td>4.65%</td>
+</tr>
+<tr>
+<td>Jeffrey Haynes</td>
+<td>1</td>
+<td>16,587.33</td>
+<td>3.85%</td>
+</tr>
+<tr>
+<td>Mary Charles</td>
+<td>1</td>
+<td>15,867.69</td>
+<td>3.69%</td>
+</tr>
+<tr>
+<td>Kelly Garcia</td>
+<td>1</td>
+<td>12,277.50</td>
+<td>2.85%</td>
+</tr>
+<tr>
+<td>Veronica Norton</td>
+<td>1</td>
+<td>10,358.70</td>
+<td>2.41%</td>
+</tr>
+<tr>
+<td>Hector Garcia</td>
+<td>1</td>
+<td>6,057.38</td>
+<td>1.41%</td>
+</tr>
+<tr>
+<td>Debra Diaz</td>
+<td>1</td>
+<td>5,430.53</td>
+<td>1.26%</td>
+</tr>
+<tr>
+<td>Jennifer Erickson</td>
+<td>1</td>
+<td>644.19</td>
+<td>0.15%</td>
+</tr>
+<tr class="total-row">
+<td>Total</td>
+<td>18</td>
+<td>430,587.07</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</div>
+                <div class='month-block'>
+<h3>25-May</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Bank</th>
+<th>Cases</th>
+<th>Amount</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mr. Warren Wilson</td>
+<td>1</td>
+<td>35,730.22</td>
+<td>12.96%</td>
+</tr>
+<tr>
+<td>Angela Lopez</td>
+<td>1</td>
+<td>34,596.94</td>
+<td>12.55%</td>
+</tr>
+<tr>
+<td>Lawrence Franklin</td>
+<td>1</td>
+<td>33,054.83</td>
+<td>11.99%</td>
+</tr>
+<tr>
+<td>Laura Jordan</td>
+<td>1</td>
+<td>28,738.12</td>
+<td>10.42%</td>
+</tr>
+<tr>
+<td>Lori Gibbs</td>
+<td>1</td>
+<td>27,064.33</td>
+<td>9.81%</td>
+</tr>
+<tr>
+<td>Daniel Herman</td>
+<td>1</td>
+<td>22,823.61</td>
+<td>8.28%</td>
+</tr>
+<tr>
+<td>Wendy Marsh</td>
+<td>1</td>
+<td>22,646.55</td>
+<td>8.21%</td>
+</tr>
+<tr>
+<td>Ashley Cantrell</td>
+<td>1</td>
+<td>22,640.48</td>
+<td>8.21%</td>
+</tr>
+<tr>
+<td>Michael Scott</td>
+<td>1</td>
+<td>20,274.87</td>
+<td>7.35%</td>
+</tr>
+<tr>
+<td>Chelsey Clark</td>
+<td>1</td>
+<td>15,076.10</td>
+<td>5.47%</td>
+</tr>
+<tr>
+<td>Tyler Hernandez</td>
+<td>1</td>
+<td>13,130.20</td>
+<td>4.76%</td>
+</tr>
+<tr class="total-row">
+<td>Total</td>
+<td>11</td>
+<td>275,776.25</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</div>
+            </div>
         </div>
-        <div class="month-block">
-          <h3>25-Apr</h3>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Bank</th>
-                <th>Cases</th>
-                <th>Amount</th>
-                <th>%</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>RJH</td>
-                <td>215</td>
-                <td>555,159.25</td>
-                <td>51.23%</td>
-              </tr>
-              <tr>
-                <td>SAB</td>
-                <td>129</td>
-                <td>153,170.00</td>
-                <td>14.13%</td>
-              </tr>
-              <tr>
-                <td>D360</td>
-                <td>83</td>
-                <td>97,667.00</td>
-                <td>9.01%</td>
-              </tr>
-              <tr>
-                <td>SNB</td>
-                <td>43</td>
-                <td>93,939.00</td>
-                <td>8.67%</td>
-              </tr>
-              <tr>
-                <td>SAIB</td>
-                <td>46</td>
-                <td>55,880.00</td>
-                <td>5.16%</td>
-              </tr>
-              <tr>
-                <td>ANB</td>
-                <td>30</td>
-                <td>40,653.00</td>
-                <td>3.75%</td>
-              </tr>
-              <tr>
-                <td>INMA</td>
-                <td>23</td>
-                <td>28,093.50</td>
-                <td>2.59%</td>
-              </tr>
-              <tr>
-                <td>BAB</td>
-                <td>10</td>
-                <td>23,673.00</td>
-                <td>2.18%</td>
-              </tr>
-              <tr>
-                <td>RB</td>
-                <td>16</td>
-                <td>18,741.00</td>
-                <td>1.73%</td>
-              </tr>
-              <tr>
-                <td>BAJ</td>
-                <td>5</td>
-                <td>10,433.00</td>
-                <td>0.96%</td>
-              </tr>
-              <tr>
-                <td>Foreign Bank</td>
-                <td>2</td>
-                <td>3,215.75</td>
-                <td>0.30%</td>
-              </tr>
-              <tr>
-                <td>GIB</td>
-                <td>1</td>
-                <td>1,600.00</td>
-                <td>0.15%</td>
-              </tr>
-              <tr>
-                <td>BSF</td>
-                <td>2</td>
-                <td>1,033.00</td>
-                <td>0.10%</td>
-              </tr>
-              <tr>
-                <td>STC Bank</td>
-                <td>1</td>
-                <td>500.00</td>
-                <td>0.05%</td>
-              </tr>
-              <tr class="total-row">
-                <td>Total</td>
-                <td>606</td>
-                <td>1,083,757.50</td>
-                <td>100.00%</td>
-              </tr>
-            </tbody>
-          </table>
+        
+        <div class="section">
+            <h2>Digital Wallet Mule Accounts</h2>
+            <div class="tables-row">
+                <div class='month-block'>
+<h3>25-Feb</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Wallet</th>
+<th>Cases</th>
+<th>Amount</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ms. Mary Thompson</td>
+<td>1</td>
+<td>41,876.03</td>
+<td>22.70%</td>
+</tr>
+<tr>
+<td>Christopher Werner</td>
+<td>1</td>
+<td>41,386.99</td>
+<td>22.43%</td>
+</tr>
+<tr>
+<td>Emma Lynch</td>
+<td>1</td>
+<td>38,810.09</td>
+<td>21.04%</td>
+</tr>
+<tr>
+<td>Karen Ward</td>
+<td>1</td>
+<td>30,027.57</td>
+<td>16.28%</td>
+</tr>
+<tr>
+<td>Stephanie Clements</td>
+<td>1</td>
+<td>21,690.24</td>
+<td>11.76%</td>
+</tr>
+<tr>
+<td>Mr. Jason Marsh</td>
+<td>1</td>
+<td>10,698.07</td>
+<td>5.80%</td>
+</tr>
+<tr class="total-row">
+<td>Total</td>
+<td>6</td>
+<td>184,488.99</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</div>
+                <div class='month-block'>
+<h3>25-Mar</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Wallet</th>
+<th>Cases</th>
+<th>Amount</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jeffery Galvan</td>
+<td>1</td>
+<td>38,298.78</td>
+<td>46.91%</td>
+</tr>
+<tr>
+<td>Eddie Owens</td>
+<td>1</td>
+<td>37,055.50</td>
+<td>45.39%</td>
+</tr>
+<tr>
+<td>Selena Valenzuela</td>
+<td>1</td>
+<td>6,289.44</td>
+<td>7.70%</td>
+</tr>
+<tr class="total-row">
+<td>Total</td>
+<td>3</td>
+<td>81,643.72</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</div>
+                <div class='month-block'>
+<h3>25-Apr</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Wallet</th>
+<th>Cases</th>
+<th>Amount</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Justin Blair</td>
+<td>1</td>
+<td>40,185.82</td>
+<td>26.64%</td>
+</tr>
+<tr>
+<td>Cory Brown</td>
+<td>1</td>
+<td>35,866.50</td>
+<td>23.77%</td>
+</tr>
+<tr>
+<td>Nicholas Yates</td>
+<td>1</td>
+<td>30,393.26</td>
+<td>20.15%</td>
+</tr>
+<tr>
+<td>Kent Anderson</td>
+<td>1</td>
+<td>16,808.25</td>
+<td>11.14%</td>
+</tr>
+<tr>
+<td>Lisa Rollins</td>
+<td>1</td>
+<td>13,788.52</td>
+<td>9.14%</td>
+</tr>
+<tr>
+<td>David Thompson</td>
+<td>1</td>
+<td>8,904.83</td>
+<td>5.90%</td>
+</tr>
+<tr>
+<td>Christine Morse</td>
+<td>1</td>
+<td>4,919.71</td>
+<td>3.26%</td>
+</tr>
+<tr class="total-row">
+<td>Total</td>
+<td>7</td>
+<td>150,866.89</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</div>
+                <div class='month-block'>
+<h3>25-May</h3>
+<table class="data-table">
+<thead>
+<tr>
+<th>Wallet</th>
+<th>Cases</th>
+<th>Amount</th>
+<th>%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Heather Hernandez</td>
+<td>1</td>
+<td>27,899.06</td>
+<td>56.61%</td>
+</tr>
+<tr>
+<td>Ashley Morris</td>
+<td>1</td>
+<td>9,432.52</td>
+<td>19.14%</td>
+</tr>
+<tr>
+<td>Christopher Perez</td>
+<td>1</td>
+<td>7,365.71</td>
+<td>14.95%</td>
+</tr>
+<tr>
+<td>Keith Matthews</td>
+<td>1</td>
+<td>4,586.04</td>
+<td>9.31%</td>
+</tr>
+<tr class="total-row">
+<td>Total</td>
+<td>4</td>
+<td>49,283.33</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</div>
+            </div>
         </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Digital Wallet Mule Accounts</h2>
-      <div class="tables-row">
-        <div class="month-block">
-          <h3>25-Feb</h3>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Wallet</th>
-                <th>Cases</th>
-                <th>Amount</th>
-                <th>%</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>NEO</td>
-                <td>226</td>
-                <td>322,008.00</td>
-                <td>36.97%</td>
-              </tr>
-              <tr>
-                <td>LOOPPAY</td>
-                <td>61</td>
-                <td>103,153.00</td>
-                <td>11.84%</td>
-              </tr>
-              <tr>
-                <td>MOBILYPAY</td>
-                <td>77</td>
-                <td>94,685.00</td>
-                <td>10.87%</td>
-              </tr>
-              <tr>
-                <td>Tiqmo</td>
-                <td>74</td>
-                <td>92,966.00</td>
-                <td>10.67%</td>
-              </tr>
-              <tr>
-                <td>BOUKI</td>
-                <td>67</td>
-                <td>73,328.00</td>
-                <td>8.42%</td>
-              </tr>
-              <tr>
-                <td>URPAY</td>
-                <td>61</td>
-                <td>59,523.00</td>
-                <td>6.83%</td>
-              </tr>
-              <tr>
-                <td>Ersal</td>
-                <td>16</td>
-                <td>34,605.75</td>
-                <td>3.97%</td>
-              </tr>
-              <tr>
-                <td>ALINMAPAY</td>
-                <td>39</td>
-                <td>33,527.05</td>
-                <td>3.85%</td>
-              </tr>
-              <tr>
-                <td>STCPAY</td>
-                <td>20</td>
-                <td>27,848.00</td>
-                <td>3.20%</td>
-              </tr>
-              <tr>
-                <td>Barq</td>
-                <td>27</td>
-                <td>25,586.00</td>
-                <td>2.94%</td>
-              </tr>
-              <tr>
-                <td>Enjaz</td>
-                <td>2</td>
-                <td>2,450.27</td>
-                <td>0.28%</td>
-              </tr>
-              <tr>
-                <td>HALA</td>
-                <td>2</td>
-                <td>1,220.00</td>
-                <td>0.14%</td>
-              </tr>
-              <tr class="total-row">
-                <td>Total</td>
-                <td>672</td>
-                <td>870,900.07</td>
-                <td>100.00%</td>
-              </tr>
-            </tbody>
-          </table>
+        
+        <div class="footer">
+            <p>Report generated on 2025-05-13 12:04</p>
         </div>
-        <div class="month-block">
-          <h3>25-Mar</h3>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Wallet</th>
-                <th>Cases</th>
-                <th>Amount</th>
-                <th>%</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>MOBILYPAY</td>
-                <td>314</td>
-                <td>474,809.99</td>
-                <td>33.10%</td>
-              </tr>
-              <tr>
-                <td>Tiqmo</td>
-                <td>240</td>
-                <td>338,863.01</td>
-                <td>23.62%</td>
-              </tr>
-              <tr>
-                <td>NEO</td>
-                <td>105</td>
-                <td>205,326.00</td>
-                <td>14.31%</td>
-              </tr>
-              <tr>
-                <td>URPAY</td>
-                <td>95</td>
-                <td>96,835.80</td>
-                <td>6.75%</td>
-              </tr>
-              <tr>
-                <td>Barq</td>
-                <td>53</td>
-                <td>74,174.58</td>
-                <td>5.17%</td>
-              </tr>
-              <tr>
-                <td>ALINMAPAY</td>
-                <td>60</td>
-                <td>70,875.00</td>
-                <td>4.94%</td>
-              </tr>
-              <tr>
-                <td>BOUKI</td>
-                <td>52</td>
-                <td>67,334.00</td>
-                <td>4.69%</td>
-              </tr>
-              <tr>
-                <td>STCPAY</td>
-                <td>23</td>
-                <td>36,493.14</td>
-                <td>2.54%</td>
-              </tr>
-              <tr>
-                <td>LOOPPAY</td>
-                <td>15</td>
-                <td>33,257.00</td>
-                <td>2.32%</td>
-              </tr>
-              <tr>
-                <td>HALA</td>
-                <td>8</td>
-                <td>19,426.00</td>
-                <td>1.35%</td>
-              </tr>
-              <tr>
-                <td>Ersal</td>
-                <td>6</td>
-                <td>17,000.00</td>
-                <td>1.19%</td>
-              </tr>
-              <tr class="total-row">
-                <td>Total</td>
-                <td>971</td>
-                <td>1,434,394.52</td>
-                <td>100.00%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="month-block">
-          <h3>25-Apr</h3>
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Wallet</th>
-                <th>Cases</th>
-                <th>Amount</th>
-                <th>%</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Tiqmo</td>
-                <td>138</td>
-                <td>237,539.00</td>
-                <td>47.06%</td>
-              </tr>
-              <tr>
-                <td>MOBILYPAY</td>
-                <td>74</td>
-                <td>76,416.00</td>
-                <td>15.14%</td>
-              </tr>
-              <tr>
-                <td>Ersal</td>
-                <td>15</td>
-                <td>55,220.75</td>
-                <td>10.94%</td>
-              </tr>
-              <tr>
-                <td>URPAY</td>
-                <td>38</td>
-                <td>45,985.00</td>
-                <td>9.11%</td>
-              </tr>
-              <tr>
-                <td>Barq</td>
-                <td>35</td>
-                <td>23,718.69</td>
-                <td>4.70%</td>
-              </tr>
-              <tr>
-                <td>ALINMAPAY</td>
-                <td>24</td>
-                <td>22,178.00</td>
-                <td>4.39%</td>
-              </tr>
-              <tr>
-                <td>HALA</td>
-                <td>11</td>
-                <td>19,881.00</td>
-                <td>3.94%</td>
-              </tr>
-              <tr>
-                <td>BOUKI</td>
-                <td>10</td>
-                <td>10,384.00</td>
-                <td>2.06%</td>
-              </tr>
-              <tr>
-                <td>STCPAY</td>
-                <td>14</td>
-                <td>10,090.75</td>
-                <td>2.00%</td>
-              </tr>
-              <tr>
-                <td>NEO</td>
-                <td>4</td>
-                <td>2,300.00</td>
-                <td>0.46%</td>
-              </tr>
-              <tr>
-                <td>Enjaz</td>
-                <td>1</td>
-                <td>1,000.00</td>
-                <td>0.20%</td>
-              </tr>
-              <tr class="total-row">
-                <td>Total</td>
-                <td>364</td>
-                <td>504,713.19</td>
-                <td>100.00%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </body>
-</html>
+    </body>
+    </html>
+    
