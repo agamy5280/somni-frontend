@@ -8,8 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "json-server": "json-server --watch src/assets/database/db.json --host 0.0.0.0 --port 3000",
-    "dev": "concurrently \"npm run start\" \"npm run json-server\"",
-    "dev:win": "concurrently \"ng serve --port 4200 --proxy-config proxy.conf.json\" \"json-server --watch src/assets/database/db.json --port 3000\""
+    "dev": "concurrently \"npm run json-server\" \"npm run start\"",
+    "dev:unix": "./start-both.sh"
   },
   "private": true,
   "dependencies": {

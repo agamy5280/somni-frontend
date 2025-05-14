@@ -31,7 +31,7 @@ export interface Chat {
   providedIn: 'root',
 })
 export class DataService {
-  private readonly API_URL = '/api'; // JSON Server URL
+  private readonly API_URL = 'http://localhost:3000'; // JSON Server URL
   private readonly CURRENT_USER_KEY = 'chat_app_current_user';
 
   private currentUser: User | null = null;
