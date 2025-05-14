@@ -8,8 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "json-server": "json-server --watch src/assets/database/db.json --host 0.0.0.0 --port 3000",
-    "dev": "./start-both.sh",
-    "debug": "node debug.js"
+    "dev": "./start-both.sh"
   },
   "private": true,
   "dependencies": {
