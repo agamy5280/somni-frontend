@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "json-server": "json-server --watch src/assets/database/db.json --host 0.0.0.0 --port 3000",
-    "dev": "./start-both.sh"
+    "dev": "node server.js"
   },
   "private": true,
   "dependencies": {
@@ -26,8 +26,10 @@
     "@ngx-loading-bar/core": "^7.0.0",
     "@turf/turf": "^7.2.0",
     "chart.js": "^4.4.9",
+    "express": "^5.1.0",
     "file-saver": "^2.0.5",
     "fuse.js": "^7.1.0",
+    "http-proxy-middleware": "^3.0.5",
     "json-server": "^1.0.0-beta.3",
     "leaflet": "^1.9.4",
     "ngx-clipboard": "^16.0.0",
