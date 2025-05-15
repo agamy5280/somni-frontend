@@ -10,7 +10,8 @@
     "test": "ng test",
     "json-server": "json-server --watch src/assets/database/db.json --host 0.0.0.0 --port 3000",
     "dev": "node server.js",
-    "prod-start": "NODE_ENV=production node server.js"
+    "prod-start": "NODE_ENV=production node server.js",
+    "postinstall": "npm run prod-build"
   },
   "main": "server.js",
   "private": true,
