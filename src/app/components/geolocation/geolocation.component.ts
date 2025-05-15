@@ -647,8 +647,10 @@ export class GeolocationComponent implements OnInit {
     if (!this.map) {
       this.map = L.map(this.mapContainer.nativeElement).setView([20, 0], 2);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      // Use proxied tiles to avoid CSP issues
+      L.tileLayer('/api/map-tiles/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
       }).addTo(this.map);
 
       this.locationMarkers = L.layerGroup().addTo(this.map);

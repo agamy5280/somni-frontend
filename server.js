@@ -1,12 +1,44 @@
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
+const axios = require("axios");
+const helmet = require("helmet");
 const app = express();
 const port = 8080;
 
 // Check if we're in production mode
 const isProd = process.env.NODE_ENV === "production";
 console.log(`Running in ${isProd ? "production" : "development"} mode`);
+
+// Proxy for map tiles - available in both prod and dev modes
+app.get("/api/map-tiles/:z/:x/:y.png", async (req, res) => {
+  try {
+    const { z, x, y } = req.params;
+    // Randomize the subdomain (a, b, c) to distribute load
+    const subdomains = ["a", "b", "c"];
+    const subdomain = subdomains[Math.floor(Math.random() * subdomains.length)];
+
+    console.log(
+      `Proxying map tile: ${z}/${x}/${y}.png from ${subdomain}.tile.openstreetmap.org`
+    );
+
+    // Get the tile from OpenStreetMap
+    const response = await axios.get(
+      `https://${subdomain}.tile.openstreetmap.org/${z}/${x}/${y}.png`,
+      { responseType: "arraybuffer" }
+    );
+
+    // Set appropriate headers
+    res.set("Content-Type", "image/png");
+    res.set("Cache-Control", "public, max-age=86400"); // Cache for 24 hours
+
+    // Send the tile
+    res.send(response.data);
+  } catch (error) {
+    console.error("Error proxying map tile:", error.message);
+    res.status(500).send("Error loading map tile");
+  }
+});
 
 if (!isProd) {
   // DEV MODE - Start JSON Server and Angular dev server
@@ -56,22 +88,26 @@ if (!isProd) {
     console.error(`Angular Error: ${data}`);
   });
 
-  // Proxy API requests to JSON Server
-  app.use(
-    "/api",
-    require("http-proxy-middleware").createProxyMiddleware({
+  // Proxy API requests to JSON Server (excluding the map-tiles endpoint which we handle separately)
+  const { createProxyMiddleware } = require("http-proxy-middleware");
+  app.use("/api", (req, res, next) => {
+    // Skip the map-tiles endpoint as we've already handled it
+    if (req.path.startsWith("/map-tiles/")) {
+      return next("route");
+    }
+    return createProxyMiddleware({
       target: "http://localhost:3000",
       changeOrigin: true,
       pathRewrite: {
         "^/api": "",
       },
-    })
-  );
+    })(req, res, next);
+  });
 
   // Proxy all other requests to Angular
   app.use(
     "/",
-    require("http-proxy-middleware").createProxyMiddleware({
+    createProxyMiddleware({
       target: "http://localhost:4200",
       ws: true,
       changeOrigin: true,
@@ -95,6 +131,35 @@ if (!isProd) {
 } else {
   // PROD MODE - Serve the built Angular app
   console.log("Running in production mode...");
+
+  // Set Content Security Policy
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: [
+            "'self'",
+            "data:",
+            "blob:",
+            "*.openstreetmap.org",
+            "*.tile.openstreetmap.org",
+          ],
+          connectSrc: [
+            "'self'",
+            "*.openstreetmap.org",
+            "*.tile.openstreetmap.org",
+          ],
+          fontSrc: ["'self'", "data:"],
+          objectSrc: ["'none'"],
+          mediaSrc: ["'self'"],
+          frameSrc: ["'self'"],
+        },
+      },
+    })
+  );
 
   // Setup simple API endpoints
   try {
