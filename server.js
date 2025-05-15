@@ -93,10 +93,10 @@ if (!isProd) {
     process.exit();
   });
 } else {
-  // PROD MODE - Simple configuration to avoid path-to-regexp issues
+  // PROD MODE - Serve the built Angular app
   console.log("Running in production mode...");
 
-  // Setup static server for the API
+  // Setup simple API endpoints
   try {
     console.log("Setting up JSON Server...");
     const jsonDbPath = path.join(
@@ -143,38 +143,38 @@ if (!isProd) {
 
   // Check if the Angular build exists
   const distPath = path.join(__dirname, "dist", "somni-frontend");
-  if (fs.existsSync(distPath)) {
-    console.log(`Serving Angular app from: ${distPath}`);
+  // For Angular 17+, the actual files are in the browser subdirectory
+  const browserPath = path.join(distPath, "browser");
 
-    // Serve static files explicitly
-    // This serves files like CSS, JS, images directly
-    app.use(express.static(distPath));
+  if (fs.existsSync(browserPath)) {
+    console.log(`Serving Angular app from: ${browserPath}`);
 
-    // Create a simplified middleware for Angular routing
-    // This avoids using complex path-to-regexp patterns
+    // Serve static files from the browser directory
+    app.use(express.static(browserPath));
+
+    // For Angular routing, serve index.html for paths that don't match static files
     app.use((req, res, next) => {
       // Skip API requests
       if (req.path.startsWith("/api")) {
         return next();
       }
 
-      // Check if the requested file exists
-      const filePath = path.join(distPath, req.path);
+      // Try to serve the file directly if it exists
+      const filePath = path.join(browserPath, req.path);
       try {
         if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-          // If it's a real file, let express.static handle it
           return next();
         }
       } catch (err) {
-        // Ignore errors and serve index.html
+        // If there's an error checking the file, continue to serve index.html
       }
 
-      // For all other requests, serve index.html
+      // For all other routes, serve index.html to support Angular routing
       console.log(`Angular route: ${req.path} - serving index.html`);
-      res.sendFile(path.join(distPath, "index.html"));
+      res.sendFile(path.join(browserPath, "index.html"));
     });
   } else {
-    console.error(`Error: Angular build not found at ${distPath}`);
+    console.error(`Error: Angular build directory not found at ${browserPath}`);
     app.use((req, res) => {
       res
         .status(404)
