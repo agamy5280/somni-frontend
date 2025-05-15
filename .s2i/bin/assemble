@@ -1,0 +1,18 @@
+#!/bin/bash
+# .s2i/bin/assemble script for OpenShift build
+
+# Run the default S2I assemble script
+/usr/libexec/s2i/assemble
+
+# Now build the Angular app in production mode
+echo "Building Angular app in production mode..."
+npm run prod-build
+
+# Ensure the build succeeded
+if [ ! -d "./dist/somni-frontend" ]; then
+  echo "Error: Angular build failed or output directory not found!"
+  exit 1
+fi
+
+echo "Angular production build completed successfully!"
+ls -la ./dist/somni-frontend
