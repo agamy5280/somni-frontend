@@ -2,8 +2,19 @@ const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const path = require("path");
 const { spawn } = require("child_process");
+const fs = require("fs");
 const app = express();
 const port = 8080;
+
+// Check if dist directory exists
+const distPath = path.join(__dirname, "dist/somni-frontend");
+if (!fs.existsSync(distPath)) {
+  console.error("Error: Angular build directory not found at:", distPath);
+  console.error(
+    "Please ensure the application is built before starting the server"
+  );
+  process.exit(1);
+}
 
 // Start JSON Server as a separate process
 console.log("Starting JSON Server...");
@@ -58,11 +69,11 @@ app.use(
 );
 
 // Serve static files from the Angular build directory
-app.use(express.static(path.join(__dirname, "dist/somni-frontend")));
+app.use(express.static(distPath));
 
 // For all other routes, serve the Angular application
 app.all("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist/somni-frontend/index.html"));
+  res.sendFile(path.join(distPath, "index.html"));
 });
 
 // Start server
