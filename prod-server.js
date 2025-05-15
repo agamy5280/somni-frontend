@@ -1,11 +1,10 @@
 const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
 const path = require("path");
 const app = express();
 const port = 8080;
 
-// Simple mock API instead of json-server
-app.use("/api", (req, res) => {
+// Simple mock API instead of using json-server
+app.get("/api/status", (req, res) => {
   res.json({ message: "API is working", status: "ok" });
 });
 
