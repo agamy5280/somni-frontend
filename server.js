@@ -4,6 +4,7 @@ const fs = require("fs");
 const axios = require("axios");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 const port = 8080;
 
@@ -193,14 +194,6 @@ if (isProd) {
     res.json(inMemoryDB.chats);
     console.log("Patched chats database");
   });
-}
-
-if (!isProd) {
-  // DEV MODE CODE - Skipped as we're focusing on production
-  console.log("Development mode setup skipped - focusing on production");
-} else {
-  // PROD MODE - Serve the built Angular app
-  console.log("Running in production mode...");
 
   // Set Content Security Policy with more permissive settings for Angular
   app.use(
@@ -283,6 +276,130 @@ if (!isProd) {
         .send("Application files not found. Build may have failed.");
     });
   }
+} else {
+  // DEVELOPMENT MODE - Direct API handlers instead of proxy
+  console.log("Setting up development environment with direct API handlers...");
+
+  // Create and ensure the db.json file exists
+  const dbPath = path.join(__dirname, "src", "assets", "database", "db.json");
+  const dbDir = path.dirname(dbPath);
+
+  if (!fs.existsSync(dbDir)) {
+    console.log(`Creating directory: ${dbDir}`);
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+
+  // Read or create initial database
+  let dbData = { users: [], chats: {} };
+
+  if (fs.existsSync(dbPath)) {
+    try {
+      const fileContent = fs.readFileSync(dbPath, "utf8");
+      dbData = JSON.parse(fileContent);
+      console.log(`Loaded database from: ${dbPath}`);
+    } catch (err) {
+      console.error(`Error reading database file: ${err.message}`);
+      console.log("Using empty database");
+    }
+  } else {
+    console.log(`Creating initial database file: ${dbPath}`);
+    fs.writeFileSync(dbPath, JSON.stringify(dbData, null, 2), "utf8");
+  }
+
+  // Function to save the database
+  const saveDatabase = () => {
+    try {
+      fs.writeFileSync(dbPath, JSON.stringify(dbData, null, 2), "utf8");
+      console.log("Database saved");
+    } catch (err) {
+      console.error(`Error saving database: ${err.message}`);
+    }
+  };
+
+  // Direct API handlers for development
+
+  // GET /api/users - Get all users
+  app.get("/api/users", (req, res) => {
+    console.log("Direct API: GET /api/users");
+    res.json(dbData.users);
+  });
+
+  // POST /api/users - Create a new user
+  app.post("/api/users", (req, res) => {
+    console.log("Direct API: Creating new user:", req.body);
+    const newUser = req.body;
+    dbData.users.push(newUser);
+    saveDatabase();
+    res.status(201).json(newUser);
+  });
+
+  // GET /api/chats - Get all chats
+  app.get("/api/chats", (req, res) => {
+    console.log("Direct API: GET /api/chats");
+    res.json(dbData.chats);
+  });
+
+  // PUT /api/chats - Update all chats
+  app.put("/api/chats", (req, res) => {
+    console.log("Direct API: Updating chats database with PUT request");
+    dbData.chats = req.body;
+    saveDatabase();
+    res.json(dbData.chats);
+  });
+
+  // PATCH /api/chats - Patch chats
+  app.patch("/api/chats", (req, res) => {
+    console.log("Direct API: Patching chats database");
+    Object.assign(dbData.chats, req.body);
+    saveDatabase();
+    res.json(dbData.chats);
+  });
+
+  // Start Angular development server
+  const isWindows = process.platform === "win32";
+  const ngCommand = isWindows
+    ? path.join("node_modules", ".bin", "ng.cmd")
+    : path.join("node_modules", ".bin", "ng");
+
+  console.log("Starting Angular development server...");
+  const angularServer = require("child_process").spawn(
+    ngCommand,
+    ["serve", "--host", "0.0.0.0", "--port", "4200", "--disable-host-check"],
+    { shell: isWindows }
+  );
+
+  angularServer.stdout.on("data", (data) => {
+    console.log(`Angular: ${data}`);
+  });
+
+  angularServer.stderr.on("data", (data) => {
+    console.error(`Angular Error: ${data}`);
+  });
+
+  // Proxy all other requests to Angular
+  app.use(
+    "/",
+    createProxyMiddleware({
+      target: "http://localhost:4200",
+      changeOrigin: true,
+      ws: true,
+    })
+  );
+
+  // Handle process termination
+  process.on("SIGINT", () => {
+    console.log("Shutting down servers...");
+    saveDatabase();
+    angularServer.kill();
+    process.exit();
+  });
+
+  process.on("SIGTERM", () => {
+    console.log("Shutting down servers...");
+    saveDatabase();
+    angularServer.kill();
+    process.exit();
+  });
 }
 
 // Start the main server

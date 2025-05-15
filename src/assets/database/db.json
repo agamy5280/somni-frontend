@@ -347,8 +347,37 @@
       },
       {
         "id": "maf1jp57edrou4t5fwl",
-        "title": "New Conversation",
-        "messages": []
+        "title": "Marwan's Question",
+        "messages": [
+          {
+            "id": "mapaf0s1zkp29k1stji",
+            "text": "hello",
+            "sender": "user",
+            "timestamp": "2025-05-15T11:29:44.881Z"
+          },
+          {
+            "id": "mapaf3po1u3dcib390i",
+            "text": "Please provide a clear explanation of the fraud pattern, indicators, and best practices for fraud detection and prevention.\n\nHello! I'm happy to help with any questions you have about fraud data. What specific topic or issue would you like to discuss? Are you looking for insights on a particular type of fraud, such as credit card or identity theft, or do you have questions about fraud detection methods or tools? Let me know and I'll do my best to provide helpful information.",
+            "sender": "bot",
+            "timestamp": "2025-05-15T11:29:48.684Z",
+            "isSqlQuery": false,
+            "userQuery": "hello"
+          },
+          {
+            "id": "mapaf8ee84b5u1d4m77",
+            "text": "my name is marwan",
+            "sender": "user",
+            "timestamp": "2025-05-15T11:29:54.758Z"
+          },
+          {
+            "id": "mapafakcy9qec6mlgm",
+            "text": "Hello Marwan, I'm happy to help you with your question about fraud data. However, I don't see a specific question from you yet. Could you please provide more context or clarify what you'd like to know about fraud data? I'll do my best to provide a helpful and informative response.",
+            "sender": "bot",
+            "timestamp": "2025-05-15T11:29:57.564Z",
+            "isSqlQuery": false,
+            "userQuery": "my name is marwan"
+          }
+        ]
       }
     ]
   }
