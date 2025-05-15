@@ -201,9 +201,15 @@ if (isProd) {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+          scriptSrc: [
+            "'self'",
+            "'unsafe-inline'",
+            "'unsafe-eval'",
+            "cdnjs.cloudflare.com",
+          ],
           scriptSrcAttr: ["'unsafe-inline'"], // Allow inline event handlers
-          styleSrc: ["'self'", "'unsafe-inline'"],
+          styleSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
+          styleSrcElem: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"], // Add this line
           imgSrc: [
             "'self'",
             "data:",
@@ -218,7 +224,7 @@ if (isProd) {
             // Allow connection to backend API
             "somni-backend-somni.apps.68060d600b3f018ca424c0c6.eu1.techzone.ibm.com",
           ],
-          fontSrc: ["'self'", "data:"],
+          fontSrc: ["'self'", "data:", "cdnjs.cloudflare.com"],
           objectSrc: ["'none'"],
           mediaSrc: ["'self'"],
           frameSrc: ["'self'"],
