@@ -132,13 +132,14 @@ if (!isProd) {
   // PROD MODE - Serve the built Angular app
   console.log("Running in production mode...");
 
-  // Set Content Security Policy
+  // Set Content Security Policy with more permissive settings for Angular
   app.use(
     helmet({
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
           scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+          scriptSrcAttr: ["'unsafe-inline'"], // Allow inline event handlers
           styleSrc: ["'self'", "'unsafe-inline'"],
           imgSrc: [
             "'self'",
@@ -158,6 +159,10 @@ if (!isProd) {
           frameSrc: ["'self'"],
         },
       },
+      // Disable other helmet features that might interfere with Angular
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: false,
+      crossOriginOpenerPolicy: false,
     })
   );
 
