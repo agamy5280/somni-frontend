@@ -1,18 +1,35 @@
 #!/bin/bash
 # .s2i/bin/assemble script for OpenShift build
 
-# Run the default S2I assemble script
+# Run the default S2I assemble script (which will run npm install and postinstall)
 /usr/libexec/s2i/assemble
 
-# Now build the Angular app in production mode
-echo "Building Angular app in production mode..."
-npm run prod-build
-
-# Ensure the build succeeded
-if [ ! -d "./dist/somni-frontend" ]; then
-  echo "Error: Angular build failed or output directory not found!"
-  exit 1
+# Check if the Angular build succeeded during postinstall
+if [ -d "./dist/somni-frontend" ]; then
+  echo "Angular production build was completed successfully via postinstall!"
+  ls -la ./dist/somni-frontend
+else
+  echo "Angular build not found. Checking Angular build capability..."
+  
+  # Check if ng command is available
+  if command -v $(npm bin)/ng &> /dev/null; then
+    echo "Building Angular app in production mode via ng command..."
+    $(npm bin)/ng build --configuration production
+  elif [ -f "./node_modules/.bin/ng" ]; then
+    echo "Building Angular app in production mode via node_modules path..."
+    ./node_modules/.bin/ng build --configuration production
+  else
+    echo "ERROR: Angular CLI not found in node_modules. Cannot build application!"
+    echo "Make sure your package.json has the correct Angular CLI dependency and postinstall script."
+    exit 1
+  fi
+  
+  # Ensure the build succeeded
+  if [ ! -d "./dist/somni-frontend" ]; then
+    echo "Error: Angular build failed or output directory not found!"
+    exit 1
+  fi
+  
+  echo "Angular production build completed successfully!"
+  ls -la ./dist/somni-frontend
 fi
-
-echo "Angular production build completed successfully!"
-ls -la ./dist/somni-frontend
