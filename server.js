@@ -1,7 +1,5 @@
 const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
 const path = require("path");
-const { spawn } = require("child_process");
 const fs = require("fs");
 const app = express();
 const port = 8080;
@@ -20,7 +18,7 @@ if (!isProd) {
 
   // Start JSON Server as a separate process
   console.log("Starting JSON Server...");
-  const jsonServer = spawn(
+  const jsonServer = require("child_process").spawn(
     npxCommand,
     [
       "json-server",
@@ -44,7 +42,7 @@ if (!isProd) {
 
   // Start Angular dev server
   console.log("Starting Angular dev server...");
-  const angularServer = spawn(
+  const angularServer = require("child_process").spawn(
     ngCommand,
     ["serve", "--host", "0.0.0.0", "--port", "4200", "--disable-host-check"],
     { shell: isWindows }
@@ -61,7 +59,7 @@ if (!isProd) {
   // Proxy API requests to JSON Server
   app.use(
     "/api",
-    createProxyMiddleware({
+    require("http-proxy-middleware").createProxyMiddleware({
       target: "http://localhost:3000",
       changeOrigin: true,
       pathRewrite: {
@@ -73,7 +71,7 @@ if (!isProd) {
   // Proxy all other requests to Angular
   app.use(
     "/",
-    createProxyMiddleware({
+    require("http-proxy-middleware").createProxyMiddleware({
       target: "http://localhost:4200",
       ws: true,
       changeOrigin: true,
@@ -95,10 +93,50 @@ if (!isProd) {
     process.exit();
   });
 } else {
-  // PROD MODE - Serve the built Angular app with a simple API mock
+  // PROD MODE - Simple configuration to avoid path-to-regexp issues
   console.log("Running in production mode...");
 
-  // Simple mock API for demo purposes
+  // Setup static server for the API
+  try {
+    console.log("Setting up JSON Server...");
+    const jsonDbPath = path.join(
+      __dirname,
+      "src",
+      "assets",
+      "database",
+      "db.json"
+    );
+
+    if (fs.existsSync(jsonDbPath)) {
+      // Setup a simple JSON server manually
+      const db = JSON.parse(fs.readFileSync(jsonDbPath, "utf8"));
+
+      // Handle each top-level property in the JSON as an endpoint
+      Object.keys(db).forEach((resource) => {
+        app.get(`/api/${resource}`, (req, res) => {
+          res.json(db[resource]);
+        });
+
+        app.get(`/api/${resource}/:id`, (req, res) => {
+          const id = parseInt(req.params.id) || req.params.id;
+          const item = db[resource].find((item) => item.id === id);
+          if (item) {
+            res.json(item);
+          } else {
+            res.status(404).json({ error: "Not found" });
+          }
+        });
+      });
+
+      console.log("JSON Server routes set up");
+    } else {
+      console.warn(`JSON DB file not found at ${jsonDbPath}`);
+    }
+  } catch (error) {
+    console.error("Error setting up JSON Server:", error.message);
+  }
+
+  // Setup simple status endpoint
   app.get("/api/status", (req, res) => {
     res.json({ message: "API is working in production mode", status: "ok" });
   });
@@ -108,11 +146,31 @@ if (!isProd) {
   if (fs.existsSync(distPath)) {
     console.log(`Serving Angular app from: ${distPath}`);
 
-    // Serve static files
+    // Serve static files explicitly
+    // This serves files like CSS, JS, images directly
     app.use(express.static(distPath));
 
-    // Serve index.html for all other routes (SPA)
-    app.get("*", (req, res) => {
+    // Create a simplified middleware for Angular routing
+    // This avoids using complex path-to-regexp patterns
+    app.use((req, res, next) => {
+      // Skip API requests
+      if (req.path.startsWith("/api")) {
+        return next();
+      }
+
+      // Check if the requested file exists
+      const filePath = path.join(distPath, req.path);
+      try {
+        if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+          // If it's a real file, let express.static handle it
+          return next();
+        }
+      } catch (err) {
+        // Ignore errors and serve index.html
+      }
+
+      // For all other requests, serve index.html
+      console.log(`Angular route: ${req.path} - serving index.html`);
       res.sendFile(path.join(distPath, "index.html"));
     });
   } else {
