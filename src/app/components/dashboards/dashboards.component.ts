@@ -494,9 +494,34 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
       if (!iframeWindow) return;
       const iframeDocument = iframeWindow.document;
 
-      // Create a style element to inject overrides
-      const overrideStyleElement = iframeDocument.createElement('style');
-      overrideStyleElement.textContent = `
+      // First, check if Plotly is available in the iframe
+      const ensurePlotlyReady = () => {
+        if ((iframeWindow as any).Plotly) {
+          return Promise.resolve();
+        } else {
+          // If Plotly is not available, create a promise that resolves when it becomes available
+          return new Promise<void>((resolve) => {
+            // Set up a listener for the custom event we defined
+            iframeWindow.addEventListener('plotly_loaded', () => resolve(), {
+              once: true,
+            });
+
+            // Set a timeout in case Plotly never loads
+            setTimeout(() => {
+              console.warn(
+                'Plotly not loaded after timeout, applying legend fixes anyway'
+              );
+              resolve();
+            }, 3000);
+          });
+        }
+      };
+
+      // Wait for Plotly to be ready, then apply our fixes
+      ensurePlotlyReady().then(() => {
+        // Create a style element to inject overrides (same as before)
+        const overrideStyleElement = iframeDocument.createElement('style');
+        overrideStyleElement.textContent = `
           body {
               max-width: none !important; /* Remove max-width constraint */
               width: 100% !important;     /* Force body to full width */
@@ -531,11 +556,12 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
                margin-right: 0 !important;
            }
       `;
-      iframeDocument.head.appendChild(overrideStyleElement);
+        iframeDocument.head.appendChild(overrideStyleElement);
 
-      // Add CSS to make legends more compact and better positioned in the iframe
-      const styleElement = iframeDocument.createElement('style');
-      styleElement.textContent = `
+        // Add CSS to make legends more compact (rest of your existing code)
+        const styleElement = iframeDocument.createElement('style');
+        // Your existing CSS here...
+        styleElement.textContent = `
         .legend {
           font-size: 10px !important;
           overflow: visible !important;
@@ -593,227 +619,135 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
           font-family: 'Arial', sans-serif !important;
         }
       `;
+        iframeDocument.head.appendChild(styleElement);
 
-      iframeDocument.head.appendChild(styleElement);
-
-      // Add script to make legends draggable if not already
-      const scriptElement = iframeDocument.createElement('script');
-      scriptElement.textContent = `
-        // Add draggable functionality to legends
-        function makeLegendsDraggable() {
-          const legends = document.querySelectorAll('.legend');
-          let legendsCount = 0;
-          
-          legends.forEach((legend, index) => {
-            legendsCount++;
-            
-            // Only make draggable if not already
-            if (!legend.getAttribute('data-draggable')) {
-              makeElementDraggable(legend);
-              legend.setAttribute('data-draggable', 'true');
-              
-              // If there's a risk of legends overlapping, reposition them
-              if (legends.length > 1 && index > 0) {
-                // For plots with multiple legends, position them better
-                const svgElement = legend.closest('svg');
-                if (svgElement) {
-                  const svgWidth = svgElement.getBoundingClientRect().width;
-                  const legendWidth = legend.getBoundingClientRect().width;
+        // Add script to make legends draggable if not already
+        const scriptElement = iframeDocument.createElement('script');
+        // Modify your existing script to use Plotly safely
+        scriptElement.textContent = `
+        // Ensure Plotly is available before running this script
+        (function() {
+          function initializeLegendDragging() {
+            // Only proceed if we have Plotly or if we're sure the plots are ready
+            if (window.Plotly || document.querySelectorAll('.legend').length > 0) {
+              // Add draggable functionality to legends
+              function makeLegendsDraggable() {
+                const legends = document.querySelectorAll('.legend');
+                let legendsCount = 0;
+                
+                legends.forEach((legend, index) => {
+                  legendsCount++;
                   
-                  // Calculate positions to avoid overlap
-                  let xPos = svgWidth - legendWidth - 10;
-                  let yPos = 10 + (index * 30);
-                  
-                  // Special handling for plots with right-side legends
-                  const filename = window.location.pathname.split('/').pop().toLowerCase();
-                  if (filename.includes('channel') || 
-                      filename.includes('classification') ||
-                      filename.includes('pattern')) {
-                    xPos = Math.max(10, xPos - 100);
+                  // Only make draggable if not already
+                  if (!legend.getAttribute('data-draggable')) {
+                    makeElementDraggable(legend);
+                    legend.setAttribute('data-draggable', 'true');
+                    
+                    // If there's a risk of legends overlapping, reposition them
+                    if (legends.length > 1 && index > 0) {
+                      // For plots with multiple legends, position them better
+                      const svgElement = legend.closest('svg');
+                      if (svgElement) {
+                        const svgWidth = svgElement.getBoundingClientRect().width;
+                        const legendWidth = legend.getBoundingClientRect().width;
+                        
+                        // Calculate positions to avoid overlap
+                        let xPos = svgWidth - legendWidth - 10;
+                        let yPos = 10 + (index * 30);
+                        
+                        // Special handling for plots with right-side legends
+                        const filename = window.location.pathname.split('/').pop().toLowerCase();
+                        if (filename.includes('channel') || 
+                            filename.includes('classification') ||
+                            filename.includes('pattern')) {
+                          xPos = Math.max(10, xPos - 100);
+                        }
+                        
+                        // Stagger legends vertically for better visibility
+                        legend.setAttribute('transform', \`translate(\${xPos}, \${yPos})\`);
+                      }
+                    }
                   }
+                });
+                
+                // Add annotation about draggable if there are legends
+                if (legendsCount > 0 && !document.getElementById('legend-note')) {
+                  const noteDiv = document.createElement('div');
+                  noteDiv.id = 'legend-note';
+                  noteDiv.style.position = 'absolute';
+                  noteDiv.style.top = '10px';
+                  noteDiv.style.left = '10px';
+                  noteDiv.style.padding = '3px 8px';
+                  noteDiv.style.background = 'rgba(255,255,255,0.7)';
+                  noteDiv.style.border = '1px solid #ddd';
+                  noteDiv.style.borderRadius = '3px';
+                  noteDiv.style.fontSize = '11px';
+                  noteDiv.style.color = '#666';
+                  noteDiv.style.zIndex = '1000';
+                  noteDiv.style.pointerEvents = 'none';
+                  noteDiv.innerHTML = 'Tip: Click and drag legends to reposition';
                   
-                  // Stagger legends vertically for better visibility
-                  legend.setAttribute('transform', \`translate(\${xPos}, \${yPos})\`);
+                  document.body.appendChild(noteDiv);
+                  
+                  // Fade out after 5 seconds
+                  setTimeout(() => {
+                    noteDiv.style.transition = 'opacity 1s';
+                    noteDiv.style.opacity = '0';
+                  }, 5000);
+                }
+                
+                // Create legend toggle button for plots with multiple legends
+                if (legendsCount > 2 && !document.getElementById('legend-toggle')) {
+                  const toggleBtn = document.createElement('button');
+                  toggleBtn.id = 'legend-toggle';
+                  toggleBtn.innerHTML = 'Toggle Legends';
+                  toggleBtn.style.position = 'absolute';
+                  toggleBtn.style.top = '10px';
+                  toggleBtn.style.right = '10px';
+                  toggleBtn.style.padding = '5px 10px';
+                  toggleBtn.style.background = '#0066CC';
+                  toggleBtn.style.color = 'white';
+                  toggleBtn.style.border = 'none';
+                  toggleBtn.style.borderRadius = '3px';
+                  toggleBtn.style.cursor = 'pointer';
+                  toggleBtn.style.zIndex = '1000';
+                  
+                  toggleBtn.onclick = function() {
+                    const legends = document.querySelectorAll('.legend');
+                    legends.forEach(legend => {
+                      legend.style.display = legend.style.display === 'none' ? '' : 'none';
+                    });
+                  };
+                  
+                  document.body.appendChild(toggleBtn);
                 }
               }
-            }
-          });
-          
-          // Add annotation about draggable if there are legends
-          if (legendsCount > 0 && !document.getElementById('legend-note')) {
-            const noteDiv = document.createElement('div');
-            noteDiv.id = 'legend-note';
-            noteDiv.style.position = 'absolute';
-            noteDiv.style.top = '10px';
-            noteDiv.style.left = '10px';
-            noteDiv.style.padding = '3px 8px';
-            noteDiv.style.background = 'rgba(255,255,255,0.7)';
-            noteDiv.style.border = '1px solid #ddd';
-            noteDiv.style.borderRadius = '3px';
-            noteDiv.style.fontSize = '11px';
-            noteDiv.style.color = '#666';
-            noteDiv.style.zIndex = '1000';
-            noteDiv.style.pointerEvents = 'none';
-            noteDiv.innerHTML = 'Tip: Click and drag legends to reposition';
-            
-            document.body.appendChild(noteDiv);
-            
-            // Fade out after 5 seconds
-            setTimeout(() => {
-              noteDiv.style.transition = 'opacity 1s';
-              noteDiv.style.opacity = '0';
-            }, 5000);
-          }
-          
-          // Create legend toggle button for plots with multiple legends
-          if (legendsCount > 2 && !document.getElementById('legend-toggle')) {
-            const toggleBtn = document.createElement('button');
-            toggleBtn.id = 'legend-toggle';
-            toggleBtn.innerHTML = 'Toggle Legends';
-            toggleBtn.style.position = 'absolute';
-            toggleBtn.style.top = '10px';
-            toggleBtn.style.right = '10px';
-            toggleBtn.style.padding = '5px 10px';
-            toggleBtn.style.background = '#0066CC';
-            toggleBtn.style.color = 'white';
-            toggleBtn.style.border = 'none';
-            toggleBtn.style.borderRadius = '3px';
-            toggleBtn.style.cursor = 'pointer';
-            toggleBtn.style.zIndex = '1000';
-            
-            toggleBtn.onclick = function() {
-              const legends = document.querySelectorAll('.legend');
-              legends.forEach(legend => {
-                legend.style.display = legend.style.display === 'none' ? '' : 'none';
-              });
-            };
-            
-            document.body.appendChild(toggleBtn);
-          }
-        }
-        
-        // Improved draggable function with boundaries protection
-        function makeElementDraggable(element) {
-          let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-          let isDragging = false;
-          
-          // Add visual indicator for draggable
-          element.style.cursor = 'move';
-          
-          // Create parent if needed for absolute positioning
-          const svgParent = element.closest('svg');
-          if (svgParent) {
-            // Get the transform values for proper positioning
-            const currentTransform = element.getAttribute('transform') || '';
-            const match = currentTransform.match(/translate\\(([^,]+),\\s*([^)]+)\\)/);
-            let initialX = 0, initialY = 0;
-            
-            if (match) {
-              initialX = parseFloat(match[1]);
-              initialY = parseFloat(match[2]);
-            }
-            
-            element.style.pointerEvents = 'all';
-            
-            element.onmousedown = dragMouseDown;
-            
-            function dragMouseDown(e) {
-              e = e || window.event;
-              e.preventDefault();
-              e.stopPropagation();
               
-              // Get the mouse cursor position at startup
-              pos3 = e.clientX;
-              pos4 = e.clientY;
+              // Rest of your code remains the same...
               
-              isDragging = true;
+              // Run legend fixes
+              makeLegendsDraggable();
               
-              // Add temporary class to indicate dragging
-              element.classList.add('dragging');
-              
-              document.onmouseup = closeDragElement;
-              document.onmousemove = elementDrag;
-            }
-            
-            function elementDrag(e) {
-              if (!isDragging) return;
-              
-              e = e || window.event;
-              e.preventDefault();
-              
-              // Calculate the new cursor position
-              pos1 = pos3 - e.clientX;
-              pos2 = pos4 - e.clientY;
-              pos3 = e.clientX;
-              pos4 = e.clientY;
-              
-              // Get current transform values
-              const currentTransform = element.getAttribute('transform') || '';
-              const match = currentTransform.match(/translate\\(([^,]+),\\s*([^)]+)\\)/);
-              let x = initialX, y = initialY;
-              
-              if (match) {
-                x = parseFloat(match[1]);
-                y = parseFloat(match[2]);
-              }
-              
-              // Update position
-              x = x - pos1;
-              y = y - pos2;
-              
-              // Apply boundary constraints
-              const svgRect = svgParent.getBoundingClientRect();
-              const elemRect = element.getBoundingClientRect();
-              
-              // Keep within reasonable bounds
-              x = Math.max(-elemRect.width/2, Math.min(svgRect.width - elemRect.width/2, x));
-              y = Math.max(0, Math.min(svgRect.height - elemRect.height, y));
-              
-              // Set the element's new position
-              element.setAttribute('transform', \`translate(\${x}, \${y})\`);
-            }
-            
-            function closeDragElement() {
-              // Stop moving when mouse button is released
-              document.onmouseup = null;
-              document.onmousemove = null;
-              isDragging = false;
-              element.classList.remove('dragging');
+              // Make function globally available
+              window.runLegendFixes = makeLegendsDraggable;
+            } else {
+              // If Plotly is not ready yet, wait and try again
+              setTimeout(initializeLegendDragging, 500);
             }
           }
-        }
-  
-        // Run legend fixes on load
-        function runLegendFixes() {
-          makeLegendsDraggable();
-        }
-        
-        // Run after a slight delay to ensure plots are loaded
-        setTimeout(runLegendFixes, 1000);
-        
-        // Expose runLegendFixes to be callable from outside
-        window.runLegendFixes = runLegendFixes;
+          
+          // Start initialization process
+          initializeLegendDragging();
+        })();
       `;
+        iframeDocument.body.appendChild(scriptElement);
 
-      iframeDocument.body.appendChild(scriptElement);
+        // Handle special cases based on visualization type
+        this.handleSpecialCases(iframe);
 
-      // Handle special cases based on visualization type
-      this.handleSpecialCases(iframe);
-
-      // Add right-click context menu for legends
-      this.addLegendContextMenu(iframe);
-
-      // Ensure legend fixes run after a delay (especially for cached content)
-      setTimeout(() => {
-        try {
-          // Explicitly run legend fixes
-          if ((iframeWindow as any).runLegendFixes) {
-            (iframeWindow as any).runLegendFixes();
-          }
-        } catch (error) {
-          console.warn('Error running legend fixes:', error);
-        }
-      }, 500);
+        // Add right-click context menu for legends
+        this.addLegendContextMenu(iframe);
+      });
     } catch (error) {
       console.warn('Could not apply legend fixes to iframe:', error);
     }
@@ -1560,6 +1494,35 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
     // Check if we have this visualization cached
     const cachedContent = this.checkCachedVisualization(filename);
 
+    // Function to add Plotly script and ensure it loads before any visualization code runs
+    const ensurePlotlyAvailable = (iframeDoc: Document): Promise<void> => {
+      return new Promise((resolve) => {
+        // Check if Plotly is already defined
+        if ((iframe.contentWindow as any).Plotly) {
+          resolve();
+          return;
+        }
+
+        // Add Plotly script
+        const plotlyScript = iframeDoc.createElement('script');
+        plotlyScript.src = 'https://cdn.plot.ly/plotly-2.28.0.min.js';
+        plotlyScript.onload = () => {
+          console.log('Plotly loaded successfully');
+          resolve();
+        };
+        plotlyScript.onerror = () => {
+          console.error('Failed to load Plotly, trying fallback');
+          // Try a fallback version if the main one fails
+          const fallbackScript = iframeDoc.createElement('script');
+          fallbackScript.src =
+            'https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.20.0/plotly.min.js';
+          fallbackScript.onload = () => resolve();
+          iframeDoc.head.appendChild(fallbackScript);
+        };
+        iframeDoc.head.appendChild(plotlyScript);
+      });
+    };
+
     if (cachedContent) {
       // Use cached content with a small artificial delay to maintain UI appearance
       setTimeout(() => {
@@ -1571,36 +1534,149 @@ export class DashboardsComponent implements OnInit, AfterViewInit {
         iframeDoc.write(cachedContent);
         iframeDoc.close();
 
-        // Apply legend fixes after a short delay
-        setTimeout(() => {
-          this.hideLoadingSpinner(iframe);
-          this.applyLegendFix(iframe);
-        }, 300);
+        // Ensure Plotly is loaded before any visualization code runs
+        ensurePlotlyAvailable(iframeDoc).then(() => {
+          // Apply legend fixes after a short delay
+          setTimeout(() => {
+            this.hideLoadingSpinner(iframe);
+            this.applyLegendFix(iframe);
+          }, 300);
+        });
       }, 200); // Small delay to maintain UI consistency
     } else {
       // Load from URL and cache it
-      this.renderer.setAttribute(iframe, 'src', filename);
-
-      // When iframe loads from URL
-      this.renderer.listen(iframe, 'load', () => {
-        try {
+      fetch(filename)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response not ok');
+          }
+          return response.text();
+        })
+        .then((html) => {
+          // Get the iframe document
           const iframeDoc = iframe.contentWindow?.document;
           if (!iframeDoc) return;
 
-          // Get the full HTML content
-          const htmlContent = iframeDoc.documentElement.outerHTML;
+          // Create a modified HTML with script loading guarantees
+          // This prevents "Plotly is not defined" errors by ensuring the script loads first
+          const modifiedHtml = html.replace(
+            '<head>',
+            `
+          <head>
+          <!-- Plotly script added programmatically -->
+          <script>
+            // Define a function to run when Plotly is ready
+            window.runWithPlotly = function(callback) {
+              if (window.Plotly) {
+                callback();
+              } else {
+                window.addEventListener('plotly_loaded', callback);
+              }
+            };
+            
+            // Create an event to signal when Plotly is loaded
+            window.dispatchPlotlyLoaded = function() {
+              window.dispatchEvent(new Event('plotly_loaded'));
+            };
+          </script>
+        `
+          );
 
-          // Save to cache for next time
-          this.saveVisualizationToCache(filename, htmlContent);
+          // Write the modified HTML to the iframe
+          iframeDoc.open();
+          iframeDoc.write(modifiedHtml);
+          iframeDoc.close();
 
-          // Hide spinner and apply fixes
+          // Load Plotly and ensure it's available before running visualization code
+          ensurePlotlyAvailable(iframeDoc).then(() => {
+            // Notify the iframe that Plotly is ready
+            if (iframe.contentWindow) {
+              (iframe.contentWindow as any).dispatchPlotlyLoaded();
+            }
+
+            // Look for any initialization scripts that might depend on Plotly
+            const scripts = iframeDoc.querySelectorAll('script:not([src])');
+            scripts.forEach((script) => {
+              const content = script.textContent || '';
+              // If the script uses Plotly, wrap it in the runWithPlotly function
+              if (content.includes('Plotly.') || content.includes('Plotly(')) {
+                const newScript = iframeDoc.createElement('script');
+                newScript.textContent = `
+                window.runWithPlotly(function() {
+                  ${content}
+                });
+              `;
+                // Replace the old script with the wrapped version
+                if (script.parentNode) {
+                  script.parentNode.replaceChild(newScript, script);
+                }
+              }
+            });
+
+            // Save to cache for next time
+            this.saveVisualizationToCache(filename, modifiedHtml);
+
+            // Hide spinner and apply fixes
+            this.hideLoadingSpinner(iframe);
+            this.applyLegendFix(iframe);
+          });
+        })
+        .catch((error) => {
+          console.error('Error loading visualization:', error);
           this.hideLoadingSpinner(iframe);
-          this.applyLegendFix(iframe);
-        } catch (error) {
-          console.warn('Error caching iframe content:', error);
-          this.hideLoadingSpinner(iframe);
-        }
-      });
+
+          // Show error message in the iframe
+          const iframeDoc = iframe.contentWindow?.document;
+          if (iframeDoc) {
+            iframeDoc.open();
+            iframeDoc.write(`
+            <html>
+              <head>
+                <style>
+                  body {
+                    font-family: Arial, sans-serif;
+                    padding: 20px;
+                    text-align: center;
+                    color: #333;
+                  }
+                  .error-container {
+                    margin: 50px auto;
+                    max-width: 500px;
+                    padding: 30px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                    border-left: 5px solid #e74c3c;
+                  }
+                  h3 {
+                    color: #e74c3c;
+                    margin-top: 0;
+                  }
+                  button {
+                    background: #0066cc;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    margin-top: 20px;
+                    font-size: 14px;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="error-container">
+                  <h3>Visualization could not be loaded</h3>
+                  <p>There was an error loading the visualization content. This might be due to network issues or content security policy restrictions.</p>
+                  <p>Error: ${error.message}</p>
+                  <button onclick="window.parent.location.reload();">Refresh Page</button>
+                </div>
+              </body>
+            </html>
+          `);
+            iframeDoc.close();
+          }
+        });
     }
   }
 }
