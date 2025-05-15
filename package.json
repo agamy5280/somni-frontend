@@ -5,13 +5,14 @@
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --port 4200 --disable-host-check",
     "build": "ng build",
-    "prod-build": "ng build --configuration production && echo 'Angular build completed'",
+    "prod-build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "json-server": "json-server --watch src/assets/database/db.json --host 0.0.0.0 --port 3000",
     "dev": "node server.js",
     "prod-start": "node prod-server.js"
   },
+  "main": "prod-server.js",
   "private": true,
   "dependencies": {
     "@angular/animations": "^19.2.8",
