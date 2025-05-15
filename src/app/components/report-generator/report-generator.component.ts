@@ -205,12 +205,11 @@ export class ReportGeneratorComponent implements OnInit {
     const fromDate = new Date(this.startDate).toLocaleDateString();
     const toDate = new Date(this.endDate).toLocaleDateString();
 
-    // Use relative path instead of absolute path
-    const filePath = './assets/data/report.xlsx';
+    // Use relative path with leading slash to ensure it's from root
+    const filePath = '/assets/data/report.xlsx';
 
     // Create a file download by fetching the file from assets
     fetch(filePath, {
-      // Force same-origin which ensures the request uses the same protocol (HTTPS) as the page
       credentials: 'same-origin',
     })
       .then((response) => {
@@ -220,30 +219,18 @@ export class ReportGeneratorComponent implements OnInit {
         return response.blob();
       })
       .then((blob) => {
-        // Create a blob URL for the file with explicit HTTPS scheme
         const blobUrl = window.URL.createObjectURL(blob);
-
-        // Create a temporary link element to trigger the download
         const link = document.createElement('a');
         link.href = blobUrl;
-
-        // Set the desired filename for the download
         link.download = `${reportName} (${fromDate} to ${toDate}).xlsx`;
-
-        // Set security attributes
         link.setAttribute('rel', 'noopener noreferrer');
-
-        // Append to body, click and remove
         document.body.appendChild(link);
         link.click();
-
-        // Clean up
         document.body.removeChild(link);
         window.URL.revokeObjectURL(blobUrl);
       })
       .catch((error) => {
         console.error('Error downloading the report:', error);
-        // You could add user feedback here for error cases
         alert('Error downloading the report. Please try again.');
       });
   }

@@ -47,9 +47,18 @@
         color: #777;
       }
     </style>
-    <script src="https://cdn.plot.ly/plotly-2.28.0.min.js"></script>
+    <script src="/assets/vendor/plotly.min.js"></script>
   </head>
   <body>
+            <script>
+              // Create Plotly fallback if the script didn't load
+              window.Plotly = window.Plotly || {
+                newPlot: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); },
+                react: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); },
+                relayout: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); }
+              };
+            </script>
+          
     <div class="header">
       <h1>Fraud Dashboard | Top Frauds by Merchant</h1>
       <div class="logo">
@@ -62,10 +71,7 @@
         <script type="text/javascript">
           window.PlotlyConfig = { MathJaxConfig: "local" };
         </script>
-        <script
-          charset="utf-8"
-          src="https://cdn.plot.ly/plotly-3.0.1.min.js"
-        ></script>
+        <script src="/assets/vendor/plotly.min.js"></script>
         <div
           id="8b2a7846-ee59-43bf-ab17-e4d54aa5d270"
           class="plotly-graph-div"

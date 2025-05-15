@@ -89,9 +89,18 @@
         }
       }
     </style>
-    <script src="https://cdn.plot.ly/plotly-2.28.0.min.js"></script>
+    <script src="/assets/vendor/plotly.min.js"></script>
   </head>
   <body>
+            <script>
+              // Create Plotly fallback if the script didn't load
+              window.Plotly = window.Plotly || {
+                newPlot: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); },
+                react: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); },
+                relayout: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); }
+              };
+            </script>
+          
     <div class="header">
       <h1>Mule Activity Dashboard</h1>
     </div>
@@ -297,10 +306,7 @@
           <script type="text/javascript">
             window.PlotlyConfig = { MathJaxConfig: "local" };
           </script>
-          <script
-            charset="utf-8"
-            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
-          ></script>
+          <script src="/assets/vendor/plotly.min.js"></script>
           <div
             id="1c934335-d606-4b85-bf9f-ce682dc67005"
             class="plotly-graph-div"

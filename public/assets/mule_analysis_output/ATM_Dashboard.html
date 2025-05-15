@@ -90,9 +90,18 @@
         }
       }
     </style>
-    <script src="https://cdn.plot.ly/plotly-2.28.0.min.js"></script>
+    <script src="/assets/vendor/plotly.min.js"></script>
   </head>
   <body>
+            <script>
+              // Create Plotly fallback if the script didn't load
+              window.Plotly = window.Plotly || {
+                newPlot: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); },
+                react: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); },
+                relayout: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); }
+              };
+            </script>
+          
     <div class="header">
       <h1>Fraud Dashboard | Month-on-Month & Trend Analysis (ATM)</h1>
       <div class="logo">
@@ -155,10 +164,7 @@
           <script type="text/javascript">
             window.PlotlyConfig = { MathJaxConfig: "local" };
           </script>
-          <script
-            charset="utf-8"
-            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
-          ></script>
+          <script src="/assets/vendor/plotly.min.js"></script>
           <div
             id="f66aa370-3678-470b-9e16-2fe7b24f6d0f"
             class="plotly-graph-div"
@@ -664,10 +670,7 @@
           <script type="text/javascript">
             window.PlotlyConfig = { MathJaxConfig: "local" };
           </script>
-          <script
-            charset="utf-8"
-            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
-          ></script>
+          <script src="/assets/vendor/plotly.min.js"></script>
           <div
             id="b1eabb38-6223-4e48-a484-92624da17160"
             class="plotly-graph-div"

@@ -92,9 +92,18 @@
         }
       }
     </style>
-    <script src="https://cdn.plot.ly/plotly-2.28.0.min.js"></script>
+    <script src="/assets/vendor/plotly.min.js"></script>
   </head>
   <body>
+            <script>
+              // Create Plotly fallback if the script didn't load
+              window.Plotly = window.Plotly || {
+                newPlot: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); },
+                react: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); },
+                relayout: function() { console.warn('Plotly not loaded properly - visualization may not display correctly'); }
+              };
+            </script>
+          
     <div class="header">
       <h1>
         Fraud Dashboard | Month-on-Month & Trend Analysis (Retail Transfers)
@@ -159,10 +168,7 @@
           <script type="text/javascript">
             window.PlotlyConfig = { MathJaxConfig: "local" };
           </script>
-          <script
-            charset="utf-8"
-            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
-          ></script>
+          <script src="/assets/vendor/plotly.min.js"></script>
           <div
             id="b39e7569-cdc6-4148-a7e3-f9c99db2d5c0"
             class="plotly-graph-div"
@@ -683,10 +689,7 @@
           <script type="text/javascript">
             window.PlotlyConfig = { MathJaxConfig: "local" };
           </script>
-          <script
-            charset="utf-8"
-            src="https://cdn.plot.ly/plotly-3.0.1.min.js"
-          ></script>
+          <script src="/assets/vendor/plotly.min.js"></script>
           <div
             id="cd00f5e6-873f-4ee3-ae4d-15d222ce5835"
             class="plotly-graph-div"

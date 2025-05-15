@@ -1,759 +1,774 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mule Accounts Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+        line-height: 1.3;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 8px;
+      }
+      .header {
+        text-align: left;
+        margin-bottom: 10px;
+        padding: 5px;
+        border-bottom: 1px solid #ddd;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 3px 0;
+        color: #333;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 8px 0 4px 0;
+        color: #444;
+      }
+      h3 {
+        font-size: 13px;
+        margin: 6px 0 3px 0;
+        color: #555;
+        font-weight: bold;
+      }
+      .section {
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 6px;
+        font-size: 11px;
+      }
+      .data-table th {
+        background-color: #0000ff;
+        color: white;
+        padding: 3px 6px;
+        text-align: left;
+        font-weight: bold;
+      }
+      .data-table td {
+        padding: 3px 6px;
+        border-bottom: 1px solid #ddd;
+      }
+      .data-table tr:nth-child(even) {
+        background-color: #f8f8f8;
+      }
+      .data-table .total-row {
+        font-weight: bold;
+        background-color: #e6e6e6;
+        padding: 2px 6px;
+      }
+      .tables-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      .month-block {
+        flex-basis: calc(25% - 10px);
+        min-width: 200px;
+        margin-bottom: 5px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+      .footer {
+        margin-top: 12px;
+        text-align: center;
+        font-size: 10px;
+        color: #777;
+      }
+      @media (max-width: 992px) {
+        .month-block {
+          flex-basis: calc(50% - 10px);
+        }
+      }
+      @media (max-width: 576px) {
+        .month-block {
+          flex-basis: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      // Create Plotly fallback if the script didn't load
+      window.Plotly = window.Plotly || {
+        newPlot: function () {
+          console.warn(
+            "Plotly not loaded properly - visualization may not display correctly"
+          );
+        },
+        react: function () {
+          console.warn(
+            "Plotly not loaded properly - visualization may not display correctly"
+          );
+        },
+        relayout: function () {
+          console.warn(
+            "Plotly not loaded properly - visualization may not display correctly"
+          );
+        },
+      };
+    </script>
 
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Mule Accounts Dashboard</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                font-size: 13px;
-                line-height: 1.3;
-                color: #333;
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 8px;
-            }
-            .header {
-                text-align: left;
-                margin-bottom: 10px;
-                padding: 5px;
-                border-bottom: 1px solid #ddd;
-            }
-            h1 {
-                font-size: 18px;
-                margin: 3px 0;
-                color: #333;
-            }
-            h2 {
-                font-size: 15px;
-                margin: 8px 0 4px 0;
-                color: #444;
-            }
-            h3 {
-                font-size: 13px;
-                margin: 6px 0 3px 0;
-                color: #555;
-                font-weight: bold;
-            }
-            .section {
-                margin-top: 12px;
-                margin-bottom: 12px;
-            }
-            .data-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 6px;
-                font-size: 11px;
-            }
-            .data-table th {
-                background-color: #0000FF;
-                color: white;
-                padding: 3px 6px;
-                text-align: left;
-                font-weight: bold;
-            }
-            .data-table td {
-                padding: 3px 6px;
-                border-bottom: 1px solid #ddd;
-            }
-            .data-table tr:nth-child(even) {
-                background-color: #f8f8f8;
-            }
-            .data-table .total-row {
-                font-weight: bold;
-                background-color: #e6e6e6;
-                padding: 2px 6px;
-            }
-            .tables-row {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                gap: 10px;
-                margin-bottom: 15px;
-            }
-            .month-block {
-                flex-basis: calc(25% - 10px);
-                min-width: 200px;
-                margin-bottom: 5px;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                padding: 5px;
-                box-sizing: border-box;
-            }
-            .footer {
-                margin-top: 12px;
-                text-align: center;
-                font-size: 10px;
-                color: #777;
-            }
-            @media (max-width: 992px) {
-                .month-block {
-                    flex-basis: calc(50% - 10px);
-                }
-            }
-            @media (max-width: 576px) {
-                .month-block {
-                    flex-basis: 100%;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="header">
-            <h1>Mule Accounts Dashboard</h1>
+    <div class="header">
+      <h1>Mule Accounts Dashboard</h1>
+    </div>
+
+    <div class="section">
+      <h2>Bank Mule Accounts</h2>
+      <div class="tables-row">
+        <div class="month-block">
+          <h3>25-Feb</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Bank</th>
+                <th>Cases</th>
+                <th>Amount</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Brenda Fernandez</td>
+                <td>1</td>
+                <td>42,933.51</td>
+                <td>13.58%</td>
+              </tr>
+              <tr>
+                <td>Adriana Anderson</td>
+                <td>1</td>
+                <td>39,604.38</td>
+                <td>12.53%</td>
+              </tr>
+              <tr>
+                <td>Kathy King</td>
+                <td>1</td>
+                <td>39,554.40</td>
+                <td>12.51%</td>
+              </tr>
+              <tr>
+                <td>Colin Graham</td>
+                <td>1</td>
+                <td>34,009.10</td>
+                <td>10.76%</td>
+              </tr>
+              <tr>
+                <td>Holly Martin</td>
+                <td>1</td>
+                <td>31,736.14</td>
+                <td>10.04%</td>
+              </tr>
+              <tr>
+                <td>Kevin Avila</td>
+                <td>1</td>
+                <td>31,256.06</td>
+                <td>9.89%</td>
+              </tr>
+              <tr>
+                <td>Courtney Smith</td>
+                <td>1</td>
+                <td>29,999.53</td>
+                <td>9.49%</td>
+              </tr>
+              <tr>
+                <td>Gary Howell</td>
+                <td>1</td>
+                <td>23,050.74</td>
+                <td>7.29%</td>
+              </tr>
+              <tr>
+                <td>Rebecca Williams</td>
+                <td>1</td>
+                <td>20,625.85</td>
+                <td>6.52%</td>
+              </tr>
+              <tr>
+                <td>Brian Sanford</td>
+                <td>1</td>
+                <td>15,949.16</td>
+                <td>5.04%</td>
+              </tr>
+              <tr>
+                <td>Denise Gonzalez</td>
+                <td>1</td>
+                <td>7,430.85</td>
+                <td>2.35%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>11</td>
+                <td>316,149.72</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        
-        <div class="section">
-            <h2>Bank Mule Accounts</h2>
-            <div class="tables-row">
-                <div class='month-block'>
-<h3>25-Feb</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Bank</th>
-<th>Cases</th>
-<th>Amount</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Brenda Fernandez</td>
-<td>1</td>
-<td>42,933.51</td>
-<td>13.58%</td>
-</tr>
-<tr>
-<td>Adriana Anderson</td>
-<td>1</td>
-<td>39,604.38</td>
-<td>12.53%</td>
-</tr>
-<tr>
-<td>Kathy King</td>
-<td>1</td>
-<td>39,554.40</td>
-<td>12.51%</td>
-</tr>
-<tr>
-<td>Colin Graham</td>
-<td>1</td>
-<td>34,009.10</td>
-<td>10.76%</td>
-</tr>
-<tr>
-<td>Holly Martin</td>
-<td>1</td>
-<td>31,736.14</td>
-<td>10.04%</td>
-</tr>
-<tr>
-<td>Kevin Avila</td>
-<td>1</td>
-<td>31,256.06</td>
-<td>9.89%</td>
-</tr>
-<tr>
-<td>Courtney Smith</td>
-<td>1</td>
-<td>29,999.53</td>
-<td>9.49%</td>
-</tr>
-<tr>
-<td>Gary Howell</td>
-<td>1</td>
-<td>23,050.74</td>
-<td>7.29%</td>
-</tr>
-<tr>
-<td>Rebecca Williams</td>
-<td>1</td>
-<td>20,625.85</td>
-<td>6.52%</td>
-</tr>
-<tr>
-<td>Brian Sanford</td>
-<td>1</td>
-<td>15,949.16</td>
-<td>5.04%</td>
-</tr>
-<tr>
-<td>Denise Gonzalez</td>
-<td>1</td>
-<td>7,430.85</td>
-<td>2.35%</td>
-</tr>
-<tr class="total-row">
-<td>Total</td>
-<td>11</td>
-<td>316,149.72</td>
-<td>100.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-                <div class='month-block'>
-<h3>25-Mar</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Bank</th>
-<th>Cases</th>
-<th>Amount</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Austin Nguyen</td>
-<td>1</td>
-<td>49,148.89</td>
-<td>11.32%</td>
-</tr>
-<tr>
-<td>Brianna Howard</td>
-<td>1</td>
-<td>47,062.34</td>
-<td>10.84%</td>
-</tr>
-<tr>
-<td>Timothy Miller</td>
-<td>1</td>
-<td>40,009.07</td>
-<td>9.21%</td>
-</tr>
-<tr>
-<td>Brandon Evans</td>
-<td>1</td>
-<td>37,253.38</td>
-<td>8.58%</td>
-</tr>
-<tr>
-<td>Richard Velazquez</td>
-<td>1</td>
-<td>37,034.30</td>
-<td>8.53%</td>
-</tr>
-<tr>
-<td>Brian Rogers</td>
-<td>1</td>
-<td>36,932.87</td>
-<td>8.50%</td>
-</tr>
-<tr>
-<td>Andrew Vasquez</td>
-<td>1</td>
-<td>36,488.22</td>
-<td>8.40%</td>
-</tr>
-<tr>
-<td>Andrea Parker</td>
-<td>1</td>
-<td>32,332.18</td>
-<td>7.44%</td>
-</tr>
-<tr>
-<td>Joseph Williams</td>
-<td>1</td>
-<td>27,404.38</td>
-<td>6.31%</td>
-</tr>
-<tr>
-<td>Austin Frank</td>
-<td>1</td>
-<td>22,294.26</td>
-<td>5.13%</td>
-</tr>
-<tr>
-<td>Sandra Garcia</td>
-<td>1</td>
-<td>21,004.11</td>
-<td>4.84%</td>
-</tr>
-<tr>
-<td>Katherine Rivera</td>
-<td>1</td>
-<td>18,025.74</td>
-<td>4.15%</td>
-</tr>
-<tr>
-<td>Jaclyn Edwards</td>
-<td>1</td>
-<td>13,114.83</td>
-<td>3.02%</td>
-</tr>
-<tr>
-<td>Katelyn Armstrong</td>
-<td>1</td>
-<td>5,947.66</td>
-<td>1.37%</td>
-</tr>
-<tr>
-<td>Linda Johnson</td>
-<td>1</td>
-<td>5,534.46</td>
-<td>1.27%</td>
-</tr>
-<tr>
-<td>Gary Johnson</td>
-<td>1</td>
-<td>2,461.43</td>
-<td>0.57%</td>
-</tr>
-<tr>
-<td>Curtis Montgomery</td>
-<td>1</td>
-<td>1,551.78</td>
-<td>0.36%</td>
-</tr>
-<tr>
-<td>Fernando Fisher</td>
-<td>1</td>
-<td>752.34</td>
-<td>0.17%</td>
-</tr>
-<tr class="total-row">
-<td>Total</td>
-<td>18</td>
-<td>434,352.24</td>
-<td>100.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-                <div class='month-block'>
-<h3>25-Apr</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Bank</th>
-<th>Cases</th>
-<th>Amount</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Timothy Nicholson</td>
-<td>1</td>
-<td>49,268.14</td>
-<td>11.44%</td>
-</tr>
-<tr>
-<td>Tyler Riley</td>
-<td>1</td>
-<td>47,768.93</td>
-<td>11.09%</td>
-</tr>
-<tr>
-<td>Gina Brown</td>
-<td>1</td>
-<td>45,837.82</td>
-<td>10.65%</td>
-</tr>
-<tr>
-<td>John Gilbert</td>
-<td>1</td>
-<td>39,138.90</td>
-<td>9.09%</td>
-</tr>
-<tr>
-<td>Thomas Sloan</td>
-<td>1</td>
-<td>30,266.63</td>
-<td>7.03%</td>
-</tr>
-<tr>
-<td>Stephanie Martin</td>
-<td>1</td>
-<td>28,592.60</td>
-<td>6.64%</td>
-</tr>
-<tr>
-<td>Bethany Fernandez</td>
-<td>1</td>
-<td>28,234.11</td>
-<td>6.56%</td>
-</tr>
-<tr>
-<td>Lori King</td>
-<td>1</td>
-<td>27,259.24</td>
-<td>6.33%</td>
-</tr>
-<tr>
-<td>Alicia Goodman</td>
-<td>1</td>
-<td>25,699.17</td>
-<td>5.97%</td>
-</tr>
-<tr>
-<td>Barbara Smith DDS</td>
-<td>1</td>
-<td>21,268.33</td>
-<td>4.94%</td>
-</tr>
-<tr>
-<td>Donna Brown</td>
-<td>1</td>
-<td>20,029.88</td>
-<td>4.65%</td>
-</tr>
-<tr>
-<td>Jeffrey Haynes</td>
-<td>1</td>
-<td>16,587.33</td>
-<td>3.85%</td>
-</tr>
-<tr>
-<td>Mary Charles</td>
-<td>1</td>
-<td>15,867.69</td>
-<td>3.69%</td>
-</tr>
-<tr>
-<td>Kelly Garcia</td>
-<td>1</td>
-<td>12,277.50</td>
-<td>2.85%</td>
-</tr>
-<tr>
-<td>Veronica Norton</td>
-<td>1</td>
-<td>10,358.70</td>
-<td>2.41%</td>
-</tr>
-<tr>
-<td>Hector Garcia</td>
-<td>1</td>
-<td>6,057.38</td>
-<td>1.41%</td>
-</tr>
-<tr>
-<td>Debra Diaz</td>
-<td>1</td>
-<td>5,430.53</td>
-<td>1.26%</td>
-</tr>
-<tr>
-<td>Jennifer Erickson</td>
-<td>1</td>
-<td>644.19</td>
-<td>0.15%</td>
-</tr>
-<tr class="total-row">
-<td>Total</td>
-<td>18</td>
-<td>430,587.07</td>
-<td>100.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-                <div class='month-block'>
-<h3>25-May</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Bank</th>
-<th>Cases</th>
-<th>Amount</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Mr. Warren Wilson</td>
-<td>1</td>
-<td>35,730.22</td>
-<td>12.96%</td>
-</tr>
-<tr>
-<td>Angela Lopez</td>
-<td>1</td>
-<td>34,596.94</td>
-<td>12.55%</td>
-</tr>
-<tr>
-<td>Lawrence Franklin</td>
-<td>1</td>
-<td>33,054.83</td>
-<td>11.99%</td>
-</tr>
-<tr>
-<td>Laura Jordan</td>
-<td>1</td>
-<td>28,738.12</td>
-<td>10.42%</td>
-</tr>
-<tr>
-<td>Lori Gibbs</td>
-<td>1</td>
-<td>27,064.33</td>
-<td>9.81%</td>
-</tr>
-<tr>
-<td>Daniel Herman</td>
-<td>1</td>
-<td>22,823.61</td>
-<td>8.28%</td>
-</tr>
-<tr>
-<td>Wendy Marsh</td>
-<td>1</td>
-<td>22,646.55</td>
-<td>8.21%</td>
-</tr>
-<tr>
-<td>Ashley Cantrell</td>
-<td>1</td>
-<td>22,640.48</td>
-<td>8.21%</td>
-</tr>
-<tr>
-<td>Michael Scott</td>
-<td>1</td>
-<td>20,274.87</td>
-<td>7.35%</td>
-</tr>
-<tr>
-<td>Chelsey Clark</td>
-<td>1</td>
-<td>15,076.10</td>
-<td>5.47%</td>
-</tr>
-<tr>
-<td>Tyler Hernandez</td>
-<td>1</td>
-<td>13,130.20</td>
-<td>4.76%</td>
-</tr>
-<tr class="total-row">
-<td>Total</td>
-<td>11</td>
-<td>275,776.25</td>
-<td>100.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-            </div>
+        <div class="month-block">
+          <h3>25-Mar</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Bank</th>
+                <th>Cases</th>
+                <th>Amount</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Austin Nguyen</td>
+                <td>1</td>
+                <td>49,148.89</td>
+                <td>11.32%</td>
+              </tr>
+              <tr>
+                <td>Brianna Howard</td>
+                <td>1</td>
+                <td>47,062.34</td>
+                <td>10.84%</td>
+              </tr>
+              <tr>
+                <td>Timothy Miller</td>
+                <td>1</td>
+                <td>40,009.07</td>
+                <td>9.21%</td>
+              </tr>
+              <tr>
+                <td>Brandon Evans</td>
+                <td>1</td>
+                <td>37,253.38</td>
+                <td>8.58%</td>
+              </tr>
+              <tr>
+                <td>Richard Velazquez</td>
+                <td>1</td>
+                <td>37,034.30</td>
+                <td>8.53%</td>
+              </tr>
+              <tr>
+                <td>Brian Rogers</td>
+                <td>1</td>
+                <td>36,932.87</td>
+                <td>8.50%</td>
+              </tr>
+              <tr>
+                <td>Andrew Vasquez</td>
+                <td>1</td>
+                <td>36,488.22</td>
+                <td>8.40%</td>
+              </tr>
+              <tr>
+                <td>Andrea Parker</td>
+                <td>1</td>
+                <td>32,332.18</td>
+                <td>7.44%</td>
+              </tr>
+              <tr>
+                <td>Joseph Williams</td>
+                <td>1</td>
+                <td>27,404.38</td>
+                <td>6.31%</td>
+              </tr>
+              <tr>
+                <td>Austin Frank</td>
+                <td>1</td>
+                <td>22,294.26</td>
+                <td>5.13%</td>
+              </tr>
+              <tr>
+                <td>Sandra Garcia</td>
+                <td>1</td>
+                <td>21,004.11</td>
+                <td>4.84%</td>
+              </tr>
+              <tr>
+                <td>Katherine Rivera</td>
+                <td>1</td>
+                <td>18,025.74</td>
+                <td>4.15%</td>
+              </tr>
+              <tr>
+                <td>Jaclyn Edwards</td>
+                <td>1</td>
+                <td>13,114.83</td>
+                <td>3.02%</td>
+              </tr>
+              <tr>
+                <td>Katelyn Armstrong</td>
+                <td>1</td>
+                <td>5,947.66</td>
+                <td>1.37%</td>
+              </tr>
+              <tr>
+                <td>Linda Johnson</td>
+                <td>1</td>
+                <td>5,534.46</td>
+                <td>1.27%</td>
+              </tr>
+              <tr>
+                <td>Gary Johnson</td>
+                <td>1</td>
+                <td>2,461.43</td>
+                <td>0.57%</td>
+              </tr>
+              <tr>
+                <td>Curtis Montgomery</td>
+                <td>1</td>
+                <td>1,551.78</td>
+                <td>0.36%</td>
+              </tr>
+              <tr>
+                <td>Fernando Fisher</td>
+                <td>1</td>
+                <td>752.34</td>
+                <td>0.17%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>18</td>
+                <td>434,352.24</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        
-        <div class="section">
-            <h2>Digital Wallet Mule Accounts</h2>
-            <div class="tables-row">
-                <div class='month-block'>
-<h3>25-Feb</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Wallet</th>
-<th>Cases</th>
-<th>Amount</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Ms. Mary Thompson</td>
-<td>1</td>
-<td>41,876.03</td>
-<td>22.70%</td>
-</tr>
-<tr>
-<td>Christopher Werner</td>
-<td>1</td>
-<td>41,386.99</td>
-<td>22.43%</td>
-</tr>
-<tr>
-<td>Emma Lynch</td>
-<td>1</td>
-<td>38,810.09</td>
-<td>21.04%</td>
-</tr>
-<tr>
-<td>Karen Ward</td>
-<td>1</td>
-<td>30,027.57</td>
-<td>16.28%</td>
-</tr>
-<tr>
-<td>Stephanie Clements</td>
-<td>1</td>
-<td>21,690.24</td>
-<td>11.76%</td>
-</tr>
-<tr>
-<td>Mr. Jason Marsh</td>
-<td>1</td>
-<td>10,698.07</td>
-<td>5.80%</td>
-</tr>
-<tr class="total-row">
-<td>Total</td>
-<td>6</td>
-<td>184,488.99</td>
-<td>100.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-                <div class='month-block'>
-<h3>25-Mar</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Wallet</th>
-<th>Cases</th>
-<th>Amount</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Jeffery Galvan</td>
-<td>1</td>
-<td>38,298.78</td>
-<td>46.91%</td>
-</tr>
-<tr>
-<td>Eddie Owens</td>
-<td>1</td>
-<td>37,055.50</td>
-<td>45.39%</td>
-</tr>
-<tr>
-<td>Selena Valenzuela</td>
-<td>1</td>
-<td>6,289.44</td>
-<td>7.70%</td>
-</tr>
-<tr class="total-row">
-<td>Total</td>
-<td>3</td>
-<td>81,643.72</td>
-<td>100.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-                <div class='month-block'>
-<h3>25-Apr</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Wallet</th>
-<th>Cases</th>
-<th>Amount</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Justin Blair</td>
-<td>1</td>
-<td>40,185.82</td>
-<td>26.64%</td>
-</tr>
-<tr>
-<td>Cory Brown</td>
-<td>1</td>
-<td>35,866.50</td>
-<td>23.77%</td>
-</tr>
-<tr>
-<td>Nicholas Yates</td>
-<td>1</td>
-<td>30,393.26</td>
-<td>20.15%</td>
-</tr>
-<tr>
-<td>Kent Anderson</td>
-<td>1</td>
-<td>16,808.25</td>
-<td>11.14%</td>
-</tr>
-<tr>
-<td>Lisa Rollins</td>
-<td>1</td>
-<td>13,788.52</td>
-<td>9.14%</td>
-</tr>
-<tr>
-<td>David Thompson</td>
-<td>1</td>
-<td>8,904.83</td>
-<td>5.90%</td>
-</tr>
-<tr>
-<td>Christine Morse</td>
-<td>1</td>
-<td>4,919.71</td>
-<td>3.26%</td>
-</tr>
-<tr class="total-row">
-<td>Total</td>
-<td>7</td>
-<td>150,866.89</td>
-<td>100.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-                <div class='month-block'>
-<h3>25-May</h3>
-<table class="data-table">
-<thead>
-<tr>
-<th>Wallet</th>
-<th>Cases</th>
-<th>Amount</th>
-<th>%</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Heather Hernandez</td>
-<td>1</td>
-<td>27,899.06</td>
-<td>56.61%</td>
-</tr>
-<tr>
-<td>Ashley Morris</td>
-<td>1</td>
-<td>9,432.52</td>
-<td>19.14%</td>
-</tr>
-<tr>
-<td>Christopher Perez</td>
-<td>1</td>
-<td>7,365.71</td>
-<td>14.95%</td>
-</tr>
-<tr>
-<td>Keith Matthews</td>
-<td>1</td>
-<td>4,586.04</td>
-<td>9.31%</td>
-</tr>
-<tr class="total-row">
-<td>Total</td>
-<td>4</td>
-<td>49,283.33</td>
-<td>100.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-            </div>
+        <div class="month-block">
+          <h3>25-Apr</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Bank</th>
+                <th>Cases</th>
+                <th>Amount</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Timothy Nicholson</td>
+                <td>1</td>
+                <td>49,268.14</td>
+                <td>11.44%</td>
+              </tr>
+              <tr>
+                <td>Tyler Riley</td>
+                <td>1</td>
+                <td>47,768.93</td>
+                <td>11.09%</td>
+              </tr>
+              <tr>
+                <td>Gina Brown</td>
+                <td>1</td>
+                <td>45,837.82</td>
+                <td>10.65%</td>
+              </tr>
+              <tr>
+                <td>John Gilbert</td>
+                <td>1</td>
+                <td>39,138.90</td>
+                <td>9.09%</td>
+              </tr>
+              <tr>
+                <td>Thomas Sloan</td>
+                <td>1</td>
+                <td>30,266.63</td>
+                <td>7.03%</td>
+              </tr>
+              <tr>
+                <td>Stephanie Martin</td>
+                <td>1</td>
+                <td>28,592.60</td>
+                <td>6.64%</td>
+              </tr>
+              <tr>
+                <td>Bethany Fernandez</td>
+                <td>1</td>
+                <td>28,234.11</td>
+                <td>6.56%</td>
+              </tr>
+              <tr>
+                <td>Lori King</td>
+                <td>1</td>
+                <td>27,259.24</td>
+                <td>6.33%</td>
+              </tr>
+              <tr>
+                <td>Alicia Goodman</td>
+                <td>1</td>
+                <td>25,699.17</td>
+                <td>5.97%</td>
+              </tr>
+              <tr>
+                <td>Barbara Smith DDS</td>
+                <td>1</td>
+                <td>21,268.33</td>
+                <td>4.94%</td>
+              </tr>
+              <tr>
+                <td>Donna Brown</td>
+                <td>1</td>
+                <td>20,029.88</td>
+                <td>4.65%</td>
+              </tr>
+              <tr>
+                <td>Jeffrey Haynes</td>
+                <td>1</td>
+                <td>16,587.33</td>
+                <td>3.85%</td>
+              </tr>
+              <tr>
+                <td>Mary Charles</td>
+                <td>1</td>
+                <td>15,867.69</td>
+                <td>3.69%</td>
+              </tr>
+              <tr>
+                <td>Kelly Garcia</td>
+                <td>1</td>
+                <td>12,277.50</td>
+                <td>2.85%</td>
+              </tr>
+              <tr>
+                <td>Veronica Norton</td>
+                <td>1</td>
+                <td>10,358.70</td>
+                <td>2.41%</td>
+              </tr>
+              <tr>
+                <td>Hector Garcia</td>
+                <td>1</td>
+                <td>6,057.38</td>
+                <td>1.41%</td>
+              </tr>
+              <tr>
+                <td>Debra Diaz</td>
+                <td>1</td>
+                <td>5,430.53</td>
+                <td>1.26%</td>
+              </tr>
+              <tr>
+                <td>Jennifer Erickson</td>
+                <td>1</td>
+                <td>644.19</td>
+                <td>0.15%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>18</td>
+                <td>430,587.07</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        
-        <div class="footer">
-            <p>Report generated on 2025-05-13 12:04</p>
+        <div class="month-block">
+          <h3>25-May</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Bank</th>
+                <th>Cases</th>
+                <th>Amount</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mr. Warren Wilson</td>
+                <td>1</td>
+                <td>35,730.22</td>
+                <td>12.96%</td>
+              </tr>
+              <tr>
+                <td>Angela Lopez</td>
+                <td>1</td>
+                <td>34,596.94</td>
+                <td>12.55%</td>
+              </tr>
+              <tr>
+                <td>Lawrence Franklin</td>
+                <td>1</td>
+                <td>33,054.83</td>
+                <td>11.99%</td>
+              </tr>
+              <tr>
+                <td>Laura Jordan</td>
+                <td>1</td>
+                <td>28,738.12</td>
+                <td>10.42%</td>
+              </tr>
+              <tr>
+                <td>Lori Gibbs</td>
+                <td>1</td>
+                <td>27,064.33</td>
+                <td>9.81%</td>
+              </tr>
+              <tr>
+                <td>Daniel Herman</td>
+                <td>1</td>
+                <td>22,823.61</td>
+                <td>8.28%</td>
+              </tr>
+              <tr>
+                <td>Wendy Marsh</td>
+                <td>1</td>
+                <td>22,646.55</td>
+                <td>8.21%</td>
+              </tr>
+              <tr>
+                <td>Ashley Cantrell</td>
+                <td>1</td>
+                <td>22,640.48</td>
+                <td>8.21%</td>
+              </tr>
+              <tr>
+                <td>Michael Scott</td>
+                <td>1</td>
+                <td>20,274.87</td>
+                <td>7.35%</td>
+              </tr>
+              <tr>
+                <td>Chelsey Clark</td>
+                <td>1</td>
+                <td>15,076.10</td>
+                <td>5.47%</td>
+              </tr>
+              <tr>
+                <td>Tyler Hernandez</td>
+                <td>1</td>
+                <td>13,130.20</td>
+                <td>4.76%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>11</td>
+                <td>275,776.25</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-    </body>
-    </html>
-    
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Digital Wallet Mule Accounts</h2>
+      <div class="tables-row">
+        <div class="month-block">
+          <h3>25-Feb</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Wallet</th>
+                <th>Cases</th>
+                <th>Amount</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Ms. Mary Thompson</td>
+                <td>1</td>
+                <td>41,876.03</td>
+                <td>22.70%</td>
+              </tr>
+              <tr>
+                <td>Christopher Werner</td>
+                <td>1</td>
+                <td>41,386.99</td>
+                <td>22.43%</td>
+              </tr>
+              <tr>
+                <td>Emma Lynch</td>
+                <td>1</td>
+                <td>38,810.09</td>
+                <td>21.04%</td>
+              </tr>
+              <tr>
+                <td>Karen Ward</td>
+                <td>1</td>
+                <td>30,027.57</td>
+                <td>16.28%</td>
+              </tr>
+              <tr>
+                <td>Stephanie Clements</td>
+                <td>1</td>
+                <td>21,690.24</td>
+                <td>11.76%</td>
+              </tr>
+              <tr>
+                <td>Mr. Jason Marsh</td>
+                <td>1</td>
+                <td>10,698.07</td>
+                <td>5.80%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>6</td>
+                <td>184,488.99</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="month-block">
+          <h3>25-Mar</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Wallet</th>
+                <th>Cases</th>
+                <th>Amount</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Jeffery Galvan</td>
+                <td>1</td>
+                <td>38,298.78</td>
+                <td>46.91%</td>
+              </tr>
+              <tr>
+                <td>Eddie Owens</td>
+                <td>1</td>
+                <td>37,055.50</td>
+                <td>45.39%</td>
+              </tr>
+              <tr>
+                <td>Selena Valenzuela</td>
+                <td>1</td>
+                <td>6,289.44</td>
+                <td>7.70%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>3</td>
+                <td>81,643.72</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="month-block">
+          <h3>25-Apr</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Wallet</th>
+                <th>Cases</th>
+                <th>Amount</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Justin Blair</td>
+                <td>1</td>
+                <td>40,185.82</td>
+                <td>26.64%</td>
+              </tr>
+              <tr>
+                <td>Cory Brown</td>
+                <td>1</td>
+                <td>35,866.50</td>
+                <td>23.77%</td>
+              </tr>
+              <tr>
+                <td>Nicholas Yates</td>
+                <td>1</td>
+                <td>30,393.26</td>
+                <td>20.15%</td>
+              </tr>
+              <tr>
+                <td>Kent Anderson</td>
+                <td>1</td>
+                <td>16,808.25</td>
+                <td>11.14%</td>
+              </tr>
+              <tr>
+                <td>Lisa Rollins</td>
+                <td>1</td>
+                <td>13,788.52</td>
+                <td>9.14%</td>
+              </tr>
+              <tr>
+                <td>David Thompson</td>
+                <td>1</td>
+                <td>8,904.83</td>
+                <td>5.90%</td>
+              </tr>
+              <tr>
+                <td>Christine Morse</td>
+                <td>1</td>
+                <td>4,919.71</td>
+                <td>3.26%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>7</td>
+                <td>150,866.89</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="month-block">
+          <h3>25-May</h3>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Wallet</th>
+                <th>Cases</th>
+                <th>Amount</th>
+                <th>%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Heather Hernandez</td>
+                <td>1</td>
+                <td>27,899.06</td>
+                <td>56.61%</td>
+              </tr>
+              <tr>
+                <td>Ashley Morris</td>
+                <td>1</td>
+                <td>9,432.52</td>
+                <td>19.14%</td>
+              </tr>
+              <tr>
+                <td>Christopher Perez</td>
+                <td>1</td>
+                <td>7,365.71</td>
+                <td>14.95%</td>
+              </tr>
+              <tr>
+                <td>Keith Matthews</td>
+                <td>1</td>
+                <td>4,586.04</td>
+                <td>9.31%</td>
+              </tr>
+              <tr class="total-row">
+                <td>Total</td>
+                <td>4</td>
+                <td>49,283.33</td>
+                <td>100.00%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
