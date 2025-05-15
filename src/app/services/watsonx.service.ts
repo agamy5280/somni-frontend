@@ -1,6 +1,5 @@
-// watsonx.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -17,8 +16,8 @@ export interface QueryResponse {
   providedIn: 'root',
 })
 export class WatsonxService {
-  private readonly API_URL =
-    'http://somni-backend-somni.apps.68060d600b3f018ca424c0c6.eu1.techzone.ibm.com'; // Flask server URL
+  // Use relative URL for development, full URL for production
+  private readonly API_URL = '/watsonx'; // This will be proxied in development mode
 
   constructor(private http: HttpClient) {}
 
@@ -44,13 +43,20 @@ export class WatsonxService {
       payload.chatHistory = chatHistory;
     }
 
-    return this.http.post<QueryResponse>(`${this.API_URL}/query`, payload).pipe(
-      tap((response) => {}),
-      catchError((error) => {
-        console.error('Error in WatsonX query:', error);
-        throw error;
-      })
-    );
+    // Add CORS headers
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http
+      .post<QueryResponse>(`${this.API_URL}/query`, payload, { headers })
+      .pipe(
+        tap((response) => {}),
+        catchError((error) => {
+          console.error('Error in WatsonX query:', error);
+          throw error;
+        })
+      );
   }
 
   /**

@@ -29,6 +29,7 @@
     "@ngx-loading-bar/core": "^7.0.0",
     "@turf/turf": "^7.2.0",
     "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
     "chart.js": "^4.4.9",
     "express": "^5.1.0",
     "file-saver": "^2.0.5",

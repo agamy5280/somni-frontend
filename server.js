@@ -3,12 +3,78 @@ const path = require("path");
 const fs = require("fs");
 const axios = require("axios");
 const helmet = require("helmet");
+const bodyParser = require("body-parser");
 const app = express();
 const port = 8080;
 
 // Check if we're in production mode
 const isProd = process.env.NODE_ENV === "production";
 console.log(`Running in ${isProd ? "production" : "development"} mode`);
+
+// Add body-parser middleware for JSON handling with higher limits for large requests
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+
+// Enable request logging
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  if (req.method === "POST" || req.method === "PUT" || req.method === "PATCH") {
+    const contentType = req.headers["content-type"] || "";
+    if (contentType.includes("application/json") && req.body) {
+      console.log(
+        "Request body:",
+        JSON.stringify(req.body, null, 2).substring(0, 500) + "..."
+      );
+    }
+  }
+  next();
+});
+
+// Add proxy for WatsonX backend - available in both prod and dev modes
+app.use("/watsonx", async (req, res) => {
+  try {
+    const watsonxBackend =
+      "http://somni-backend-somni.apps.68060d600b3f018ca424c0c6.eu1.techzone.ibm.com";
+
+    // Log request details
+    console.log(`Proxying WatsonX request: ${req.method} ${req.path}`);
+
+    // Forward the request to the WatsonX backend
+    const response = await axios({
+      method: req.method,
+      url: `${watsonxBackend}${req.path}`,
+      data: req.body,
+      headers: {
+        "Content-Type": "application/json",
+        // Forward other necessary headers, but remove host to avoid conflicts
+        ...Object.entries(req.headers)
+          .filter(
+            ([key]) => !["host", "connection"].includes(key.toLowerCase())
+          )
+          .reduce((obj, [key, val]) => ({ ...obj, [key]: val }), {}),
+      },
+      responseType: "json",
+    });
+
+    // Send back the response
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error("Error proxying WatsonX request:", error.message);
+
+    // Forward error status and message if available
+    if (error.response) {
+      res.status(error.response.status).json({
+        error: "Error from WatsonX backend",
+        details: error.response.data,
+      });
+    } else {
+      res.status(500).json({
+        error: "Error connecting to WatsonX backend",
+        message: error.message,
+      });
+    }
+  }
+});
 
 // Proxy for map tiles - available in both prod and dev modes
 app.get("/api/map-tiles/:z/:x/:y.png", async (req, res) => {
@@ -40,94 +106,98 @@ app.get("/api/map-tiles/:z/:x/:y.png", async (req, res) => {
   }
 });
 
-if (!isProd) {
-  // DEV MODE - Start JSON Server and Angular dev server
-  const isWindows = process.platform === "win32";
-  const npxCommand = isWindows ? "npx.cmd" : "npx";
-  const ngCommand = isWindows
-    ? path.join("node_modules", ".bin", "ng.cmd")
-    : path.join("node_modules", ".bin", "ng");
+// In-memory database for production mode
+const inMemoryDB = {
+  users: [],
+  chats: {},
+};
 
-  // Start JSON Server as a separate process
-  console.log("Starting JSON Server...");
-  const jsonServer = require("child_process").spawn(
-    npxCommand,
-    [
-      "json-server",
-      "--watch",
-      path.join("src", "assets", "database", "db.json"),
-      "--host",
-      "0.0.0.0",
-      "--port",
-      "3000",
-    ],
-    { shell: isWindows }
-  );
+// Check if there's a local JSON file to initialize from
+try {
+  if (isProd && fs.existsSync(path.join(__dirname, "db-backup.json"))) {
+    const dbBackup = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "db-backup.json"), "utf8")
+    );
+    if (dbBackup.users) inMemoryDB.users = dbBackup.users;
+    if (dbBackup.chats) inMemoryDB.chats = dbBackup.chats;
+    console.log("Loaded in-memory database from backup file");
+  }
+} catch (err) {
+  console.error("Error loading database backup:", err);
+}
 
-  jsonServer.stdout.on("data", (data) => {
-    console.log(`JSON Server: ${data}`);
-  });
-
-  jsonServer.stderr.on("data", (data) => {
-    console.error(`JSON Server Error: ${data}`);
-  });
-
-  // Start Angular dev server
-  console.log("Starting Angular dev server...");
-  const angularServer = require("child_process").spawn(
-    ngCommand,
-    ["serve", "--host", "0.0.0.0", "--port", "4200", "--disable-host-check"],
-    { shell: isWindows }
-  );
-
-  angularServer.stdout.on("data", (data) => {
-    console.log(`Angular: ${data}`);
-  });
-
-  angularServer.stderr.on("data", (data) => {
-    console.error(`Angular Error: ${data}`);
-  });
-
-  // Proxy API requests to JSON Server (excluding the map-tiles endpoint which we handle separately)
-  const { createProxyMiddleware } = require("http-proxy-middleware");
-  app.use("/api", (req, res, next) => {
-    // Skip the map-tiles endpoint as we've already handled it
-    if (req.path.startsWith("/map-tiles/")) {
-      return next("route");
+// Save in-memory database periodically and on exit (in production)
+if (isProd) {
+  const saveDB = () => {
+    try {
+      fs.writeFileSync(
+        path.join(__dirname, "db-backup.json"),
+        JSON.stringify(inMemoryDB, null, 2)
+      );
+      console.log("Database backup saved");
+    } catch (err) {
+      console.error("Error saving database backup:", err);
     }
-    return createProxyMiddleware({
-      target: "http://localhost:3000",
-      changeOrigin: true,
-      pathRewrite: {
-        "^/api": "",
-      },
-    })(req, res, next);
-  });
+  };
 
-  // Proxy all other requests to Angular
-  app.use(
-    "/",
-    createProxyMiddleware({
-      target: "http://localhost:4200",
-      ws: true,
-      changeOrigin: true,
-    })
-  );
+  // Save every 5 minutes
+  setInterval(saveDB, 5 * 60 * 1000);
 
-  // Handle process termination
+  // Save on process exit
   process.on("SIGINT", () => {
-    console.log("Shutting down servers...");
-    jsonServer.kill();
-    angularServer.kill();
-    process.exit();
+    console.log("Saving database before exit...");
+    saveDB();
+    process.exit(0);
   });
 
   process.on("SIGTERM", () => {
-    console.log("Shutting down servers...");
-    jsonServer.kill();
-    angularServer.kill();
-    process.exit();
+    console.log("Saving database before exit...");
+    saveDB();
+    process.exit(0);
   });
+}
+
+// JSON Server API simulation for production mode
+if (isProd) {
+  // GET /api/users - Get all users
+  app.get("/api/users", (req, res) => {
+    res.json(inMemoryDB.users);
+  });
+
+  // POST /api/users - Create a new user
+  app.post("/api/users", (req, res) => {
+    console.log("Creating new user:", req.body);
+    const newUser = req.body;
+    inMemoryDB.users.push(newUser);
+    res.status(201).json(newUser);
+    console.log(`Created new user: ${newUser.email}`);
+  });
+
+  // GET /api/chats - Get all chats
+  app.get("/api/chats", (req, res) => {
+    res.json(inMemoryDB.chats);
+  });
+
+  // PUT /api/chats - Update all chats
+  app.put("/api/chats", (req, res) => {
+    console.log("Updating chats database with PUT request");
+    inMemoryDB.chats = req.body;
+    res.json(inMemoryDB.chats);
+    console.log("Updated chats database");
+  });
+
+  // PATCH /api/chats - Patch chats
+  app.patch("/api/chats", (req, res) => {
+    console.log("Patching chats database:", req.body);
+    Object.assign(inMemoryDB.chats, req.body);
+    res.json(inMemoryDB.chats);
+    console.log("Patched chats database");
+  });
+}
+
+if (!isProd) {
+  // DEV MODE CODE - Skipped as we're focusing on production
+  console.log("Development mode setup skipped - focusing on production");
 } else {
   // PROD MODE - Serve the built Angular app
   console.log("Running in production mode...");
@@ -152,6 +222,8 @@ if (!isProd) {
             "'self'",
             "*.openstreetmap.org",
             "*.tile.openstreetmap.org",
+            // Allow connection to backend API
+            "somni-backend-somni.apps.68060d600b3f018ca424c0c6.eu1.techzone.ibm.com",
           ],
           fontSrc: ["'self'", "data:"],
           objectSrc: ["'none'"],
@@ -166,47 +238,7 @@ if (!isProd) {
     })
   );
 
-  // Setup simple API endpoints
-  try {
-    console.log("Setting up JSON Server...");
-    const jsonDbPath = path.join(
-      __dirname,
-      "src",
-      "assets",
-      "database",
-      "db.json"
-    );
-
-    if (fs.existsSync(jsonDbPath)) {
-      // Setup a simple JSON server manually
-      const db = JSON.parse(fs.readFileSync(jsonDbPath, "utf8"));
-
-      // Handle each top-level property in the JSON as an endpoint
-      Object.keys(db).forEach((resource) => {
-        app.get(`/api/${resource}`, (req, res) => {
-          res.json(db[resource]);
-        });
-
-        app.get(`/api/${resource}/:id`, (req, res) => {
-          const id = parseInt(req.params.id) || req.params.id;
-          const item = db[resource].find((item) => item.id === id);
-          if (item) {
-            res.json(item);
-          } else {
-            res.status(404).json({ error: "Not found" });
-          }
-        });
-      });
-
-      console.log("JSON Server routes set up");
-    } else {
-      console.warn(`JSON DB file not found at ${jsonDbPath}`);
-    }
-  } catch (error) {
-    console.error("Error setting up JSON Server:", error.message);
-  }
-
-  // Setup simple status endpoint
+  // Setup simple API status endpoint
   app.get("/api/status", (req, res) => {
     res.json({ message: "API is working in production mode", status: "ok" });
   });
@@ -224,8 +256,8 @@ if (!isProd) {
 
     // For Angular routing, serve index.html for paths that don't match static files
     app.use((req, res, next) => {
-      // Skip API requests
-      if (req.path.startsWith("/api")) {
+      // Skip API and WatsonX requests
+      if (req.path.startsWith("/api") || req.path.startsWith("/watsonx")) {
         return next();
       }
 
