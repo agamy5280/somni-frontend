@@ -127,7 +127,7 @@ export class SettingsComponent implements OnInit {
           setTimeout(() => {
             console.log('Redirecting to chatbot...');
             this.router.navigate(['/chatbot']);
-          }, 1500); // Redirect after 1.5 seconds to show success message
+          }, 500);
         },
         error: (error) => {
           console.error('=== UPDATE FAILED ===');
