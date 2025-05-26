@@ -8,6 +8,7 @@ export interface User {
   fullName: string;
   email: string;
   password: string;
+  preferredModel?: string; // Added model preference
 }
 
 export interface Message {
@@ -27,6 +28,12 @@ export interface Chat {
   messages: Message[];
 }
 
+export interface ModelOption {
+  key: string;
+  value: string;
+  description?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -35,6 +42,50 @@ export class DataService {
   private readonly CURRENT_USER_KEY = 'chat_app_current_user';
 
   private currentUser: User | null = null;
+
+  // Available AI models for user selection
+  private readonly availableModels: ModelOption[] = [
+    {
+      key: 'gpt-4',
+      value: 'OpenAI GPT-4',
+      description: 'Most capable OpenAI model for complex tasks',
+    },
+    {
+      key: 'gpt-3.5-turbo',
+      value: 'OpenAI GPT-3.5 Turbo',
+      description: 'Fast and efficient for most conversational tasks',
+    },
+    {
+      key: 'meta-llama/llama-3-1-70b-instruct',
+      value: 'Meta Llama 3.1 70B',
+      description: 'Large language model by Meta with strong reasoning',
+    },
+    {
+      key: 'meta-llama/llama-3-1-8b-instruct',
+      value: 'Meta Llama 3.1 8B',
+      description: 'Smaller, faster Llama model for quick responses',
+    },
+    {
+      key: 'claude-3-sonnet',
+      value: 'Anthropic Claude 3 Sonnet',
+      description: 'Balanced model with strong analytical capabilities',
+    },
+    {
+      key: 'claude-3-haiku',
+      value: 'Anthropic Claude 3 Haiku',
+      description: 'Fast and efficient for everyday tasks',
+    },
+    {
+      key: 'mistral-large',
+      value: 'Mistral Large',
+      description: 'High-performance model with multilingual support',
+    },
+    {
+      key: 'mistral-medium',
+      value: 'Mistral Medium',
+      description: 'Balanced performance and speed',
+    },
+  ];
 
   constructor(private http: HttpClient) {
     // Load current user from localStorage
@@ -53,6 +104,19 @@ export class DataService {
       this.currentUser = null;
       localStorage.removeItem(this.CURRENT_USER_KEY);
     }
+  }
+
+  // Model-related methods
+  getAvailableModels(): ModelOption[] {
+    return [...this.availableModels];
+  }
+
+  getModelByKey(key: string): ModelOption | undefined {
+    return this.availableModels.find((model) => model.key === key);
+  }
+
+  getDefaultModel(): ModelOption {
+    return this.availableModels[0]; // Default to first model (GPT-4)
   }
 
   // Authentication methods
@@ -84,7 +148,8 @@ export class DataService {
   register(
     fullName: string,
     email: string,
-    password: string
+    password: string,
+    preferredModel: string = this.getDefaultModel().key
   ): Observable<User> {
     // First check if email already exists
     return this.http.get<User[]>(`${this.API_URL}/users`).pipe(
@@ -94,12 +159,19 @@ export class DataService {
           throw new Error('Email already registered');
         }
 
+        // Validate that the preferred model exists
+        if (!this.getModelByKey(preferredModel)) {
+          console.warn(`Invalid model key: ${preferredModel}, using default`);
+          preferredModel = this.getDefaultModel().key;
+        }
+
         // Create new user
         const newUser: User = {
           id: this.generateId(),
           fullName,
           email,
           password,
+          preferredModel,
         };
 
         return newUser;
@@ -119,6 +191,53 @@ export class DataService {
         );
       }),
       delay(500) // Simulate network delay
+    );
+  }
+
+  // Update user's preferred model
+  // Update user's preferred model
+  updateUserModel(userId: string, modelKey: string): Observable<User> {
+    if (!this.getModelByKey(modelKey)) {
+      return throwError(() => new Error('Invalid model selected'));
+    }
+
+    console.log(`Attempting to update user ${userId} model to: ${modelKey}`);
+
+    // Get the current user data first
+    return this.http.get<User[]>(`${this.API_URL}/users`).pipe(
+      switchMap((users) => {
+        const user = users.find((u) => u.id === userId);
+        if (!user) {
+          throw new Error('User not found');
+        }
+
+        // Create updated user object
+        const updatedUser = { ...user, preferredModel: modelKey };
+        console.log('Sending updated user to server:', updatedUser);
+
+        // Update the specific user
+        return this.http
+          .put<User>(`${this.API_URL}/users/${userId}`, updatedUser)
+          .pipe(
+            tap((response) => {
+              console.log('Server response:', response);
+
+              // Update current user in localStorage if it's the same user
+              if (this.currentUser && this.currentUser.id === userId) {
+                this.currentUser.preferredModel = modelKey;
+                this.setCurrentUser(this.currentUser);
+                console.log('Updated localStorage with new model preference');
+              }
+            }),
+            map(() => updatedUser)
+          );
+      }),
+      catchError((error) => {
+        console.error('Error updating user model:', error);
+        return throwError(
+          () => new Error('Failed to update model preference: ' + error.message)
+        );
+      })
     );
   }
 
@@ -164,6 +283,18 @@ export class DataService {
       }
     }
     return this.currentUser;
+  }
+
+  // Get current user's preferred model
+  getCurrentUserModel(): ModelOption {
+    const user = this.getCurrentUser();
+    if (user && user.preferredModel) {
+      const model = this.getModelByKey(user.preferredModel);
+      if (model) {
+        return model;
+      }
+    }
+    return this.getDefaultModel();
   }
 
   // Chat methods

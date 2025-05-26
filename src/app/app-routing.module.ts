@@ -8,6 +8,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { GeolocationComponent } from './components/geolocation/geolocation.component';
+import { SettingsComponent } from './components/header/settings/settings.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,11 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'reports',

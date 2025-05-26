@@ -9,7 +9,7 @@
 
 .register-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 550px; // Slightly wider for model selection
 }
 
 .register-card {
@@ -38,6 +38,25 @@
   p {
     color: #001081;
     margin: 0;
+  }
+}
+
+// Step title
+.step-title {
+  text-align: center;
+  margin-bottom: 25px;
+
+  h3 {
+    color: #001081;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1.3em;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+    font-size: 0.9em;
   }
 }
 
@@ -120,9 +139,10 @@
       }
 
       .step-label {
-        font-size: 14px;
+        font-size: 12px;
         color: #777;
         transition: color 0.3s ease;
+        text-align: center;
       }
 
       &.current {
@@ -161,13 +181,13 @@
   }
 }
 
-// Fix for progress line fill
-.step-indicators .step.completed ~ .progress-line:after {
-  width: 50%;
+// Progress line animation for 3 steps
+.step-indicators .step:first-child.completed ~ .progress-line:after {
+  width: 33.33%;
 }
 
-.step-indicators .step:first-child.completed ~ .progress-line:after {
-  width: 50%;
+.step-indicators .step:nth-child(2).completed ~ .progress-line:after {
+  width: 66.66%;
 }
 
 .step-indicators .step:last-child.completed ~ .progress-line:after {
@@ -184,13 +204,15 @@
     font-weight: 500;
   }
 
-  input {
+  input,
+  select {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 14px;
     transition: border-color 0.3s;
+    background-color: white;
 
     &:focus {
       border-color: #43cea2;
@@ -201,12 +223,95 @@
       border-color: #e74c3c;
     }
   }
+
+  select {
+    cursor: pointer;
+
+    option {
+      padding: 8px;
+    }
+  }
+
+  // Model selection specific styles
+  &.model-selection {
+    select {
+      font-weight: 500;
+
+      option {
+        font-weight: normal;
+      }
+    }
+  }
 }
 
 .error-message {
   color: #e74c3c;
   font-size: 12px;
   margin-top: 5px;
+}
+
+// Model description card
+.model-description {
+  margin: 20px 0;
+
+  .model-info {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+
+    h4 {
+      color: #001081;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    p {
+      color: #6c757d;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+}
+
+// Model features section
+.model-features {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+
+  h4 {
+    color: #001081;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #495057;
+
+      i {
+        color: #28a745;
+        margin-right: 10px;
+        width: 16px;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 .form-navigation {
@@ -223,9 +328,16 @@
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
     &:hover {
       background-color: #e0e0e0;
+    }
+
+    i {
+      font-size: 12px;
     }
   }
 
@@ -240,6 +352,10 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 
     &:hover {
       background: linear-gradient(to right, #3cb78f, #17528f);
@@ -248,6 +364,10 @@
     &:disabled {
       opacity: 0.7;
       cursor: not-allowed;
+    }
+
+    i {
+      font-size: 12px;
     }
   }
 }
@@ -281,6 +401,32 @@
 
     &:hover {
       text-decoration: underline;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .register-container {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .register-card {
+    padding: 20px;
+  }
+
+  .step-indicators {
+    .step {
+      .step-label {
+        font-size: 10px;
+      }
+    }
+  }
+
+  .model-features {
+    ul li {
+      font-size: 13px;
     }
   }
 }

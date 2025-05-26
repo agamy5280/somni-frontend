@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { DataService, User } from '../../services/data.service';
+import { DataService, User, ModelOption } from '../../services/data.service';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +12,7 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSidebar = new EventEmitter<void>();
 
   currentUser: User | null = null;
+  currentModel: ModelOption | null = null;
   showUserMenu = false;
   showRoutes = false; // New property to track routes visibility
 
@@ -30,8 +31,10 @@ export class HeaderComponent implements OnInit {
   constructor(private dataService: DataService, private router: Router) {}
 
   ngOnInit(): void {
-    // Get current user when component initializes
+    // Get current user and model when component initializes
     this.currentUser = this.dataService.getCurrentUser();
+    this.currentModel = this.dataService.getCurrentUserModel();
+    this.loadUserData();
   }
 
   onToggleSidebar(): void {
@@ -51,6 +54,35 @@ export class HeaderComponent implements OnInit {
 
   toggleUserMenu(): void {
     this.showUserMenu = !this.showUserMenu;
+  }
+
+  loadUserData(): void {
+    this.currentUser = this.dataService.getCurrentUser();
+    this.currentModel = this.dataService.getCurrentUserModel();
+    console.log('Header loaded user data:', {
+      user: this.currentUser?.email,
+      model: this.currentModel?.value,
+    });
+  }
+
+  // Add this method to refresh data (call this when coming back from settings)
+  refreshUserData(): void {
+    console.log('Refreshing header user data...');
+    this.loadUserData();
+  }
+
+  // Update the goToSettings method to refresh data when returning
+  goToSettings(): void {
+    this.router.navigate(['/settings']).then(() => {
+      this.showUserMenu = false;
+    });
+  }
+
+  // Navigate to profile page (placeholder)
+  goToProfile(): void {
+    // For now, redirect to settings with profile tab
+    this.router.navigate(['/settings'], { fragment: 'profile' });
+    this.showUserMenu = false;
   }
 
   logout(): void {
@@ -81,5 +113,11 @@ export class HeaderComponent implements OnInit {
     }
 
     return nameParts[0][0].toUpperCase();
+  }
+
+  getCurrentModelName(): string {
+    // Refresh the model data to ensure it's current
+    this.currentModel = this.dataService.getCurrentUserModel();
+    return this.currentModel?.value || 'Default Model';
   }
 }

@@ -8,7 +8,7 @@ import {
   animate,
   transition,
 } from '@angular/animations';
-import { DataService } from '../../../services/data.service';
+import { DataService, ModelOption } from '../../../services/data.service';
 
 @Component({
   selector: 'app-register',
@@ -64,9 +64,10 @@ export class RegisterComponent implements OnInit {
   loading = false;
   submitted = false;
   currentStep = 1;
-  totalSteps = 2;
+  totalSteps = 3; // Updated to 3 steps
   shakeState = 'idle';
   errorMessage: string | null = null;
+  availableModels: ModelOption[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -81,6 +82,9 @@ export class RegisterComponent implements OnInit {
       // Step 2
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
+
+      // Step 3 - Model preference
+      preferredModel: ['', Validators.required],
     });
   }
 
@@ -89,6 +93,15 @@ export class RegisterComponent implements OnInit {
     if (this.dataService.isLoggedIn()) {
       this.router.navigate(['/chatbot']);
     }
+
+    // Load available models
+    this.availableModels = this.dataService.getAvailableModels();
+
+    // Set default model
+    const defaultModel = this.dataService.getDefaultModel();
+    this.registerForm.patchValue({
+      preferredModel: defaultModel.key,
+    });
   }
 
   get f() {
@@ -120,15 +133,20 @@ export class RegisterComponent implements OnInit {
 
     this.loading = true;
 
-    // Register the user with DataService
+    // Register the user with DataService including model preference
     this.dataService
       .register(
         this.f['fullName'].value,
         this.f['email'].value,
-        this.f['password'].value
+        this.f['password'].value,
+        this.f['preferredModel'].value
       )
       .subscribe({
         next: (user) => {
+          console.log(
+            'User registered successfully with model:',
+            user.preferredModel
+          );
           this.router.navigate(['/chatbot']);
         },
         error: (error) => {
@@ -143,6 +161,18 @@ export class RegisterComponent implements OnInit {
     // Validate the current step fields
     if (this.currentStep === 1) {
       if (this.f['fullName'].invalid || this.f['email'].invalid) {
+        this.shakeForm();
+        return;
+      }
+    } else if (this.currentStep === 2) {
+      if (this.f['password'].invalid || this.f['confirmPassword'].invalid) {
+        this.shakeForm();
+        return;
+      }
+
+      // Check if passwords match
+      if (this.f['password'].value !== this.f['confirmPassword'].value) {
+        this.f['confirmPassword'].setErrors({ mismatch: true });
         this.shakeForm();
         return;
       }
@@ -165,6 +195,24 @@ export class RegisterComponent implements OnInit {
     if (step < this.currentStep) return 'completed';
     if (step === this.currentStep) return 'current';
     return 'upcoming';
+  }
+
+  getStepLabel(step: number): string {
+    switch (step) {
+      case 1:
+        return 'Account';
+      case 2:
+        return 'Security';
+      case 3:
+        return 'Preferences';
+      default:
+        return '';
+    }
+  }
+
+  getSelectedModel(): ModelOption | undefined {
+    const selectedKey = this.f['preferredModel'].value;
+    return this.availableModels.find((model) => model.key === selectedKey);
   }
 
   shakeForm() {

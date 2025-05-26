@@ -13,14 +13,13 @@
     <div class="stepper">
       <div class="step-indicators">
         <div
-          *ngFor="let step of [1, 2]"
+          *ngFor="let step of [1, 2, 3]"
           [ngClass]="getStepClass(step)"
           class="step"
         >
           <div class="step-number">{{ step }}</div>
           <div class="step-label">
-            <span *ngIf="step === 1">Account</span>
-            <span *ngIf="step === 2">Security</span>
+            <span>{{ getStepLabel(step) }}</span>
           </div>
         </div>
         <div class="progress-line"></div>
@@ -28,8 +27,13 @@
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <!-- Step 1 -->
+      <!-- Step 1 - Account Info -->
       <div *ngIf="currentStep === 1" @slideIn>
+        <div class="step-title">
+          <h3>Account Information</h3>
+          <p>Let's start with your basic details</p>
+        </div>
+
         <div class="form-group">
           <label for="fullName">Full Name</label>
           <input
@@ -64,8 +68,13 @@
         </div>
       </div>
 
-      <!-- Step 2 -->
+      <!-- Step 2 - Security -->
       <div *ngIf="currentStep === 2" @slideIn>
+        <div class="step-title">
+          <h3>Security Setup</h3>
+          <p>Create a secure password for your account</p>
+        </div>
+
         <div class="form-group">
           <label for="password">Password</label>
           <input
@@ -110,6 +119,69 @@
         </div>
       </div>
 
+      <!-- Step 3 - Model Preferences -->
+      <div *ngIf="currentStep === 3" @slideIn>
+        <div class="step-title">
+          <h3>AI Model Preference</h3>
+          <p>Choose your preferred AI model for conversations</p>
+        </div>
+
+        <div class="form-group model-selection">
+          <label for="preferredModel">Preferred AI Model</label>
+          <select
+            formControlName="preferredModel"
+            id="preferredModel"
+            [ngClass]="{
+              'is-invalid': submitted && f['preferredModel'].errors
+            }"
+          >
+            <option value="" disabled>Select an AI model</option>
+            <option *ngFor="let model of availableModels" [value]="model.key">
+              {{ model.value }}
+            </option>
+          </select>
+          <div
+            *ngIf="submitted && f['preferredModel'].errors"
+            class="error-message"
+          >
+            <div *ngIf="f['preferredModel'].errors?.['required']">
+              Please select a preferred AI model
+            </div>
+          </div>
+        </div>
+
+        <!-- Model Description -->
+        <div *ngIf="getSelectedModel()" class="model-description">
+          <div class="model-info">
+            <h4>{{ getSelectedModel()?.value }}</h4>
+            <p>{{ getSelectedModel()?.description }}</p>
+          </div>
+        </div>
+
+        <!-- Model Features Info -->
+        <div class="model-features">
+          <h4>Why choose your AI model?</h4>
+          <ul>
+            <li>
+              <i class="fas fa-check"></i> Different models excel at different
+              tasks
+            </li>
+            <li>
+              <i class="fas fa-check"></i> You can change this preference
+              anytime in settings
+            </li>
+            <li>
+              <i class="fas fa-check"></i> Each model has unique capabilities
+              and response styles
+            </li>
+            <li>
+              <i class="fas fa-check"></i> Choose based on your preferred
+              conversation style
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <div class="form-navigation">
         <button
           *ngIf="currentStep > 1"
@@ -117,12 +189,16 @@
           class="back-button"
           (click)="prevStep()"
         >
-          Back
+          <i class="fas fa-arrow-left"></i> Back
         </button>
 
         <button type="submit" [disabled]="loading" class="next-button">
-          <span *ngIf="!loading && currentStep < totalSteps">Next</span>
-          <span *ngIf="!loading && currentStep === totalSteps">Sign Up</span>
+          <span *ngIf="!loading && currentStep < totalSteps">
+            Next <i class="fas fa-arrow-right"></i>
+          </span>
+          <span *ngIf="!loading && currentStep === totalSteps">
+            <i class="fas fa-user-plus"></i> Create Account
+          </span>
           <span *ngIf="loading" class="spinner"></span>
         </button>
       </div>

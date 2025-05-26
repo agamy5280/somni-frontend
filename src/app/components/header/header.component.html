@@ -1,11 +1,4 @@
-<!-- <button class="header-btn" title="Notifications">
-      <i class="fas fa-bell"></i>
-    </button>
-    <button class="header-btn" title="Help">
-      <i class="fas fa-question-circle"></i>
-    </button> -->
-
-<!-- User menu button -->
+<!-- Header -->
 <div class="header">
   <div class="logo">
     <div class="sidebar-toggle-container">
@@ -34,7 +27,7 @@
     <div class="user-menu-container">
       <button
         class="header-btn user-btn"
-        title="User settings"
+        title="User menu"
         (click)="toggleUserMenu()"
       >
         <div *ngIf="currentUser" class="user-avatar">
@@ -48,21 +41,32 @@
         <div class="user-info" *ngIf="currentUser">
           <div class="user-name">{{ currentUser.fullName }}</div>
           <div class="user-email">{{ currentUser.email }}</div>
+          <div class="user-model">
+            <i class="fas fa-robot"></i>
+            {{ getCurrentModelName() }}
+          </div>
         </div>
         <div class="dropdown-divider"></div>
         <ul class="menu-items">
           <li>
-            <a href="#" (click)="$event.preventDefault()">
+            <a href="#" (click)="$event.preventDefault(); goToProfile()">
               <i class="fas fa-user"></i> Profile
             </a>
           </li>
           <li>
-            <a href="#" (click)="$event.preventDefault()">
+            <a href="#" (click)="$event.preventDefault(); goToSettings()">
               <i class="fas fa-cog"></i> Settings
             </a>
           </li>
+          <li class="divider-item">
+            <div class="dropdown-divider"></div>
+          </li>
           <li>
-            <a href="#" (click)="$event.preventDefault(); logout()">
+            <a
+              href="#"
+              (click)="$event.preventDefault(); logout()"
+              class="logout-item"
+            >
               <i class="fas fa-sign-out-alt"></i> Logout
             </a>
           </li>

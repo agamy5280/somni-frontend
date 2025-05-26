@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
+import { DataService } from './data.service';
 
 export interface QueryResponse {
   sql?: string;
@@ -19,7 +20,7 @@ export class WatsonxService {
   // Use relative URL for development, full URL for production
   private readonly API_URL = '/watsonx'; // This will be proxied in development mode
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private dataService: DataService) {}
 
   /**
    * Send a natural language query to the Flask backend
@@ -32,10 +33,16 @@ export class WatsonxService {
     isNewChat: boolean = false,
     chatHistory: any[] = []
   ): Observable<QueryResponse> {
+    // Get current user's preferred model
+    const currentUser = this.dataService.getCurrentUser();
+    const preferredModel =
+      currentUser?.preferredModel || this.dataService.getDefaultModel().key;
+
     // Only include chatHistory if this is NOT a new chat
     const payload: any = {
       query: query,
       isNewChat: isNewChat,
+      modelPreference: preferredModel, // Include user's model preference
     };
 
     // Only add chat history for existing conversations
@@ -43,15 +50,28 @@ export class WatsonxService {
       payload.chatHistory = chatHistory;
     }
 
+    // Add user context for backend logging
+    if (currentUser) {
+      payload.userId = currentUser.id;
+      payload.userEmail = currentUser.email;
+    }
+
     // Add CORS headers
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
 
+    console.log(
+      'Sending query to backend with model preference:',
+      preferredModel
+    );
+
     return this.http
       .post<QueryResponse>(`${this.API_URL}/query`, payload, { headers })
       .pipe(
-        tap((response) => {}),
+        tap((response) => {
+          console.log('Received response from backend:', response);
+        }),
         catchError((error) => {
           console.error('Error in WatsonX query:', error);
           throw error;
@@ -109,5 +129,24 @@ export class WatsonxService {
     }
 
     return tokenizedHistory;
+  }
+
+  /**
+   * Get the current user's preferred model info
+   */
+  getCurrentUserModelInfo() {
+    return this.dataService.getCurrentUserModel();
+  }
+
+  /**
+   * Update user's model preference
+   */
+  updateUserModelPreference(modelKey: string): Observable<any> {
+    const currentUser = this.dataService.getCurrentUser();
+    if (!currentUser) {
+      throw new Error('No user logged in');
+    }
+
+    return this.dataService.updateUserModel(currentUser.id, modelKey);
   }
 }

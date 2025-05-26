@@ -22,6 +22,10 @@ app.use((req, res, next) => {
   if (req.method === "POST" || req.method === "PUT" || req.method === "PATCH") {
     const contentType = req.headers["content-type"] || "";
     if (contentType.includes("application/json") && req.body) {
+      // Log model preference if present
+      if (req.body.modelPreference) {
+        console.log(`Using AI model: ${req.body.modelPreference}`);
+      }
       console.log(
         "Request body:",
         JSON.stringify(req.body, null, 2).substring(0, 500) + "..."
@@ -37,8 +41,11 @@ app.use("/watsonx", async (req, res) => {
     const watsonxBackend =
       "http://somni-backend-somni.apps.68060d600b3f018ca424c0c6.eu1.techzone.ibm.com";
 
-    // Log request details
+    // Log request details including model preference
     console.log(`Proxying WatsonX request: ${req.method} ${req.path}`);
+    if (req.body.modelPreference) {
+      console.log(`Forwarding model preference: ${req.body.modelPreference}`);
+    }
 
     // Forward the request to the WatsonX backend
     const response = await axios({
@@ -169,9 +176,40 @@ if (isProd) {
   app.post("/api/users", (req, res) => {
     console.log("Creating new user:", req.body);
     const newUser = req.body;
+
+    // Log model preference for new user
+    if (newUser.preferredModel) {
+      console.log(
+        `New user ${newUser.email} prefers model: ${newUser.preferredModel}`
+      );
+    }
+
     inMemoryDB.users.push(newUser);
     res.status(201).json(newUser);
     console.log(`Created new user: ${newUser.email}`);
+  });
+
+  // PUT /api/users/:id - Update a specific user
+  app.put("/api/users/:id", (req, res) => {
+    const userId = req.params.id;
+    const userIndex = inMemoryDB.users.findIndex((u) => u.id === userId);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const updatedUser = req.body;
+    inMemoryDB.users[userIndex] = updatedUser;
+
+    // Log model preference update
+    if (updatedUser.preferredModel) {
+      console.log(
+        `Updated user ${updatedUser.email} model preference to: ${updatedUser.preferredModel}`
+      );
+    }
+
+    res.json(updatedUser);
+    console.log(`Updated user: ${updatedUser.email}`);
   });
 
   // GET /api/chats - Get all chats
@@ -334,9 +372,41 @@ if (isProd) {
   app.post("/api/users", (req, res) => {
     console.log("Direct API: Creating new user:", req.body);
     const newUser = req.body;
+
+    // Log model preference for new user
+    if (newUser.preferredModel) {
+      console.log(
+        `New user ${newUser.email} prefers model: ${newUser.preferredModel}`
+      );
+    }
+
     dbData.users.push(newUser);
     saveDatabase();
     res.status(201).json(newUser);
+  });
+
+  // PUT /api/users/:id - Update a specific user
+  app.put("/api/users/:id", (req, res) => {
+    console.log("Direct API: Updating user:", req.params.id);
+    const userId = req.params.id;
+    const userIndex = dbData.users.findIndex((u) => u.id === userId);
+
+    if (userIndex === -1) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const updatedUser = req.body;
+    dbData.users[userIndex] = updatedUser;
+
+    // Log model preference update
+    if (updatedUser.preferredModel) {
+      console.log(
+        `Updated user ${updatedUser.email} model preference to: ${updatedUser.preferredModel}`
+      );
+    }
+
+    saveDatabase();
+    res.json(updatedUser);
   });
 
   // GET /api/chats - Get all chats

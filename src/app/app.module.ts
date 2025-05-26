@@ -30,6 +30,7 @@ import { DeleteConfirmationDialogComponent } from './components/chatbot/delete-c
 import { ReportGeneratorComponent } from './components/report-generator/report-generator.component';
 import { DashboardsComponent } from './components/dashboards/dashboards.component';
 import { GeolocationComponent } from './components/geolocation/geolocation.component';
+import { SettingsComponent } from './components/header/settings/settings.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { GeolocationComponent } from './components/geolocation/geolocation.compo
     ReportGeneratorComponent,
     DashboardsComponent,
     GeolocationComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,

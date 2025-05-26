@@ -1,0 +1,96 @@
+<app-header></app-header>
+<div class="settings-container">
+  <!-- Settings Header -->
+  <div class="settings-header">
+    <button class="back-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      <span>Back</span>
+    </button>
+    <h1>AI Model Preferences</h1>
+  </div>
+
+  <!-- Settings Content -->
+  <div class="settings-content">
+    <div class="settings-panel">
+      <div class="panel-header">
+        <h2>Choose Your AI Model</h2>
+        <p>Select your preferred AI model for conversations</p>
+      </div>
+
+      <!-- Model Preference Form -->
+      <div class="model-preference-section">
+        <form [formGroup]="modelPreferenceForm" (ngSubmit)="onSave()">
+          <div class="current-model">
+            <label>Current Model:</label>
+            <div class="model-display">
+              <strong>{{ currentModel?.value || "Default Model" }}</strong>
+              <span class="model-description">{{
+                currentModel?.description || "No description available"
+              }}</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="modelSelect">Select New Model:</label>
+            <select
+              formControlName="selectedModel"
+              id="modelSelect"
+              [ngClass]="{
+                'is-invalid': submitted && f['selectedModel'].errors
+              }"
+            >
+              <option value="" disabled>Choose an AI model</option>
+              <option
+                *ngFor="let model of availableModels"
+                [value]="model.key"
+                [selected]="model.key === currentModel?.key"
+              >
+                {{ model.value }}
+              </option>
+            </select>
+            <div
+              *ngIf="submitted && f['selectedModel'].errors"
+              class="error-message"
+            >
+              <div *ngIf="f['selectedModel'].errors?.['required']">
+                Please select a model
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="getSelectedModelInfo()" class="model-preview">
+            <h4>{{ getSelectedModelInfo()?.value }}</h4>
+            <p>{{ getSelectedModelInfo()?.description }}</p>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="onCancel()"
+              [disabled]="loading"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="save-btn"
+              [disabled]="loading || !hasChanges()"
+            >
+              <span *ngIf="!loading">Save Preference</span>
+              <span *ngIf="loading" class="spinner"></span>
+            </button>
+          </div>
+        </form>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="successMessage" class="success-message">
+          {{ successMessage }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
