@@ -123,10 +123,11 @@ export class SettingsComponent implements OnInit {
 
           console.log('Refreshed component data');
 
-          // Clear success message after 3 seconds
+          // Show success message briefly, then redirect to chatbot
           setTimeout(() => {
-            this.successMessage = null;
-          }, 3000);
+            console.log('Redirecting to chatbot...');
+            this.router.navigate(['/chatbot']);
+          }, 1500); // Redirect after 1.5 seconds to show success message
         },
         error: (error) => {
           console.error('=== UPDATE FAILED ===');
