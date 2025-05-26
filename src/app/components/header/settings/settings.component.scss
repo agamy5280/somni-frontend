@@ -12,14 +12,14 @@ $transition: all 0.3s ease;
 
 :host {
   display: block;
-  height: 100vh;
+  height: 100%;
   width: 100%;
 }
 
 .settings-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100% !important;
   background-color: $light-gray;
 }
 
