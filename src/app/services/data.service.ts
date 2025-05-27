@@ -201,8 +201,6 @@ export class DataService {
       return throwError(() => new Error('Invalid model selected'));
     }
 
-    console.log(`Attempting to update user ${userId} model to: ${modelKey}`);
-
     // Get the current user data first
     return this.http.get<User[]>(`${this.API_URL}/users`).pipe(
       switchMap((users) => {
@@ -213,20 +211,16 @@ export class DataService {
 
         // Create updated user object
         const updatedUser = { ...user, preferredModel: modelKey };
-        console.log('Sending updated user to server:', updatedUser);
 
         // Update the specific user
         return this.http
           .put<User>(`${this.API_URL}/users/${userId}`, updatedUser)
           .pipe(
             tap((response) => {
-              console.log('Server response:', response);
-
               // Update current user in localStorage if it's the same user
               if (this.currentUser && this.currentUser.id === userId) {
                 this.currentUser.preferredModel = modelKey;
                 this.setCurrentUser(this.currentUser);
-                console.log('Updated localStorage with new model preference');
               }
             }),
             map(() => updatedUser)

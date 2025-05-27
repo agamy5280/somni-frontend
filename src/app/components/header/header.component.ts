@@ -59,15 +59,10 @@ export class HeaderComponent implements OnInit {
   loadUserData(): void {
     this.currentUser = this.dataService.getCurrentUser();
     this.currentModel = this.dataService.getCurrentUserModel();
-    console.log('Header loaded user data:', {
-      user: this.currentUser?.email,
-      model: this.currentModel?.value,
-    });
   }
 
   // Add this method to refresh data (call this when coming back from settings)
   refreshUserData(): void {
-    console.log('Refreshing header user data...');
     this.loadUserData();
   }
 

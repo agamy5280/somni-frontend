@@ -76,20 +76,11 @@ export class SettingsComponent implements OnInit {
     this.submitted = true;
     this.errorMessage = null;
     this.successMessage = null;
-
-    console.log('=== SAVE BUTTON CLICKED ===');
-    console.log('Form valid:', this.modelPreferenceForm.valid);
-    console.log('Current user:', this.currentUser);
-    console.log('Selected model:', this.f['selectedModel'].value);
-    console.log('Current model:', this.currentModel?.key);
-
     if (this.modelPreferenceForm.invalid) {
-      console.log('Form is invalid, stopping');
       return;
     }
 
     if (!this.hasChanges()) {
-      console.log('No changes detected');
       this.successMessage = 'No changes to save';
       return;
     }
@@ -102,18 +93,10 @@ export class SettingsComponent implements OnInit {
       this.loading = false;
       return;
     }
-
-    console.log(
-      `Starting update: user ${this.currentUser.id} -> model ${selectedModelKey}`
-    );
-
     this.dataService
       .updateUserModel(this.currentUser.id, selectedModelKey)
       .subscribe({
         next: (updatedUser) => {
-          console.log('=== UPDATE SUCCESSFUL ===');
-          console.log('Updated user:', updatedUser);
-
           this.loading = false;
           this.successMessage = 'AI model preference updated successfully!';
 
@@ -121,11 +104,8 @@ export class SettingsComponent implements OnInit {
           this.loadUserData();
           this.loadModelData();
 
-          console.log('Refreshed component data');
-
           // Show success message briefly, then redirect to chatbot
           setTimeout(() => {
-            console.log('Redirecting to chatbot...');
             this.router.navigate(['/chatbot']);
           }, 500);
         },

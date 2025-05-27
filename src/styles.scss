@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-/* You can add global styles to this file, and also import other style files */
 /* Global App Styles */
 
 /* Reset and base styles */
@@ -12,20 +11,20 @@
 body,
 html {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  height: 100%;
+  /* Remove fixed height constraints */
+  min-height: 100vh;
   width: 100%;
-  // overflow: hidden;
   background-color: #f5f5f5;
   color: #333333;
 }
 
-/* Main containers spacing fix */
+/* Main containers - allow natural expansion */
 .app-container {
-  height: 100vh;
+  min-height: 100vh; /* Changed from height: 100vh */
   width: 100vw;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* Remove overflow: hidden to allow scrolling */
   margin: 0;
   padding: 0;
 }
@@ -34,9 +33,10 @@ html {
   display: flex;
   flex: 1;
   width: 100%;
-  overflow: hidden;
+  /* Remove overflow: hidden to allow content expansion */
   margin: 0;
   padding: 0;
+  min-height: 0; /* Important for flex children */
 }
 
 /* Fix for conversation area spacing */
@@ -55,6 +55,7 @@ app-chatbot-conversation {
   padding: 0;
   display: flex;
   flex-direction: column;
+  min-height: 0; /* Allow shrinking */
 }
 
 /* Messages container spacing fix */
@@ -64,6 +65,7 @@ app-chatbot-conversation {
   padding: 1rem;
   margin: 0;
   overflow-y: auto;
+  min-height: 0; /* Important for flex scrolling */
 }
 
 /* Chat header fix */
@@ -71,6 +73,7 @@ app-chatbot-conversation {
   padding: 0.75rem 1rem;
   margin: 0;
   width: 100%;
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 /* Message spacing fix */
@@ -84,6 +87,7 @@ app-chatbot-conversation {
   padding: 0.75rem 1rem;
   margin: 0;
   width: 100%;
+  flex-shrink: 0; /* Prevent input from shrinking */
 }
 
 /* Sidebar fixes */
@@ -94,6 +98,7 @@ app-chatbot-sidebar,
   max-width: 280px;
   margin: 0;
   padding: 0;
+  /* Allow natural height expansion */
 }
 
 .chats-list {
@@ -111,6 +116,7 @@ app-chatbot-sidebar,
   padding: 0.75rem 1rem;
   margin: 0;
   width: 100%;
+  flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 /* Improved Typography */
